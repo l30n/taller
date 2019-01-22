@@ -22,9 +22,9 @@ mix.webpackConfig({
  |
  */
 
-mix.copyDirectory('resources/img', 'public/img'); + -
+mix.copyDirectory('resources/img', 'public/img');
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css').version();
+mix.js('resources/js/app.js', 'public/js').extract(['vue']).version();
+mix.sass('resources/sass/app.scss', 'public/css').version();
 
 mix.disableNotifications();
