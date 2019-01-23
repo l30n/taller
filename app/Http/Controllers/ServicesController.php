@@ -12,7 +12,7 @@ class ServicesController extends Controller
     public function get(GetServicesRequest $request)
     {
 
-        $car = Car::with(['carServices', 'carServices.service'])
+        $car = Car::has('carServices')
             ->where('brand', '=', $request->get('brand'))
             ->where('start_year', '<=', $request->get('year'))
             ->where('end_year', '>=', $request->get('year'))
