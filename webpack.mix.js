@@ -2,6 +2,9 @@ const {
     mix
 } = require('laravel-mix');
 
+const fs = require('fs');
+const path = require('path');
+
 mix.webpackConfig({
     module: {
         rules: [{
@@ -10,6 +13,18 @@ mix.webpackConfig({
         }, ]
     }
 });
+
+function deleteFiles(directory) {
+    fs.readdir(directory, (err, files) => {
+        if (err) throw err;
+
+        for (const file of files) {
+            fs.unlink(path.join(directory, file), err => {
+                if (err) throw err;
+            });
+        }
+    });
+}
 
 /*
  |--------------------------------------------------------------------------
@@ -23,6 +38,9 @@ mix.webpackConfig({
  */
 
 mix.copyDirectory('resources/img', 'public/img');
+
+deleteFiles('public/js');
+deleteFiles('public/css');
 
 mix.js('resources/js/app.js', 'public/js').extract(['vue']).version();
 mix.sass('resources/sass/app.scss', 'public/css').version();

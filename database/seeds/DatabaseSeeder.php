@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             ItemsTableSeeder::class,
             ServiceItemsTableSeeder::class,
             CarsTableSeeder::class,
+            CarServicesTableSeeder::class,
             CarServiceItemsTableSeeder::class,
             ClientsTableSeeder::class,
         ]);
