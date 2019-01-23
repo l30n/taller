@@ -8,7 +8,16 @@ use App\Models\Service;
 
 class ServicesController extends Controller
 {
-    //
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+
+    }
+
     public function get(GetServicesRequest $request)
     {
 

@@ -6,6 +6,16 @@ use App\Models\Car;
 
 class CarsController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+
+    }
+
     //
     public function get()
     {

@@ -16,12 +16,19 @@
         </div>
         <el-container class="wrapper">
             <el-header height="80px" :style="{ 'background-color': primaryColor }">
-                <img src="{{ asset('img/logo.png') }}" alt="element-logo" class="header-logo">
-                <!--ul class="header-operations">
+                <a href="{{ url('/') }}">
+                    <img src="{{ asset('img/logo.png') }}" alt="element-logo" class="header-logo">
+                </a>
+                <ul class="header-operations">
                     <li>
-                        User
+                        <a href="#" onclick="javascript:document.getElementById('form-logout').submit();">
+                            Cerrar Sesion
+                        </a>
+                        <form id="form-logout" method="POST" action="{{ route('logout') }}">
+                            <input type="hidden" value="{{ csrf_token() }}" name="_token" />
+                        </form>
                     </li>
-                </ul-->
+                </ul>
             </el-header>
             <el-container class="wrapper">
                 <el-aside class="menu">

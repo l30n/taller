@@ -56,6 +56,8 @@ Vue.use(ElementUI, {
   size: 'medium'
 });
 
+Vue.component('login-component', require('./components/Login/LoginComponent').default);
+
 Vue.component('list-sales', require('./components/Sales/ListComponent').default);
 Vue.component('create-sales', require('./components/Sales/CreateComponent').default);
 Vue.component('select-service', require('./components/Sales/SelectServiceComponent').default);
