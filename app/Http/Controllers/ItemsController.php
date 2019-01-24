@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
+
 class ItemsController extends Controller
 {
     //
@@ -13,5 +15,15 @@ class ItemsController extends Controller
     public function __construct()
     {
 
+    }
+
+    public function index()
+    {
+        return view('items.index');
+    }
+
+    public function get()
+    {
+        return Item::paginate(10);
     }
 }

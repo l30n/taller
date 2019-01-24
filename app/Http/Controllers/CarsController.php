@@ -16,10 +16,15 @@ class CarsController extends Controller
 
     }
 
+    public function index()
+    {
+        return view('cars.index');
+    }
+
     //
     public function get()
     {
-        return Car::all();
+        return Car::paginate(10);
     }
 
     public function listBrands()

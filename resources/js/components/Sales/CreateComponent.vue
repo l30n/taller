@@ -211,7 +211,7 @@ export default {
       $this.selectedServices = [];
       $this.services = [];
       axios
-        .get("/api/services", {
+        .get("/api/servicesByCar", {
           params: {
             brand: $this.brand,
             year: $this.year

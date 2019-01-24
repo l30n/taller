@@ -17,11 +17,19 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
-Route::get('/cars', 'CarsController@get');
 Route::get('/car/brands', 'CarsController@listBrands');
-Route::get('/services', 'ServicesController@get');
+Route::get('/servicesByCar', 'ServicesController@getByCar');
 
 Route::get('/clients', 'ClientsController@get');
 
 Route::get('/sales', 'SalesController@get');
 Route::post('/sales', 'SalesController@save');
+
+Route::get('/items', 'ItemsController@get');
+Route::post('/items', 'ItemsController@save');
+
+Route::get('/cars', 'CarsController@get');
+Route::post('/cars', 'CarsController@save');
+
+Route::get('/services', 'ServicesController@get');
+Route::post('/services', 'ServicesController@save');

@@ -63,6 +63,12 @@ Vue.component('create-sales', require('./components/Sales/CreateComponent').defa
 Vue.component('select-service', require('./components/Sales/SelectServiceComponent').default);
 Vue.component('receipt-sales', require('./components/Sales/ReceiptComponent').default);
 
+Vue.component('list-items', require('./components/Items/ListComponent').default);
+
+Vue.component('list-services', require('./components/Services/ListComponent').default);
+
+Vue.component('list-cars', require('./components/Cars/ListComponent').default);
+
 new Vue({
   el: '#app',
   store,

@@ -18,9 +18,18 @@ class ServicesController extends Controller
 
     }
 
-    public function get(GetServicesRequest $request)
+    public function index()
     {
+        return view('services.index');
+    }
 
+    public function get()
+    {
+        return Service::paginate(10);
+    }
+
+    public function getByCar(GetServicesRequest $request)
+    {
         $car = Car::has('carServices')
             ->where('brand', '=', $request->get('brand'))
             ->where('start_year', '<=', $request->get('year'))
