@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveItemRequest;
 use App\Models\Item;
 
 class ItemsController extends Controller
@@ -25,5 +26,12 @@ class ItemsController extends Controller
     public function get()
     {
         return Item::paginate(10);
+    }
+
+    public function save(SaveItemRequest $request)
+    {
+        $item = $request->all();
+
+        return Item::create($item);
     }
 }

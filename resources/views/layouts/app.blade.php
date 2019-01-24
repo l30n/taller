@@ -31,18 +31,18 @@
                 </ul>
             </el-header>
             <el-container class="wrapper">
-                <el-aside class="menu">
+                <el-aside class="menu" default-active="{{ Route::current()->getName() }}">
                     <el-menu>
-                        <el-menu-item index="1" v-on:click="goto('{{ route('sales.list') }}')">
+                        <el-menu-item index="sales.list" v-on:click="goto('{{ route('sales.list') }}')">
                             Ordenes de Servicio
                         </el-menu-item>
-                        <el-menu-item index="1" v-on:click="goto('{{ route('services.list') }}')">
+                        <el-menu-item index="services.list" v-on:click="goto('{{ route('services.list') }}')">
                             Servicios
                         </el-menu-item>
-                        <el-menu-item index="1" v-on:click="goto('{{ route('cars.list') }}')">
+                        <el-menu-item index="cars.list" v-on:click="goto('{{ route('cars.list') }}')">
                             Carros
                         </el-menu-item>
-                        <el-menu-item index="1" v-on:click="goto('{{ route('items.list') }}')">
+                        <el-menu-item index="items.list" v-on:click="goto('{{ route('items.list') }}')">
                             Articulos
                         </el-menu-item>
                     </el-menu>

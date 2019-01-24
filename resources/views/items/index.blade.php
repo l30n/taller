@@ -5,11 +5,7 @@
         <el-col :span="19">
             <h2>Articulos</h2>
         </el-col>
-        <el-col :span="5" style="text-align:right;">
-            <el-button type="primary" icon="el-icon-circle-plus" v-on:click="goto('{{ route('sales.create') }}')">
-                Agregar un Articulo
-            </el-button>
-        </el-col>
+        <create-items></create-items>
     </el-row>
     <el-row type="flex">
         <el-col :span="24">

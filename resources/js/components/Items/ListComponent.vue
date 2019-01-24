@@ -15,7 +15,7 @@
         </el-table-column>
         <el-table-column
           prop="name"
-          label="Nombre"
+          label="Articulo"
         >
         </el-table-column>
       </el-table>
@@ -48,13 +48,18 @@ export default {
         $this.items = response.data;
       });
     },
+    refreshTable() {
+      this.loadTable("/api/items?page=" + this.page);
+    },
     handleCurrentChange(val) {
-      this.loadTable("/api/items?page=" + val);
+      this.page = val;
+      this.refreshTable();
     }
   },
   data() {
     return {
-      items: []
+      items: [],
+      page: 1
     };
   }
 };
