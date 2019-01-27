@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveCarRequest;
 use App\Models\Car;
 
 class CarsController extends Controller
@@ -22,9 +23,18 @@ class CarsController extends Controller
     }
 
     //
-    public function get()
+    public function get()   
     {
         return Car::paginate(10);
+    }
+
+    public function save(SaveCarRequest $request)
+    {
+        return Car::firstOrCreate([
+            'brand' => $request->get('brand'),
+            'start_year' => $request->get('year')[0],
+            'end_year' => $request->get('year')[1],
+        ]);
     }
 
     public function listBrands()

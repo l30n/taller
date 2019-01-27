@@ -10,8 +10,12 @@
       >
         <el-table-column
           prop="id"
-          type="index"
+          label="#"
+          width="50px"
         >
+          <template slot-scope="scope">
+            {{ scope.row.id }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="brand"
@@ -45,6 +49,8 @@
 export default {
   mounted: function() {
     this.loadTable("/api/cars");
+
+    this.$root.$on("refreshTable", this.refreshTable);
   },
   methods: {
     loadTable(url) {
@@ -53,13 +59,18 @@ export default {
         $this.cars = response.data;
       });
     },
+    refreshTable() {
+      this.loadTable("/api/cars?page=" + this.page);
+    },
     handleCurrentChange(val) {
-      this.loadTable("/api/cars?page=" + val);
+      this.page = val;
+      this.refreshTable();
     }
   },
   data() {
     return {
-      cars: []
+      cars: [],
+      page: 1
     };
   }
 };

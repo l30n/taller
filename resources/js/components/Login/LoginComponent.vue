@@ -13,6 +13,11 @@
         name="_token"
         type="hidden"
       />
+      <img
+        src="/img/logo.png"
+        width="50%"
+        style="margin: 0 auto;display: block;"
+      />
       <h1 class="main-title">Taller Gallegos</h1>
       <br>
       <el-form-item>

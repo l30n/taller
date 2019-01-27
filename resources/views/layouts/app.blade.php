@@ -31,8 +31,8 @@
                 </ul>
             </el-header>
             <el-container class="wrapper">
-                <el-aside class="menu" default-active="{{ Route::current()->getName() }}">
-                    <el-menu>
+                <el-aside class="menu">
+                    <el-menu default-active="{{ Route::current()->getName() }}">
                         <el-menu-item index="sales.list" v-on:click="goto('{{ route('sales.list') }}')">
                             Ordenes de Servicio
                         </el-menu-item>

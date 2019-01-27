@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GetServicesRequest;
+use App\Http\Requests\SaveServiceRequest;
 use App\Models\Car;
 use App\Models\Service;
 
@@ -26,6 +27,11 @@ class ServicesController extends Controller
     public function get()
     {
         return Service::paginate(10);
+    }
+
+    public function save(SaveServiceRequest $request)
+    {
+        return Service::firstOrCreate($request->all());
     }
 
     public function getByCar(GetServicesRequest $request)

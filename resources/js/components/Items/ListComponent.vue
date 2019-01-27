@@ -10,8 +10,12 @@
       >
         <el-table-column
           prop="id"
-          type="index"
+          label="#"
+          width="50px"
         >
+          <template slot-scope="scope">
+            {{ scope.row.id }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="name"
@@ -40,6 +44,8 @@
 export default {
   mounted: function() {
     this.loadTable("/api/items");
+
+    this.$root.$on("refreshTable", this.refreshTable);
   },
   methods: {
     loadTable(url) {

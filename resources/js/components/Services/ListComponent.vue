@@ -10,12 +10,16 @@
       >
         <el-table-column
           prop="id"
-          type="index"
+          label="#"
+          width="50px"
         >
+          <template slot-scope="scope">
+            {{ scope.row.id }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="name"
-          label="Nombre"
+          label="Servicio"
         >
         </el-table-column>
       </el-table>
@@ -40,6 +44,8 @@
 export default {
   mounted: function() {
     this.loadTable("/api/services");
+
+    this.$root.$on("refreshTable", this.refreshTable);
   },
   methods: {
     loadTable(url) {
@@ -48,13 +54,18 @@ export default {
         $this.services = response.data;
       });
     },
+    refreshTable() {
+      this.loadTable("/api/services?page=" + this.page);
+    },
     handleCurrentChange(val) {
-      this.loadTable("/api/services?page=" + val);
+      this.page = val;
+      this.refreshTable();
     }
   },
   data() {
     return {
-      services: []
+      services: [],
+      page: 1
     };
   }
 };

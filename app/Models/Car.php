@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Car extends Model
 {
     //
+    public $fillable = ['brand', 'start_year', 'end_year'];
 
     public function carServices()
     {

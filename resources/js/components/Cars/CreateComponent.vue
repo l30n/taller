@@ -6,10 +6,10 @@
       @click="dialogVisible = true"
       style="float:right;"
     >
-      Agregar un Articulo
+      Agregar un Carro
     </el-button>
     <el-dialog
-      title="Agregar un Articulo"
+      title="Agregar un Carro"
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="handleClose"
@@ -19,24 +19,28 @@
           <el-form
             :label-position="labelPosition"
             :rules="rules"
-            :model="item"
+            :model="car"
             label-width="150px"
-            ref="itemForm"
+            ref="carForm"
           >
             <el-form-item
-              label="Nombre del Articulo"
+              label="Marca del Carro"
               prop="name"
             >
-              <el-input v-model="item.name"></el-input>
+              <el-input v-model="car.brand"></el-input>
             </el-form-item>
             <el-form-item
-              label="Descripcion"
-              prop="description"
+              :label="'Año (' + car.year[0] + '-' + car.year[1] + ')'"
+              prop="year"
             >
-              <el-input
-                type="textarea"
-                v-model="item.description"
-              ></el-input>
+              <el-slider
+                v-model="car.year"
+                range
+                show-stops
+                :min="1999"
+                :max="2019"
+              >
+              </el-slider>
             </el-form-item>
           </el-form>
         </el-col>
@@ -48,7 +52,7 @@
         <el-button @click="cancel()">Cancelar</el-button>
         <el-button
           type="primary"
-          @click="saveItem()"
+          @click="saveCar()"
         >Agregar</el-button>
       </span>
     </el-dialog>
@@ -60,15 +64,15 @@ export default {
     return {
       dialogVisible: false,
       labelPosition: "left",
-      item: {
-        name: "",
-        description: ""
+      car: {
+        brand: "",
+        year: [1999, 2019]
       },
       rules: {
-        name: [
+        brand: [
           {
             required: true,
-            message: "Campo Nombre es obligatorio",
+            message: "Campo Marca es obligatorio",
             trigger: "blur"
           }
         ]
@@ -78,7 +82,7 @@ export default {
   methods: {
     handleClose(done) {
       var $this = this;
-      if ($this.item.name) {
+      if ($this.car.brand) {
         $this
           .$confirm("¿Estas seguro de no guardar el Articulo?")
           .then(_ => {
@@ -93,19 +97,18 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
-      this.item.name = "";
-      this.item.description = "";
+      this.car.name = "";
     },
-    saveItem() {
+    saveCar() {
       var $this = this;
-      $this.$refs.itemForm.validate(valid => {
+      $this.$refs.carForm.validate(valid => {
         if (valid) {
           axios
-            .post("/api/items", $this.item)
+            .post("/api/cars", $this.car)
             .then(function(response) {
               $this.$notify({
                 title: "¡Exito!",
-                message: "Articulo fue agregado correctamente",
+                message: "El Carro fue agregado correctamente",
                 type: "success"
               });
               $this.$root.$emit("refreshTable");

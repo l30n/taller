@@ -66,8 +66,10 @@ Vue.component('receipt-sales', require('./components/Sales/ReceiptComponent').de
 Vue.component('create-items', require('./components/Items/CreateComponent').default);
 Vue.component('list-items', require('./components/Items/ListComponent').default);
 
+Vue.component('create-services', require('./components/Services/CreateComponent').default);
 Vue.component('list-services', require('./components/Services/ListComponent').default);
 
+Vue.component('create-cars', require('./components/Cars/CreateComponent').default);
 Vue.component('list-cars', require('./components/Cars/ListComponent').default);
 
 new Vue({

@@ -32,6 +32,6 @@ class ItemsController extends Controller
     {
         $item = $request->all();
 
-        return Item::create($item);
+        return Item::firstOrCreate($item);
     }
 }

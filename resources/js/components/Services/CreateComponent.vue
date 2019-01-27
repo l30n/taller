@@ -6,10 +6,10 @@
       @click="dialogVisible = true"
       style="float:right;"
     >
-      Agregar un Articulo
+      Agregar un Servicio
     </el-button>
     <el-dialog
-      title="Agregar un Articulo"
+      title="Agregar un Servicio"
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="handleClose"
@@ -19,15 +19,15 @@
           <el-form
             :label-position="labelPosition"
             :rules="rules"
-            :model="item"
+            :model="service"
             label-width="150px"
-            ref="itemForm"
+            ref="serviceForm"
           >
             <el-form-item
-              label="Nombre del Articulo"
+              label="Nombre del Servicio"
               prop="name"
             >
-              <el-input v-model="item.name"></el-input>
+              <el-input v-model="service.name"></el-input>
             </el-form-item>
             <el-form-item
               label="Descripcion"
@@ -35,7 +35,7 @@
             >
               <el-input
                 type="textarea"
-                v-model="item.description"
+                v-model="service.description"
               ></el-input>
             </el-form-item>
           </el-form>
@@ -48,7 +48,7 @@
         <el-button @click="cancel()">Cancelar</el-button>
         <el-button
           type="primary"
-          @click="saveItem()"
+          @click="saveService()"
         >Agregar</el-button>
       </span>
     </el-dialog>
@@ -60,7 +60,7 @@ export default {
     return {
       dialogVisible: false,
       labelPosition: "left",
-      item: {
+      service: {
         name: "",
         description: ""
       },
@@ -78,9 +78,9 @@ export default {
   methods: {
     handleClose(done) {
       var $this = this;
-      if ($this.item.name) {
+      if ($this.service.name) {
         $this
-          .$confirm("¿Estas seguro de no guardar el Articulo?")
+          .$confirm("¿Estas seguro de no guardar el Servicio?")
           .then(_ => {
             $this.cancel();
             done();
@@ -93,19 +93,19 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
-      this.item.name = "";
-      this.item.description = "";
+      this.service.name = "";
+      this.service.description = "";
     },
-    saveItem() {
+    saveService() {
       var $this = this;
-      $this.$refs.itemForm.validate(valid => {
+      $this.$refs.serviceForm.validate(valid => {
         if (valid) {
           axios
-            .post("/api/items", $this.item)
+            .post("/api/services", $this.service)
             .then(function(response) {
               $this.$notify({
                 title: "¡Exito!",
-                message: "Articulo fue agregado correctamente",
+                message: "El Servicio fue agregado correctamente",
                 type: "success"
               });
               $this.$root.$emit("refreshTable");
