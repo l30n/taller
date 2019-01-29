@@ -48,6 +48,7 @@ class ServicesController extends Controller
 
         $services = Service::whereHas('carServices', function ($query) use ($car) {
             $query->where('car_id', '=', $car->id);
+            $query->has('carServiceItems');
         })->with('items')->with('items.carServiceItems')->get();
 
         $services->map(function ($service) use ($car) {
@@ -55,6 +56,7 @@ class ServicesController extends Controller
                 $carServiceItem = $item->carServiceItems->where('car_id', '=', $car->id)
                     ->where('service_id', '=', $service->id)
                     ->where('item_id', '=', $item->id)->first();
+                
 
                 $item = $item->toArray();
 
