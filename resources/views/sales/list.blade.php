@@ -1,7 +1,10 @@
 @extends('layouts.app') 
 @section('content')
 <el-main class="content">
-    <el-row type="flex" justify="end">
+    <el-row type="flex">
+        <el-col :span="19">
+            <h2>Ordenes de Servicio</h2>
+        </el-col>
         <el-col :span="5" style="text-align:right;">
             <el-button type="primary" icon="el-icon-circle-plus" v-on:click="goto('{{ route('sales.create') }}')">
                 Crear Orden de Servicio
