@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GetServicesRequest;
 use App\Http\Requests\SaveServiceRequest;
 use App\Models\Car;
+use App\Models\CarServiceItem;
 use App\Models\Service;
 
 class ServicesController extends Controller
@@ -46,16 +47,45 @@ class ServicesController extends Controller
             return [];
         }
 
-        $services = Service::whereHas('carServices', function ($query) use ($car) {
-            $query->where('car_id', '=', $car->id);
-        })->with('items')->has('items.carServiceItems')->get();
+        $carServiceItems = CarServiceItem::where('car_id', '=', $car->id)
+            ->with('service')->with('item')->get();
+
+        $services = collect();
+
+        $carServiceItems->map(function ($carServiceItem) use ($services) {
+            $service = collect($carServiceItem->service);
+            if ($services->get($carServiceItem->service_id)) {
+                $service = $services->get($carServiceItem->service_id);
+            }
+
+            $items = collect();
+            if ($service->has('items')) {
+                $items = $service->get('items');
+            }
+            $item = $carServiceItem->item->toArray();
+
+            $item['price'] = floatval($carServiceItem->price);
+            $item['low'] = $carServiceItem->low;
+            $item['mid'] = $carServiceItem->mid;
+            $item['high'] = $carServiceItem->high;
+
+            $items->put($carServiceItem->item_id, $item);
+
+            $service->put('items', $items);
+
+            $services->put($carServiceItem->service_id, $service);
+        });
+
+        return $services->values()->toArray();
 
         $services->map(function ($service) use ($car) {
-            $service->items->transform(function ($item) use ($car, $service) {
-                $carServiceItem = $item->carServiceItems->where('car_id', '=', $car->id)
-                    ->where('service_id', '=', $service->id)
+            $service->items->filter(function ($item, $key) use ($car, $service) {
+                $carServiceItem = $item->carServiceItems->where('service_id', '=', $service->id)
                     ->where('item_id', '=', $item->id)->first();
-                
+
+                if (empty($carServiceItem)) {
+                    return false;
+                }
 
                 $item = $item->toArray();
 
@@ -64,7 +94,9 @@ class ServicesController extends Controller
                 $item['mid'] = $carServiceItem->mid;
                 $item['high'] = $carServiceItem->high;
 
-                return $item;
+                $service->items->put($key, $item);
+
+                return true;
             });
         });
 

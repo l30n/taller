@@ -4083,8 +4083,8 @@ function mergeFn (a, b) {
       var total = 0;
       var order = this.order;
 
-      for (var i = 0; i < order.services.length; i++) {
-        for (var x = 0; x < order.services[i].items.length; x++) {
+      for (var i in order.services) {
+        for (var x in order.services[i].items) {
           total += order.services[i].items[x].price + order.services[i].items[x].price * order.services[i].items[x][order.price] / 100;
         }
       }
@@ -6002,7 +6002,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.box-card {\n  max-height: 500px;\n  overflow-y: auto;\n}\n.odd {\n  background-color: #f2f2f2;\n}\n", ""]);
+exports.push([module.i, "\n.box-card {\n  max-height: 500px;\n  overflow-y: auto;\n}\n.row-item:nth-child(odd) {\n  background-color: #f2f2f2;\n}\n", ""]);
 
 // exports
 
@@ -79663,8 +79663,7 @@ var render = function() {
                                             "el-row",
                                             {
                                               key: index,
-                                              class:
-                                                index % 2 == 0 ? "odd" : "even"
+                                              staticClass: "row-item"
                                             },
                                             [
                                               _c(

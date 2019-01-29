@@ -61,7 +61,7 @@
                     <el-row
                       v-for="(item, index) in service.items"
                       v-bind:key="index"
-                      :class="index % 2 == 0 ? 'odd':'even'"
+                      class="row-item"
                     >
                       <el-col
                         :span="6"
@@ -174,8 +174,8 @@ export default {
       var total = 0;
       const order = this.order;
 
-      for (var i = 0; i < order.services.length; i++) {
-        for (var x = 0; x < order.services[i].items.length; x++) {
+      for (var i in order.services) {
+        for (var x in order.services[i].items) {
           total +=
             order.services[i].items[x].price +
             (order.services[i].items[x].price *
@@ -195,7 +195,7 @@ export default {
   max-height: 500px;
   overflow-y: auto;
 }
-.odd {
+.row-item:nth-child(odd) {
   background-color: #f2f2f2;
 }
 </style>

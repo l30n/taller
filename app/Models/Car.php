@@ -14,6 +14,11 @@ class Car extends Model
         return $this->hasMany('App\Models\CarService');
     }
 
+    public function carServiceItems()
+    {
+        return $this->hasMany('App\Models\CarServiceItem');
+    }
+
     public function services()
     {
         return $this->hasManyThrough('App\Models\Service', 'App\Models\CarService', 'car_id', 'service_id', 'service_id');
