@@ -80214,9 +80214,13 @@ var render = function() {
                           "\n          " +
                             _vm._s(scope.row.car[0].brand) +
                             " " +
-                            _vm._s(scope.row.car[0].start_year) +
-                            "-" +
-                            _vm._s(scope.row.car[0].end_year) +
+                            _vm._s(
+                              scope.row.sale_service.year
+                                ? scope.row.sale_service.year
+                                : scope.row.car[0].start_year +
+                                    "-" +
+                                    scope.row.car[0].end_year
+                            ) +
                             "\n        "
                         )
                       ]

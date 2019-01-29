@@ -8,6 +8,11 @@ class Sale extends Model
 {
     //
 
+    public function saleService()
+    {
+        return $this->hasOne('App\Models\SaleService');
+    }
+
     public function client()
     {
         return $this->belongsTo('App\Models\Client');
