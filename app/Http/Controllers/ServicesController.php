@@ -66,8 +66,11 @@ class ServicesController extends Controller
 
             $item['price'] = floatval($carServiceItem->price);
             $item['low'] = $carServiceItem->low;
+            $item['low_price'] = floatval($carServiceItem->low_price);
             $item['mid'] = $carServiceItem->mid;
+            $item['mid_price'] = floatval($carServiceItem->mid_price);
             $item['high'] = $carServiceItem->high;
+            $item['high_price'] = floatval($carServiceItem->high_price);
 
             $items->put($carServiceItem->item_id, $item);
 
@@ -77,29 +80,5 @@ class ServicesController extends Controller
         });
 
         return $services->values()->toArray();
-
-        $services->map(function ($service) use ($car) {
-            $service->items->filter(function ($item, $key) use ($car, $service) {
-                $carServiceItem = $item->carServiceItems->where('service_id', '=', $service->id)
-                    ->where('item_id', '=', $item->id)->first();
-
-                if (empty($carServiceItem)) {
-                    return false;
-                }
-
-                $item = $item->toArray();
-
-                $item['price'] = floatval($carServiceItem->price);
-                $item['low'] = $carServiceItem->low;
-                $item['mid'] = $carServiceItem->mid;
-                $item['high'] = $carServiceItem->high;
-
-                $service->items->put($key, $item);
-
-                return true;
-            });
-        });
-
-        return $services;
     }
 }

@@ -36,12 +36,17 @@ class SalesController extends Controller
 
     public function get()
     {
-        return Sale::with('saleService')->with('client')->with('car')->with('services')->paginate(10);
+        return Sale::with('saleService')->with('client')->with(['car' => function ($query) {
+            $query->groupBy('id');
+        }])->with(['services' => function ($query) {
+            $query->groupBy('id');
+        }])->paginate(10);
     }
 
     public function save(Request $request)
     {
         $year = $request->get('year');
+        $price = $request->get('price');
 
         $car = Car::with(['carServices', 'carServices.service'])
             ->where('brand', '=', $request->get('brand'))
@@ -60,12 +65,16 @@ class SalesController extends Controller
         $sale->save();
 
         foreach ($request->get('services') as $service) {
-            SaleService::create([
-                'sale_id' => $sale->id,
-                'car_id' => $car->id,
-                'service_id' => $service['id'],
-                'year' => $year,
-            ]);
+            foreach ($service['items'] as $item) {
+                SaleService::create([
+                    'sale_id' => $sale->id,
+                    'car_id' => $car->id,
+                    'service_id' => $service['id'],
+                    'item_id' => $item['id'],
+                    'year' => $year,
+                    'price' => $item[$price . '_price'],
+                ]);
+            }
         }
 
         $sale->id;

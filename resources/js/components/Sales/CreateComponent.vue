@@ -3,45 +3,26 @@
     <el-main class="content">
       <el-row>
         <el-col :span="24">
-          <el-form
-            inline
-            label-position="right"
-            label-width="80px"
-            class="query-form"
-          >
-            <el-form-item
-              label="Vehiculo"
-              prop="brand"
-            >
-              <el-select
-                filterable
-                placeholder="Selecciona un Vehiculo"
-                v-model="brand"
-              >
+          <el-form inline label-position="right" label-width="80px" class="query-form">
+            <el-form-item label="Vehiculo" prop="brand">
+              <el-select filterable placeholder="Selecciona un Vehiculo" v-model="brand">
                 <el-option
                   v-for="brand in brands"
                   :key="brand.brand"
                   :label="brand.brand"
                   :value="brand.brand"
-                >
-                </el-option>
+                ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="Año">
               <el-select
                 v-model="year"
                 filterable
-                placeholder=""
+                placeholder
                 class="year"
                 :disabled="years.length == 0"
               >
-                <el-option
-                  v-for="year in years"
-                  :key="year"
-                  :label="year"
-                  :value="year"
-                >
-                </el-option>
+                <el-option v-for="year in years" :key="year" :label="year" :value="year"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -62,8 +43,7 @@
               placeholder="Filtra servicios"
               v-model="filterText"
               v-if="services.length > 0"
-            >
-            </el-input>
+            ></el-input>
             <el-tree
               class="filter-tree"
               node-key="id"
@@ -76,83 +56,47 @@
               @check-change="handleServiceChange"
               ref="services"
               v-if="services.length > 0"
-            >
-            </el-tree>
+            ></el-tree>
             <el-row v-if="services.length == 0">
-              <el-col
-                :span="24"
-                style="text-align: center;"
-              >No hay servicios</el-col>
+              <el-col :span="24" style="text-align: center;">No hay servicios</el-col>
             </el-row>
           </el-card>
         </el-col>
-        <el-col
-          :span="18"
-          :offset="1"
-        >
+        <el-col :span="18" :offset="1">
           <h3>Articulos</h3>
           <el-card class="box-card">
             <el-row
               v-if="selectedServices.length > 0"
               style="text-align:center;margin-bottom:10px;"
             >
-              <el-col
-                :span="4"
-                :offset="9"
-              >
-                <el-radio
-                  label="low"
-                  v-model="selectedPrice"
-                ></el-radio>
+              <el-col :span="5" :offset="9">
+                <el-radio label="low" v-model="selectedPrice"></el-radio>
               </el-col>
-              <el-col :span="4">
-                <el-radio
-                  label="mid"
-                  v-model="selectedPrice"
-                ></el-radio>
+              <el-col :span="5">
+                <el-radio label="mid" v-model="selectedPrice"></el-radio>
               </el-col>
-              <el-col :span="4">
-                <el-radio
-                  label="high"
-                  v-model="selectedPrice"
-                ></el-radio>
+              <el-col :span="5">
+                <el-radio label="high" v-model="selectedPrice"></el-radio>
               </el-col>
             </el-row>
-            <div
-              v-for="(service, index) in selectedServices"
-              v-bind:key="index"
-            >
-              <select-service
-                :service="service"
-                :price="selectedPrice"
-              ></select-service>
+            <div v-for="(service, index) in selectedServices" v-bind:key="index">
+              <select-service :service="service" :price="selectedPrice"></select-service>
             </div>
             <el-row v-if="selectedServices.length == 0">
-              <el-col
-                :span="24"
-                style="text-align: center;"
-              >Servicio no seleccionado</el-col>
+              <el-col :span="24" style="text-align: center;">Servicio no seleccionado</el-col>
             </el-row>
           </el-card>
         </el-col>
       </el-row>
-      <el-row
-        type="flex"
-        justify="end"
-      >
-        <el-col
-          :span="5"
-          style="text-align:right;"
-        >
+      <el-row type="flex" justify="end">
+        <el-col :span="5" style="text-align:right;">
           <br>
           <el-button
             type="primary"
             icon="el-icon-arrow-right"
             :disabled="selectedServices.length == 0"
             @click="next()"
-          >
-            Continuar
-          </el-button>
+          >Continuar</el-button>
         </el-col>
       </el-row>
     </el-main>
@@ -266,16 +210,22 @@ export default {
 
 <style lang="scss">
 .box-card {
-  height: 330px;
+  height: 430px;
   overflow-y: auto;
   .el-tree {
-    height: 250px;
+    height: 350px;
     overflow-y: scroll;
     border: 1px solid rgb(242, 242, 242);
   }
 }
 .el-input.percentage {
   width: 50px;
+}
+.el-input.price {
+  width: 80%;
+  input {
+    text-align: right;
+  }
 }
 .el-radio__label {
   display: none;

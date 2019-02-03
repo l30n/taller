@@ -1,118 +1,55 @@
 <template>
   <el-row>
     <el-row>
-      <el-col :span="6">
-        {{ service.label }}
-      </el-col>
-      <el-col :span="3">
-        Precio
-      </el-col>
+      <el-col :span="6">{{ service.label }}</el-col>
+      <el-col :span="3">Base</el-col>
+      <el-col :span="2" style="text-align:center;" v-bind:class="{ priceSelected: price == 'low'}">%</el-col>
       <el-col
-        :span="2"
+        :span="3"
         style="text-align:center;"
         v-bind:class="{ priceSelected: price == 'low'}"
-      >
-        %
-      </el-col>
+      >Bajo</el-col>
+      <el-col :span="2" style="text-align:center;" v-bind:class="{ priceSelected: price == 'mid'}">%</el-col>
       <el-col
-        :span="2"
-        v-bind:class="{ priceSelected: price == 'low'}"
-      >
-        Bajo
-      </el-col>
-      <el-col
-        :span="2"
+        :span="3"
         style="text-align:center;"
         v-bind:class="{ priceSelected: price == 'mid'}"
-      >
-        %
-      </el-col>
-      <el-col
-        :span="2"
-        v-bind:class="{ priceSelected: price == 'mid'}"
-      >
-        Medio
-      </el-col>
+      >Medio</el-col>
       <el-col
         :span="2"
         style="text-align:center;"
         v-bind:class="{ priceSelected: price == 'high'}"
-      >
-        %
-      </el-col>
+      >%</el-col>
       <el-col
-        :span="2"
+        :span="3"
+        style="text-align:center;"
         v-bind:class="{ priceSelected: price == 'high'}"
-      >
-        Alto
-      </el-col>
+      >Alto</el-col>
     </el-row>
-    <el-row
-      v-for="(item, index) in service.items"
-      v-bind:key="index"
-    >
-      <el-col
-        :span="5"
-        :offset="1"
-      >
+    <el-row v-for="(item, index) in service.items" v-bind:key="index">
+      <el-col :span="5" :offset="1">
         <label class="el-form-item__label">{{ item.name }}</label>
       </el-col>
       <el-col :span="3">
         <label class="el-form-item__label">${{ formatPrice(item.price) }}</label>
       </el-col>
-      <el-col
-        :span="2"
-        style="text-align:center;"
-        v-bind:class="{ priceSelected: price == 'low'}"
-      >
-        <el-input
-          class="percentage"
-          maxlength="2"
-          v-model="item.low"
-        >
-        </el-input>
+      <el-col :span="2" style="text-align:center;" v-bind:class="{ priceSelected: price == 'low'}">
+        <el-input class="percentage" maxlength="2" v-model="item.low"></el-input>
       </el-col>
-      <el-col
-        :span="2"
-        v-bind:class="{ priceSelected: price == 'low'}"
-      >
-        <label class="el-form-item__label">${{ formatPrice(item.price + (item.price * item.low / 100)) }}</label>
+      <el-col :span="3" style="text-align:center;" v-bind:class="{ priceSelected: price == 'low'}">
+        <el-input class="price" v-model="item.low_price"></el-input>
       </el-col>
-      <el-col
-        :span="2"
-        style="text-align:center;"
-        v-bind:class="{ priceSelected: price == 'mid'}"
-      >
-        <el-input
-          class="percentage"
-          maxlength="2"
-          v-model="item.mid"
-        >
-        </el-input>
+      <el-col :span="2" style="text-align:center;" v-bind:class="{ priceSelected: price == 'mid'}">
+        <el-input class="percentage" maxlength="2" v-model="item.mid"></el-input>
       </el-col>
-      <el-col
-        :span="2"
-        v-bind:class="{ priceSelected: price == 'mid'}"
-      >
-        <label class="el-form-item__label">${{ formatPrice(item.price + (item.price * item.mid / 100)) }}</label>
+      <el-col :span="3" style="text-align:center;" v-bind:class="{ priceSelected: price == 'mid'}">
+        <el-input class="price" v-model="item.mid_price"></el-input>
       </el-col>
-      <el-col
-        :span="2"
-        style="text-align:center;"
-        v-bind:class="{ priceSelected: price == 'high'}"
-      >
-        <el-input
-          class="percentage"
-          maxlength="2"
-          v-model="item.high"
-        >
-        </el-input>
+      <el-col :span="2" style="text-align:center;" v-bind:class="{ priceSelected: price == 'high'}">
+        <el-input class="percentage" maxlength="2" v-model="item.high"></el-input>
       </el-col>
-      <el-col
-        :span="2"
-        v-bind:class="{ priceSelected: price == 'high'}"
-      >
-        <label class="el-form-item__label">${{ formatPrice(item.price + (item.price * item.high / 100)) }}</label>
+      <el-col :span="3" style="text-align:center;" v-bind:class="{ priceSelected: price == 'high'}">
+        <el-input class="price" v-model="item.high_price"></el-input>
       </el-col>
     </el-row>
   </el-row>

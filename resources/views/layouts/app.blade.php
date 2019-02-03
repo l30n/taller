@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Taller Gallegos</title>
@@ -8,7 +7,6 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-
 <body>
     <div id="app" v-cloak>
         <div class="loader-container">
@@ -21,7 +19,7 @@
                 </a>
                 <ul class="header-operations">
                     <li>
-                        <a href="#" onclick="javascript:document.getElementById('form-logout').submit();">
+                        <a href="#" onclick="javascript:document.getElementById('form-logout').submit();" style="color:white;">
                             Cerrar Sesion
                         </a>
                         <form id="form-logout" method="POST" action="{{ route('logout') }}">
@@ -45,6 +43,9 @@
                         <el-menu-item index="items.list" v-on:click="goto('{{ route('items.list') }}')">
                             Articulos
                         </el-menu-item>
+                        <el-menu-item index="clients.list" v-on:click="goto('{{ route('clients.list') }}')">
+                            Clients
+                        </el-menu-item>
                     </el-menu>
                 </el-aside>
                 @yield('content')
@@ -55,5 +56,4 @@
     <script src="{{ mix('js/vendor.js') }}"></script>
     <script src="{{ mix('js/app.js') }}"></script>
 </body>
-
 </html>

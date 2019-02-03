@@ -21,6 +21,7 @@ Route::get('/car/brands', 'CarsController@listBrands');
 Route::get('/servicesByCar', 'ServicesController@getByCar');
 
 Route::get('/clients', 'ClientsController@get');
+Route::post('/clients', 'ClientsController@save');
 
 Route::get('/sales', 'SalesController@get');
 Route::post('/sales', 'SalesController@save');

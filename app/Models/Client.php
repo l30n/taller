@@ -7,4 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Client extends Model
 {
     //
+    public $fillable = [
+        'name', 'phonenumber', 'address', 'reference',
+    ];
 }

@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class SaleService extends Model
 {
     //
-    public $fillable = ['car_id', 'service_id', 'sale_id', 'year'];
+    public $fillable = [
+        'car_id', 'service_id', 'sale_id', 'item_id', 'year', 'price',
+    ];
 }
