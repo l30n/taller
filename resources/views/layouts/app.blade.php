@@ -48,7 +48,7 @@
                             Articulos
                         </el-menu-item>
                         <el-menu-item index="clients.list" v-on:click="goto('{{ route('clients.list') }}')">
-                            Clients
+                            Clientes
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
