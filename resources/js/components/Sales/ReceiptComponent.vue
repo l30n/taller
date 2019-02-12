@@ -128,9 +128,11 @@ export default {
 
       for (var i in order.services) {
         for (var x in order.services[i].items) {
-          total += parseFloat(
-            order.services[i].items[x][order.price + "_price"]
-          );
+          if (order.services[i].items[x][order.price + "_price"]) {
+            total += parseFloat(
+              order.services[i].items[x][order.price + "_price"]
+            );
+          }
         }
       }
 

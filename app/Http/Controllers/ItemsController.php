@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveItemRequest;
 use App\Models\Item;
+use Illuminate\Http\Request;
 
 class ItemsController extends Controller
 {
@@ -23,8 +24,12 @@ class ItemsController extends Controller
         return view('items.index');
     }
 
-    public function get()
+    public function get(Request $request)
     {
+        if ($request->has('all')) {
+            return Item::all();
+        }
+
         return Item::paginate(10);
     }
 

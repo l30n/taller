@@ -7,6 +7,7 @@ use App\Http\Requests\SaveServiceRequest;
 use App\Models\Car;
 use App\Models\CarServiceItem;
 use App\Models\Service;
+use Illuminate\Http\Request;
 
 class ServicesController extends Controller
 {
@@ -25,8 +26,12 @@ class ServicesController extends Controller
         return view('services.index');
     }
 
-    public function get()
+    public function get(Request $request)
     {
+        if ($request->has('all')) {
+            return Service::all();
+        }
+
         return Service::paginate(10);
     }
 

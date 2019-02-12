@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>Taller Gallegos</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -29,10 +30,13 @@
                 </ul>
             </el-header>
             <el-container class="wrapper">
-                <el-aside class="menu">
+                <el-aside class="menu" width="200px">
                     <el-menu default-active="{{ Route::current()->getName() }}">
                         <el-menu-item index="sales.list" v-on:click="goto('{{ route('sales.list') }}')">
                             Ordenes de Servicio
+                        </el-menu-item>
+                        <el-menu-item index="carservices.list" v-on:click="goto('{{ route('carservices.list') }}')">
+                            Carros y Servicios
                         </el-menu-item>
                         <el-menu-item index="services.list" v-on:click="goto('{{ route('services.list') }}')">
                             Servicios
