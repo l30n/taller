@@ -79,9 +79,17 @@
                 <el-radio label="high" v-model="selectedPrice"></el-radio>
               </el-col>
             </el-row>
-            <div v-for="(service, index) in selectedServices" v-bind:key="index">
-              <select-service :service="service" :price="selectedPrice"></select-service>
+            <div style="height: 340px;overflow: auto;">
+              <div v-for="(service, index) in selectedServices" v-bind:key="index">
+                <select-service :service="service" :price="selectedPrice"></select-service>
+              </div>
             </div>
+            <el-row v-if="selectedServices.length > 0">
+              <el-col :span="9">Total</el-col>
+              <el-col :span="5" style="text-align: right;padding-right: 10px;">{{ total('low') }}</el-col>
+              <el-col :span="5" style="text-align: right;padding-right: 10px;">{{ total('mid') }}</el-col>
+              <el-col :span="5" style="text-align: right;padding-right: 10px;">{{ total('high') }}</el-col>
+            </el-row>
             <el-row v-if="selectedServices.length == 0">
               <el-col :span="24" style="text-align: center;">Servicio no seleccionado</el-col>
             </el-row>
@@ -192,6 +200,25 @@ export default {
           if (tmp[0] === name) result = decodeURIComponent(tmp[1]);
         });
       return result;
+    },
+    formatPrice(value) {
+      let val = (value / 1).toFixed(2);
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    total(price) {
+      var total = 0;
+
+      for (var i in this.selectedServices) {
+        for (var x in this.selectedServices[i].items) {
+          if (this.selectedServices[i].items[x][price + "_price"]) {
+            total += parseFloat(
+              this.selectedServices[i].items[x][price + "_price"]
+            );
+          }
+        }
+      }
+
+      return this.formatPrice(total);
     },
     next() {
       const order = {

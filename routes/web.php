@@ -41,6 +41,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', 'ClientsController@index')->name('clients.list');
     });
 
+    Route::prefix('users')->group(function () {
+        Route::get('/', 'UsersController@index')->name('users.list');
+    });
+
     Route::prefix('carservices')->group(function () {
         Route::get('/', 'CarServicesController@index')->name('carservices.list');
         Route::get('/create', 'CarServicesController@create')->name('carservices.create');

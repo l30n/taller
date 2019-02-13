@@ -79,6 +79,9 @@ Vue.component('create-carservices', require('./components/CarServices/CreateComp
 Vue.component('list-carservices', require('./components/CarServices/ListComponent').default);
 Vue.component('select-item', require('./components/CarServices/SelectItemComponent').default);
 
+//Vue.component('create-users', require('./components/Cars/CreateComponent').default);
+Vue.component('list-users', require('./components/Users/ListComponent').default);
+
 new Vue({
   el: '#app',
   store,

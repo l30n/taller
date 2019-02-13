@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row style="border-bottom: 1px solid black;margin-bottom:5px;">
     <el-row>
       <el-col :span="6">{{ service.label }}</el-col>
       <el-col :span="3">Base</el-col>
@@ -52,6 +52,7 @@
         <el-input class="price" v-model="item.high_price"></el-input>
       </el-col>
     </el-row>
+    <el-row></el-row>
   </el-row>
 </template>
 

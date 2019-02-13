@@ -37,3 +37,6 @@ Route::post('/services', 'ServicesController@save');
 
 Route::get('/carservices', 'CarServicesController@get');
 Route::post('/carservices', 'CarServicesController@save');
+
+Route::get('/users', 'UsersController@get');
+Route::post('/users', 'UsersController@save');
