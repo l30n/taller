@@ -5,6 +5,7 @@
         <el-col :span="19">
             <h2>Usuarios</h2>
         </el-col>
+        <create-users></create-users>
     </el-row>
     <el-row type="flex">
         <el-col :span="24">

@@ -60,7 +60,7 @@ export default {
           {
             required: true,
             message: "Campo Nombre es obligatorio",
-            trigger: "blur"
+            trigger: "change"
           }
         ]
       }
@@ -84,9 +84,7 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
-      this.client.name = "";
-      this.client.phonenumber = "";
-      this.client.address = "";
+      this.$refs.clientForm.resetFields();
     },
     saveClient() {
       var $this = this;

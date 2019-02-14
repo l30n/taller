@@ -5,9 +5,7 @@
       icon="el-icon-circle-plus"
       @click="dialogVisible = true"
       style="float:right;"
-    >
-      Agregar un Carro
-    </el-button>
+    >Agregar un Carro</el-button>
     <el-dialog
       title="Agregar un Carro"
       :visible.sync="dialogVisible"
@@ -23,37 +21,18 @@
             label-width="150px"
             ref="carForm"
           >
-            <el-form-item
-              label="Marca del Carro"
-              prop="name"
-            >
+            <el-form-item label="Marca del Carro" prop="name">
               <el-input v-model="car.brand"></el-input>
             </el-form-item>
-            <el-form-item
-              :label="'Año (' + car.year[0] + '-' + car.year[1] + ')'"
-              prop="year"
-            >
-              <el-slider
-                v-model="car.year"
-                range
-                show-stops
-                :min="1999"
-                :max="2019"
-              >
-              </el-slider>
+            <el-form-item :label="'Año (' + car.year[0] + '-' + car.year[1] + ')'" prop="year">
+              <el-slider v-model="car.year" range show-stops :min="1999" :max="2019"></el-slider>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
+      <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">Cancelar</el-button>
-        <el-button
-          type="primary"
-          @click="saveCar()"
-        >Agregar</el-button>
+        <el-button type="primary" @click="saveCar()">Agregar</el-button>
       </span>
     </el-dialog>
   </el-col>
@@ -73,7 +52,7 @@ export default {
           {
             required: true,
             message: "Campo Marca es obligatorio",
-            trigger: "blur"
+            trigger: "change"
           }
         ]
       }
@@ -97,7 +76,7 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
-      this.car.name = "";
+      this.$refs.carForm.resetFields();
     },
     saveCar() {
       var $this = this;

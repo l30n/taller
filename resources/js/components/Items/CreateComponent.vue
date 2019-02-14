@@ -5,9 +5,7 @@
       icon="el-icon-circle-plus"
       @click="dialogVisible = true"
       style="float:right;"
-    >
-      Agregar un Articulo
-    </el-button>
+    >Agregar un Articulo</el-button>
     <el-dialog
       title="Agregar un Articulo"
       :visible.sync="dialogVisible"
@@ -23,33 +21,18 @@
             label-width="150px"
             ref="itemForm"
           >
-            <el-form-item
-              label="Nombre del Articulo"
-              prop="name"
-            >
+            <el-form-item label="Nombre del Articulo" prop="name">
               <el-input v-model="item.name"></el-input>
             </el-form-item>
-            <el-form-item
-              label="Descripcion"
-              prop="description"
-            >
-              <el-input
-                type="textarea"
-                v-model="item.description"
-              ></el-input>
+            <el-form-item label="Descripcion" prop="description">
+              <el-input type="textarea" v-model="item.description"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
+      <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">Cancelar</el-button>
-        <el-button
-          type="primary"
-          @click="saveItem()"
-        >Agregar</el-button>
+        <el-button type="primary" @click="saveItem()">Agregar</el-button>
       </span>
     </el-dialog>
   </el-col>
@@ -69,7 +52,7 @@ export default {
           {
             required: true,
             message: "Campo Nombre es obligatorio",
-            trigger: "blur"
+            trigger: "change"
           }
         ]
       }
@@ -93,8 +76,7 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
-      this.item.name = "";
-      this.item.description = "";
+      this.$refs.itemForm.resetFields();
     },
     saveItem() {
       var $this = this;

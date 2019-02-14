@@ -5,9 +5,9 @@
       icon="el-icon-circle-plus"
       @click="dialogVisible = true"
       style="float:right;"
-    >Agregar un Servicio</el-button>
+    >Agregar un Usuario</el-button>
     <el-dialog
-      title="Agregar un Servicio"
+      title="Agregar un Usuario"
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="handleClose"
@@ -17,22 +17,25 @@
           <el-form
             :label-position="labelPosition"
             :rules="rules"
-            :model="service"
+            :model="user"
             label-width="150px"
-            ref="serviceForm"
+            ref="userForm"
           >
-            <el-form-item label="Nombre del Servicio" prop="name">
-              <el-input v-model="service.name"></el-input>
+            <el-form-item label="Nombre" prop="name">
+              <el-input v-model="user.name"></el-input>
             </el-form-item>
-            <el-form-item label="Descripcion" prop="description">
-              <el-input type="textarea" v-model="service.description"></el-input>
+            <el-form-item label="Correo Electronico" prop="email">
+              <el-input v-model="user.email"></el-input>
+            </el-form-item>
+            <el-form-item label="Contraseña" prop="password">
+              <el-input v-model="user.password"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">Cancelar</el-button>
-        <el-button type="primary" @click="saveService()">Agregar</el-button>
+        <el-button type="primary" @click="saveUser()">Agregar</el-button>
       </span>
     </el-dialog>
   </el-col>
@@ -43,15 +46,35 @@ export default {
     return {
       dialogVisible: false,
       labelPosition: "left",
-      service: {
+      user: {
         name: "",
-        description: ""
+        email: "",
+        password: ""
       },
       rules: {
         name: [
           {
             required: true,
             message: "Campo Nombre es obligatorio",
+            trigger: "change"
+          }
+        ],
+        email: [
+          {
+            required: true,
+            message: "Campo Correo Electronico es obligatorio",
+            trigger: "change"
+          },
+          {
+            type: "email",
+            message: "Correo Electronico invalido",
+            trigger: "change"
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: "Campo Contraseña es obligatorio",
             trigger: "change"
           }
         ]
@@ -61,9 +84,9 @@ export default {
   methods: {
     handleClose(done) {
       var $this = this;
-      if ($this.service.name) {
+      if ($this.user.name || $this.user.email || $this.user.password) {
         $this
-          .$confirm("¿Estas seguro de no guardar el Servicio?")
+          .$confirm("¿Estas seguro de no guardar el Articulo?")
           .then(_ => {
             $this.cancel();
             done();
@@ -76,18 +99,18 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
-      this.$refs.serviceForm.resetFields();
+      this.$refs.userForm.resetFields();
     },
-    saveService() {
+    saveUser() {
       var $this = this;
-      $this.$refs.serviceForm.validate(valid => {
+      $this.$refs.userForm.validate(valid => {
         if (valid) {
           axios
-            .post("/api/services", $this.service)
+            .post("/api/users", $this.user)
             .then(function(response) {
               $this.$notify({
                 title: "¡Exito!",
-                message: "El Servicio fue agregado correctamente",
+                message: "El Usuario fue agregado correctamente",
                 type: "success"
               });
               $this.$root.$emit("refreshTable");

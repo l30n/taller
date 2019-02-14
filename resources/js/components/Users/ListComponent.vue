@@ -5,6 +5,7 @@
         <el-table-column prop="id" label="#" width="50px">
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
+        <el-table-column prop="name" label="Nombre"></el-table-column>
         <el-table-column prop="email" label="Correo Electronico"></el-table-column>
         <el-table-column prop="created_at" label="Fecha"></el-table-column>
       </el-table>
