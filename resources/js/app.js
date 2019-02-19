@@ -82,6 +82,9 @@ Vue.component('select-item', require('./components/CarServices/SelectItemCompone
 Vue.component('create-users', require('./components/Users/CreateComponent').default);
 Vue.component('list-users', require('./components/Users/ListComponent').default);
 
+//Vue.component('create-roles', require('./components/Users/CreateComponent').default);
+Vue.component('list-roles', require('./components/Roles/ListComponent').default);
+
 new Vue({
   el: '#app',
   store,

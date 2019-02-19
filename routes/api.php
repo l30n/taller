@@ -40,3 +40,6 @@ Route::post('/carservices', 'CarServicesController@save');
 
 Route::get('/users', 'UsersController@get');
 Route::post('/users', 'UsersController@save');
+
+Route::get('/roles', 'RolesController@get');
+Route::post('/roles', 'UsersController@save');

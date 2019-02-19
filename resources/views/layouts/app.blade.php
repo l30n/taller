@@ -53,6 +53,9 @@
                         <el-menu-item index="users.list" v-on:click="goto('{{ route('users.list') }}')">
                             Usuarios
                         </el-menu-item>
+                        <el-menu-item index="roles.list" v-on:click="goto('{{ route('roles.list') }}')">
+                            Roles
+                        </el-menu-item>
                     </el-menu>
                 </el-aside>
                 @yield('content')
