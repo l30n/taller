@@ -5,22 +5,37 @@
         <label class="el-form-item__label">{{ item.name }}</label>
       </el-col>
       <el-col :span="3">
-        <el-input class="price" v-model="item.price"></el-input>
+        <el-input class="price" v-model="item.price" @change="changeBase(item, index)"></el-input>
       </el-col>
       <el-col :span="2">
-        <el-input class="percentage" maxlength="2" v-model="item.low"></el-input>
+        <el-input
+          class="percentage"
+          maxlength="2"
+          v-model="item.low"
+          @change="changePercentage('low', item, index)"
+        ></el-input>
       </el-col>
       <el-col :span="3">
         <el-input class="price" v-model="item.low_price"></el-input>
       </el-col>
       <el-col :span="2">
-        <el-input class="percentage" maxlength="2" v-model="item.mid"></el-input>
+        <el-input
+          class="percentage"
+          maxlength="2"
+          v-model="item.mid"
+          @change="changePercentage('mid', item, index)"
+        ></el-input>
       </el-col>
       <el-col :span="3">
         <el-input class="price" v-model="item.mid_price"></el-input>
       </el-col>
       <el-col :span="2">
-        <el-input class="percentage" maxlength="2" v-model="item.high"></el-input>
+        <el-input
+          class="percentage"
+          maxlength="2"
+          v-model="item.high"
+          @change="changePercentage('high', item, index)"
+        ></el-input>
       </el-col>
       <el-col :span="3">
         <el-input class="price" v-model="item.high_price"></el-input>
@@ -42,8 +57,18 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     deleteItem(value) {
-      console.log(value);
       this.items.splice(value, 1);
+    },
+    changeBase(item, index) {
+      this.items[index].low_price = item.price;
+      this.items[index].mid_price = item.price;
+      this.items[index].high_price = item.price;
+      this.$forceUpdate();
+    },
+    changePercentage(price, item, index) {
+      this.items[index][price + "_price"] =
+        parseInt(item.price) + (item.price * item[price]) / 100;
+      this.$forceUpdate();
     }
   }
 };

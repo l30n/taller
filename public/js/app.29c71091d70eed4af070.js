@@ -3172,6 +3172,13 @@ function mergeFn (a, b) {
     handleChange: function handleChange(value) {
       this.item = "";
       var item = this.listItems[value];
+      item.price = 0;
+      item.low = 0;
+      item.low_price = 0;
+      item.mid = 0;
+      item.mid_price = 0;
+      item.high = 0;
+      item.high_price = 0;
       this.items.push(item);
     },
     next: function next() {
@@ -3308,6 +3315,21 @@ function mergeFn (a, b) {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   props: ["items"],
@@ -3318,8 +3340,17 @@ function mergeFn (a, b) {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     deleteItem: function deleteItem(value) {
-      console.log(value);
       this.items.splice(value, 1);
+    },
+    changeBase: function changeBase(item, index) {
+      this.items[index].low_price = item.price;
+      this.items[index].mid_price = item.price;
+      this.items[index].high_price = item.price;
+      this.$forceUpdate();
+    },
+    changePercentage: function changePercentage(price, item, index) {
+      this.items[index][price + "_price"] = parseInt(item.price) + item.price * item[price] / 100;
+      this.$forceUpdate();
     }
   }
 });
@@ -81843,6 +81874,11 @@ var render = function() {
             [
               _c("el-input", {
                 staticClass: "price",
+                on: {
+                  change: function($event) {
+                    _vm.changeBase(item, index)
+                  }
+                },
                 model: {
                   value: item.price,
                   callback: function($$v) {
@@ -81862,6 +81898,11 @@ var render = function() {
               _c("el-input", {
                 staticClass: "percentage",
                 attrs: { maxlength: "2" },
+                on: {
+                  change: function($event) {
+                    _vm.changePercentage("low", item, index)
+                  }
+                },
                 model: {
                   value: item.low,
                   callback: function($$v) {
@@ -81899,6 +81940,11 @@ var render = function() {
               _c("el-input", {
                 staticClass: "percentage",
                 attrs: { maxlength: "2" },
+                on: {
+                  change: function($event) {
+                    _vm.changePercentage("mid", item, index)
+                  }
+                },
                 model: {
                   value: item.mid,
                   callback: function($$v) {
@@ -81936,6 +81982,11 @@ var render = function() {
               _c("el-input", {
                 staticClass: "percentage",
                 attrs: { maxlength: "2" },
+                on: {
+                  change: function($event) {
+                    _vm.changePercentage("high", item, index)
+                  }
+                },
                 model: {
                   value: item.high,
                   callback: function($$v) {

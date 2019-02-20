@@ -128,6 +128,13 @@ export default {
     handleChange(value) {
       this.item = "";
       var item = this.listItems[value];
+      item.price = 0;
+      item.low = 0;
+      item.low_price = 0;
+      item.mid = 0;
+      item.mid_price = 0;
+      item.high = 0;
+      item.high_price = 0;
       this.items.push(item);
     },
     next() {
