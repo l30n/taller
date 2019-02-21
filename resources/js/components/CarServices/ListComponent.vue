@@ -14,6 +14,11 @@
         <el-table-column label="Servicio">
           <template slot-scope="scope">{{ scope.row.service.name }}</template>
         </el-table-column>
+        <el-table-column width="200px">
+          <template slot-scope="scope">
+            <el-button icon="el-icon-edit" @click="goto('/carservices/edit/' + scope.row.id)">Editar</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="block" style="text-align: center;" v-if="cars.total > 10">
         <el-pagination
@@ -47,6 +52,9 @@ export default {
     handleCurrentChange(val) {
       this.page = val;
       this.refreshTable();
+    },
+    goto: function(link) {
+      window.location.href = link;
     }
   },
   data() {

@@ -3129,6 +3129,20 @@ function mergeFn (a, b) {
 //
 
 /* harmony default export */ __webpack_exports__["a"] = ({
+  props: {
+    carService: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    items: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    }
+  },
   watch: {
     filterText: function filterText(val) {
       this.$refs.services.filter(val);
@@ -3143,7 +3157,6 @@ function mergeFn (a, b) {
       cars: [],
       service: "",
       services: [],
-      items: [],
       item: "",
       listItems: [],
       save: false,
@@ -3158,10 +3171,16 @@ function mergeFn (a, b) {
 
     axios.get("/api/cars?all=1").then(function (response) {
       $this.cars = response.data;
+      if ($this.carService) {
+        $this.car = $this.carService.car_id;
+      }
     });
 
     axios.get("/api/services?all=1").then(function (response) {
       $this.services = response.data;
+      if ($this.carService) {
+        $this.service = $this.carService.service_id;
+      }
     });
 
     axios.get("/api/items?all=1").then(function (response) {
@@ -3180,6 +3199,7 @@ function mergeFn (a, b) {
       item.high = 0;
       item.high_price = 0;
       this.items.push(item);
+      this.$refs.selectItem.$forceUpdate();
     },
     next: function next() {
       var $this = this;
@@ -3191,7 +3211,7 @@ function mergeFn (a, b) {
         $this.save = true;
         $this.$notify({
           title: "¡Exito!",
-          message: "Articulo fue agregado correctamente",
+          message: "Servicio fue agregado correctamente",
           type: "success"
         });
         setTimeout(function () {
@@ -3245,6 +3265,11 @@ function mergeFn (a, b) {
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   mounted: function mounted() {
@@ -3265,6 +3290,10 @@ function mergeFn (a, b) {
     handleCurrentChange: function handleCurrentChange(val) {
       this.page = val;
       this.refreshTable();
+    },
+
+    goto: function goto(link) {
+      window.location.href = link;
     }
   },
   data: function data() {
@@ -3341,6 +3370,7 @@ function mergeFn (a, b) {
     },
     deleteItem: function deleteItem(value) {
       this.items.splice(value, 1);
+      this.$forceUpdate();
     },
     changeBase: function changeBase(item, index) {
       this.items[index].low_price = item.price;
@@ -3351,6 +3381,12 @@ function mergeFn (a, b) {
     changePercentage: function changePercentage(price, item, index) {
       this.items[index][price + "_price"] = parseInt(item.price) + item.price * item[price] / 100;
       this.$forceUpdate();
+    },
+    itemName: function itemName(item) {
+      if (item.name) {
+        return item.name;
+      }
+      return item.item.name;
     }
   }
 });
@@ -6631,7 +6667,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.priceSelected {\n  background: #f2f2f2;\n}\n.priceSelected label {\n    line-height: 37px;\n}\n", ""]);
+exports.push([module.i, "\n.priceSelected {\n  background: #f2f2f2;\n}\n.priceSelected label {\n    line-height: 37px;\n}\n.el-form-item__label {\n  text-align: left;\n  line-height: 18px;\n}\n", ""]);
 
 // exports
 
@@ -79933,6 +79969,31 @@ var render = function() {
                     }
                   }
                 ])
+              }),
+              _vm._v(" "),
+              _c("el-table-column", {
+                attrs: { width: "200px" },
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(scope) {
+                      return [
+                        _c(
+                          "el-button",
+                          {
+                            attrs: { icon: "el-icon-edit" },
+                            on: {
+                              click: function($event) {
+                                _vm.goto("/carservices/edit/" + scope.row.id)
+                              }
+                            }
+                          },
+                          [_vm._v("Editar")]
+                        )
+                      ]
+                    }
+                  }
+                ])
               })
             ],
             1
@@ -81332,7 +81393,10 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("select-item", { attrs: { items: _vm.items } })
+                      _c("select-item", {
+                        ref: "selectItem",
+                        attrs: { items: _vm.items }
+                      })
                     ],
                     1
                   )
@@ -81860,11 +81924,11 @@ var render = function() {
     _vm._l(_vm.items, function(item, index) {
       return _c(
         "el-row",
-        { key: index },
+        { key: index, staticStyle: { "margin-bottom": "5px" } },
         [
           _c("el-col", { attrs: { span: 4 } }, [
             _c("label", { staticClass: "el-form-item__label" }, [
-              _vm._v(_vm._s(item.name))
+              _vm._v(_vm._s(_vm.itemName(item)))
             ])
           ]),
           _vm._v(" "),

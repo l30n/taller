@@ -52,5 +52,6 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('carservices')->group(function () {
         Route::get('/', 'CarServicesController@index')->name('carservices.list');
         Route::get('/create', 'CarServicesController@create')->name('carservices.create');
+        Route::get('/edit/{id}', 'CarServicesController@edit')->name('carservices.edit');
     });
 });

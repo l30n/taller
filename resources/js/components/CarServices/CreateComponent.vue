@@ -66,7 +66,7 @@
               <el-col :span="2">%</el-col>
               <el-col :span="3">Alto</el-col>
             </el-row>
-            <select-item :items="items"></select-item>
+            <select-item ref="selectItem" :items="items"></select-item>
           </el-card>
         </el-col>
       </el-row>
@@ -86,6 +86,20 @@
 
 <script>
 export default {
+  props: {
+    carService: {
+      type: Object,
+      default: function() {
+        return {};
+      }
+    },
+    items: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    }
+  },
   watch: {
     filterText(val) {
       this.$refs.services.filter(val);
@@ -100,7 +114,6 @@ export default {
       cars: [],
       service: "",
       services: [],
-      items: [],
       item: "",
       listItems: [],
       save: false,
@@ -114,10 +127,16 @@ export default {
 
     axios.get("/api/cars?all=1").then(function(response) {
       $this.cars = response.data;
+      if ($this.carService) {
+        $this.car = $this.carService.car_id;
+      }
     });
 
     axios.get("/api/services?all=1").then(function(response) {
       $this.services = response.data;
+      if ($this.carService) {
+        $this.service = $this.carService.service_id;
+      }
     });
 
     axios.get("/api/items?all=1").then(function(response) {
@@ -136,6 +155,7 @@ export default {
       item.high = 0;
       item.high_price = 0;
       this.items.push(item);
+      this.$refs.selectItem.$forceUpdate();
     },
     next() {
       var $this = this;
@@ -149,7 +169,7 @@ export default {
           $this.save = true;
           $this.$notify({
             title: "¡Exito!",
-            message: "Articulo fue agregado correctamente",
+            message: "Servicio fue agregado correctamente",
             type: "success"
           });
           setTimeout(function() {

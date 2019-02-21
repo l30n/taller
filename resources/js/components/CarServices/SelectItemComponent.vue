@@ -1,8 +1,8 @@
 <template>
   <el-row>
-    <el-row v-for="(item, index) in items" v-bind:key="index">
+    <el-row v-for="(item, index) in items" v-bind:key="index" style="margin-bottom:5px;">
       <el-col :span="4">
-        <label class="el-form-item__label">{{ item.name }}</label>
+        <label class="el-form-item__label">{{ itemName(item) }}</label>
       </el-col>
       <el-col :span="3">
         <el-input class="price" v-model="item.price" @change="changeBase(item, index)"></el-input>
@@ -58,6 +58,7 @@ export default {
     },
     deleteItem(value) {
       this.items.splice(value, 1);
+      this.$forceUpdate();
     },
     changeBase(item, index) {
       this.items[index].low_price = item.price;
@@ -69,6 +70,12 @@ export default {
       this.items[index][price + "_price"] =
         parseInt(item.price) + (item.price * item[price]) / 100;
       this.$forceUpdate();
+    },
+    itemName(item) {
+      if (item.name) {
+        return item.name;
+      }
+      return item.item.name;
     }
   }
 };
@@ -80,5 +87,9 @@ export default {
   label {
     line-height: 37px;
   }
+}
+.el-form-item__label {
+  text-align: left;
+  line-height: 18px;
 }
 </style>

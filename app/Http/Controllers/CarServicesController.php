@@ -20,6 +20,18 @@ class CarServicesController extends Controller
         return view('carservices.create');
     }
 
+    public function edit($id)
+    {
+        $carService = CarService::find($id);
+
+        $items = CarServiceItem::where([
+            'car_id' => $carService->car_id,
+            'service_id' => $carService->service_id,
+        ])->with('item')->get();
+
+        return view('carservices.edit', ['carService' => $carService, 'items' => $items]);
+    }
+
     public function get()
     {
         return CarService::with('car')->with('service')->paginate(10);
@@ -40,20 +52,42 @@ class CarServicesController extends Controller
             'high' => 0,
         ]);
 
-        $items = $request->get('items');
+        $items = collect($request->get('items'));
 
-        foreach ($items as $item) {
+        $ids = CarServiceItem::select('id')->where([
+            'car_id' => $car,
+            'service_id' => $service,
+        ])->get();
+
+        $ids->each(function ($id, $key) use ($items) {
+            if (!$items->contains('id', $id->id)) {
+                CarServiceItem::find($id->id)->delete();
+            }
+        });
+
+        $items->each(function ($item, $key) use ($car, $service) {
             $item['car_id'] = $car;
             $item['service_id'] = $service;
             $item['item_id'] = $item['id'];
             $item['comment'] = '';
 
-            unset($item['id']);
-            unset($item['name']);
-            unset($item['description']);
+            if (isset($item['name'])) {
+                unset($item['id']);
+                unset($item['name']);
+                unset($item['description']);
+            }
 
-            CarServiceItem::firstOrCreate($item);
-        }
+            if (isset($item['item'])) {
+                $item['item_id'] = $item['item']['id'];
+                unset($item['item']);
+            }
+
+            if (isset($item['id'])) {
+                CarServiceItem::find($item['id'])->update($item);
+            } else {
+                CarServiceItem::firstOrCreate($item);
+            }
+        });
 
         return response()->json([
             'success' => true,
