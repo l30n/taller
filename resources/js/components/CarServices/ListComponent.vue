@@ -29,7 +29,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block" style="text-align: center;" v-if="cars.length > limit">
+      <div class="block" style="text-align: center;" v-if="cars.length > limit && search == ''">
         <el-pagination
           layout="prev, pager, next"
           :page-size="limit"

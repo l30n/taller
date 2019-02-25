@@ -80182,7 +80182,7 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _vm.cars.length > _vm.limit
+          _vm.cars.length > _vm.limit && _vm.search == ""
             ? _c(
                 "div",
                 {
