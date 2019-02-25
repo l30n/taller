@@ -3288,6 +3288,7 @@ function mergeFn (a, b) {
   },
   computed: {
     data: function data() {
+      console.log((this.page - 1) * 10);
       return this.cars.splice((this.page - 1) * 10, 10);
     }
   },
@@ -80184,7 +80185,7 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _vm.cars.length > 10
+          _vm.data.length > 10
             ? _c(
                 "div",
                 {
@@ -80196,7 +80197,7 @@ var render = function() {
                     attrs: {
                       layout: "prev, pager, next",
                       "page-size": 10,
-                      total: _vm.cars.length
+                      total: _vm.data.length
                     },
                     on: { "current-change": _vm.handleCurrentChange }
                   })

@@ -29,11 +29,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block" style="text-align: center;" v-if="cars.length > 10">
+      <div class="block" style="text-align: center;" v-if="data.length > 10">
         <el-pagination
           layout="prev, pager, next"
           :page-size="10"
-          :total="cars.length"
+          :total="data.length"
           @current-change="handleCurrentChange"
         ></el-pagination>
       </div>
@@ -50,6 +50,7 @@ export default {
   },
   computed: {
     data: function() {
+      console.log((this.page - 1) * 10);
       return this.cars.splice((this.page - 1) * 10, 10);
     }
   },
