@@ -1,7 +1,13 @@
 <template>
   <el-row>
     <el-col :span="24">
-      <el-table :data="cars.data" class="table" stripe border style="width: 100%">
+      <el-table
+        :data="cars.data.filter(data => !search || data.car.brand.toLowerCase().includes(search.toLowerCase()))"
+        class="table"
+        stripe
+        border
+        style="width: 100%"
+      >
         <el-table-column prop="id" label="#" width="50px">
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
@@ -14,7 +20,10 @@
         <el-table-column label="Servicio">
           <template slot-scope="scope">{{ scope.row.service.name }}</template>
         </el-table-column>
-        <el-table-column width="200px">
+        <el-table-column>
+          <template slot="header" slot-scope="scope">
+            <el-input v-model="search" size="mini" placeholder="Escribe para buscar"/>
+          </template>
           <template slot-scope="scope">
             <el-button icon="el-icon-edit" @click="goto('/carservices/edit/' + scope.row.id)">Editar</el-button>
           </template>
@@ -35,7 +44,7 @@
 <script>
 export default {
   mounted: function() {
-    this.loadTable("/api/carservices");
+    this.loadTable("/api/carservices?all=1");
 
     this.$root.$on("refreshTable", this.refreshTable);
   },
@@ -47,11 +56,11 @@ export default {
       });
     },
     refreshTable() {
-      this.loadTable("/api/carservices?page=" + this.page);
+      this.loadTable("/api/carservices?all=" + this.page);
     },
     handleCurrentChange(val) {
       this.page = val;
-      this.refreshTable();
+      //this.refreshTable();
     },
     goto: function(link) {
       window.location.href = link;
@@ -59,8 +68,11 @@ export default {
   },
   data() {
     return {
-      cars: [],
-      page: 1
+      cars: {
+        data: []
+      },
+      page: 1,
+      search: ""
     };
   }
 };

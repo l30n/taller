@@ -3270,10 +3270,19 @@ function mergeFn (a, b) {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   mounted: function mounted() {
-    this.loadTable("/api/carservices");
+    this.loadTable("/api/carservices?all=1");
 
     this.$root.$on("refreshTable", this.refreshTable);
   },
@@ -3285,11 +3294,11 @@ function mergeFn (a, b) {
       });
     },
     refreshTable: function refreshTable() {
-      this.loadTable("/api/carservices?page=" + this.page);
+      this.loadTable("/api/carservices?all=" + this.page);
     },
     handleCurrentChange: function handleCurrentChange(val) {
       this.page = val;
-      this.refreshTable();
+      //this.refreshTable();
     },
 
     goto: function goto(link) {
@@ -3298,8 +3307,11 @@ function mergeFn (a, b) {
   },
   data: function data() {
     return {
-      cars: [],
-      page: 1
+      cars: {
+        data: []
+      },
+      page: 1,
+      search: ""
     };
   }
 });
@@ -4053,6 +4065,131 @@ function mergeFn (a, b) {
       this.$notify.error({
         title: "Error",
         message: $this.error[0]
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/js/components/Roles/CreateComponent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  props: ["permissions"],
+  data: function data() {
+    return {
+      dialogVisible: false,
+      labelPosition: "left",
+      role: {
+        name: "",
+        permissions: []
+      },
+      rules: {
+        name: [{
+          required: true,
+          message: "Campo Nombre es obligatorio",
+          trigger: "change"
+        }],
+        permissions: [{
+          type: "array",
+          required: true,
+          message: "Campo Permisos es obligatorio",
+          trigger: "change"
+        }]
+      }
+    };
+  },
+
+  methods: {
+    handleClose: function handleClose(done) {
+      var $this = this;
+      if ($this.role.name) {
+        $this.$confirm("¿Estas seguro de no guardar el Articulo?").then(function (_) {
+          $this.cancel();
+          done();
+        }).catch(function (_) {});
+      } else {
+        $this.cancel();
+        done();
+      }
+    },
+    cancel: function cancel() {
+      this.dialogVisible = false;
+      this.$refs.roleForm.resetFields();
+    },
+    saveRole: function saveRole() {
+      var $this = this;
+      $this.$refs.roleForm.validate(function (valid) {
+        if (valid) {
+          axios.post("/api/roles", $this.role).then(function (response) {
+            $this.$notify({
+              title: "¡Exito!",
+              message: "El Rol fue agregado correctamente",
+              type: "success"
+            });
+            $this.$root.$emit("refreshTable");
+            $this.cancel();
+          }).catch(function (error) {
+            if (error.response.data.errors) {
+              var errors = error.response.data.errors;
+              $this.$alert(errors[Object.keys(errors)[0]][0], "Error", {
+                confirmButtonText: "OK",
+                type: "error"
+              });
+            }
+          });
+        } else {
+          return false;
+        }
       });
     }
   }
@@ -6608,6 +6745,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n#app {\n  display: table;\n  width: 100%;\n}\n.g-center {\n  display: table-cell;\n  vertical-align: middle;\n}\n.main-title {\n  text-align: center;\n}\n.des {\n  text-align: center;\n  color: #999;\n  margin-bottom: 2em;\n}\n.login-form {\n  width: 300px;\n  margin: 0 auto;\n}\n.login-page {\n  background: #fff;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-61100f14\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/js/components/Roles/CreateComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
+// imports
+
+
+// module
+exports.push([module.i, "\n.el-checkbox {\n  margin-right: 10px;\n}\n.el-checkbox + .el-checkbox {\n  margin-left: 0;\n}\n", ""]);
 
 // exports
 
@@ -79914,7 +80066,18 @@ var render = function() {
             {
               staticClass: "table",
               staticStyle: { width: "100%" },
-              attrs: { data: _vm.cars.data, stripe: "", border: "" }
+              attrs: {
+                data: _vm.cars.data.filter(function(data) {
+                  return (
+                    !_vm.search ||
+                    data.car.brand
+                      .toLowerCase()
+                      .includes(_vm.search.toLowerCase())
+                  )
+                }),
+                stripe: "",
+                border: ""
+              }
             },
             [
               _c("el-table-column", {
@@ -79972,8 +80135,27 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("el-table-column", {
-                attrs: { width: "200px" },
                 scopedSlots: _vm._u([
+                  {
+                    key: "header",
+                    fn: function(scope) {
+                      return [
+                        _c("el-input", {
+                          attrs: {
+                            size: "mini",
+                            placeholder: "Escribe para buscar"
+                          },
+                          model: {
+                            value: _vm.search,
+                            callback: function($$v) {
+                              _vm.search = $$v
+                            },
+                            expression: "search"
+                          }
+                        })
+                      ]
+                    }
+                  },
                   {
                     key: "default",
                     fn: function(scope) {
@@ -80553,6 +80735,182 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-57906ed2", esExports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-61100f14\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/js/components/Roles/CreateComponent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "el-col",
+    { attrs: { span: 5 } },
+    [
+      _c(
+        "el-button",
+        {
+          staticStyle: { float: "right" },
+          attrs: { type: "primary", icon: "el-icon-circle-plus" },
+          on: {
+            click: function($event) {
+              _vm.dialogVisible = true
+            }
+          }
+        },
+        [_vm._v("Agregar un Rol")]
+      ),
+      _vm._v(" "),
+      _c(
+        "el-dialog",
+        {
+          attrs: {
+            title: "Agregar un Role",
+            visible: _vm.dialogVisible,
+            width: "40%",
+            "before-close": _vm.handleClose
+          },
+          on: {
+            "update:visible": function($event) {
+              _vm.dialogVisible = $event
+            }
+          }
+        },
+        [
+          _c(
+            "el-row",
+            [
+              _c(
+                "el-col",
+                { attrs: { span: 24 } },
+                [
+                  _c(
+                    "el-form",
+                    {
+                      ref: "roleForm",
+                      attrs: {
+                        "label-position": _vm.labelPosition,
+                        rules: _vm.rules,
+                        model: _vm.role,
+                        "label-width": "150px"
+                      }
+                    },
+                    [
+                      _c(
+                        "el-form-item",
+                        { attrs: { label: "Nombre", prop: "name" } },
+                        [
+                          _c("el-input", {
+                            model: {
+                              value: _vm.role.name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.role, "name", $$v)
+                              },
+                              expression: "role.name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-form-item",
+                        { attrs: { label: "Permisos", prop: "permissions" } },
+                        [
+                          _c(
+                            "el-checkbox-group",
+                            {
+                              model: {
+                                value: _vm.role.permissions,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.role, "permissions", $$v)
+                                },
+                                expression: "role.permissions"
+                              }
+                            },
+                            _vm._l(_vm.permissions, function(permission) {
+                              return _c(
+                                "el-checkbox",
+                                {
+                                  key: permission.id,
+                                  attrs: {
+                                    value: permission.id,
+                                    label: permission.id
+                                  }
+                                },
+                                [_vm._v(_vm._s(permission.name))]
+                              )
+                            }),
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              staticClass: "dialog-footer",
+              attrs: { slot: "footer" },
+              slot: "footer"
+            },
+            [
+              _c(
+                "el-button",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.cancel()
+                    }
+                  }
+                },
+                [_vm._v("Cancelar")]
+              ),
+              _vm._v(" "),
+              _c(
+                "el-button",
+                {
+                  attrs: { type: "primary" },
+                  on: {
+                    click: function($event) {
+                      _vm.saveRole()
+                    }
+                  }
+                },
+                [_vm._v("Agregar")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-61100f14", esExports)
   }
 }
 
@@ -81365,6 +81723,7 @@ var render = function() {
                     [
                       _c(
                         "el-row",
+                        { staticStyle: { "margin-bottom": "5px" } },
                         [
                           _c("el-col", { attrs: { span: 4 } }, [
                             _vm._v("Nombre")
@@ -82440,6 +82799,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d786705\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LoginComponent.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d786705\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LoginComponent.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-61100f14\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/js/components/Roles/CreateComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-61100f14\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/js/components/Roles/CreateComponent.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("3211c41a", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-61100f14\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateComponent.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-61100f14\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateComponent.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -96354,7 +96740,7 @@ Vue.component('select-item', __webpack_require__("./resources/js/components/CarS
 Vue.component('create-users', __webpack_require__("./resources/js/components/Users/CreateComponent.vue").default);
 Vue.component('list-users', __webpack_require__("./resources/js/components/Users/ListComponent.vue").default);
 
-//Vue.component('create-roles', require('./components/Users/CreateComponent').default);
+Vue.component('create-roles', __webpack_require__("./resources/js/components/Roles/CreateComponent.vue").default);
 Vue.component('list-roles', __webpack_require__("./resources/js/components/Roles/ListComponent.vue").default);
 
 new Vue({
@@ -96968,6 +97354,64 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-1d786705", Component.options)
   } else {
     hotAPI.reload("data-v-1d786705", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Roles/CreateComponent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_node_modules_vue_loader_lib_selector_type_script_index_0_CreateComponent_vue__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/js/components/Roles/CreateComponent.vue");
+/* empty harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_61100f14_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_CreateComponent_vue__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-61100f14\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/js/components/Roles/CreateComponent.vue");
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-61100f14\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/js/components/Roles/CreateComponent.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_node_modules_vue_loader_lib_selector_type_script_index_0_CreateComponent_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_61100f14_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_CreateComponent_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/Roles/CreateComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-61100f14", Component.options)
+  } else {
+    hotAPI.reload("data-v-61100f14", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

@@ -5,6 +5,7 @@
         <el-col :span="19">
             <h2>Roles</h2>
         </el-col>
+        <create-roles :permissions="{{ $permissions->toJson()}}"></create-roles>
     </el-row>
     <el-row type="flex">
         <el-col :span="24">

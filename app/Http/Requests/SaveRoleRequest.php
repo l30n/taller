@@ -24,8 +24,22 @@ class SaveRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:roles|max:10',
+            'name' => 'required|unique:roles,name',
             'permissions' => 'required',
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'El nombre del rol es obligatorio.',
+            'name.unique' => 'El nombre del rol ya existe.',
+            'permissions.required' => 'Se necesitan seleccionar permisos.',
         ];
     }
 }

@@ -42,4 +42,4 @@ Route::get('/users', 'UsersController@get');
 Route::post('/users', 'UsersController@save');
 
 Route::get('/roles', 'RolesController@get');
-Route::post('/roles', 'UsersController@save');
+Route::post('/roles', 'RolesController@save');

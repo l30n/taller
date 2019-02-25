@@ -56,7 +56,7 @@
         <el-col :span="17" style="padding-left: 20px;">
           <h3>Articulos</h3>
           <el-card class="box-card">
-            <el-row>
+            <el-row style="margin-bottom:5px;">
               <el-col :span="4">Nombre</el-col>
               <el-col :span="3">Base</el-col>
               <el-col :span="2">%</el-col>
