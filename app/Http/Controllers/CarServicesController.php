@@ -32,8 +32,12 @@ class CarServicesController extends Controller
         return view('carservices.edit', ['carService' => $carService, 'items' => $items]);
     }
 
-    public function get()
+    public function get(Request $request)
     {
+        if ($request->has('all')) {
+            return CarService::with('car')->with('service')->get();
+        }
+
         return CarService::with('car')->with('service')->paginate(10);
     }
 

@@ -3286,6 +3286,11 @@ function mergeFn (a, b) {
 
     this.$root.$on("refreshTable", this.refreshTable);
   },
+  computed: {
+    data: function data() {
+      return this.cars.splice((this.page - 1) * 10, 10);
+    }
+  },
   methods: {
     loadTable: function loadTable(url) {
       var $this = this;
@@ -3307,9 +3312,7 @@ function mergeFn (a, b) {
   },
   data: function data() {
     return {
-      cars: {
-        data: []
-      },
+      cars: [],
       page: 1,
       search: ""
     };
@@ -80067,7 +80070,7 @@ var render = function() {
               staticClass: "table",
               staticStyle: { width: "100%" },
               attrs: {
-                data: _vm.cars.data.filter(function(data) {
+                data: _vm.data.filter(function(data) {
                   return (
                     !_vm.search ||
                     data.car.brand
@@ -80181,7 +80184,7 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _vm.cars.total > 10
+          _vm.cars.length > 10
             ? _c(
                 "div",
                 {
@@ -80193,7 +80196,7 @@ var render = function() {
                     attrs: {
                       layout: "prev, pager, next",
                       "page-size": 10,
-                      total: _vm.cars.total
+                      total: _vm.cars.length
                     },
                     on: { "current-change": _vm.handleCurrentChange }
                   })

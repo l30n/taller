@@ -2,7 +2,7 @@
   <el-row>
     <el-col :span="24">
       <el-table
-        :data="cars.data.filter(data => !search || data.car.brand.toLowerCase().includes(search.toLowerCase()))"
+        :data="data.filter(data => !search || data.car.brand.toLowerCase().includes(search.toLowerCase()))"
         class="table"
         stripe
         border
@@ -29,11 +29,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block" style="text-align: center;" v-if="cars.total > 10">
+      <div class="block" style="text-align: center;" v-if="cars.length > 10">
         <el-pagination
           layout="prev, pager, next"
           :page-size="10"
-          :total="cars.total"
+          :total="cars.length"
           @current-change="handleCurrentChange"
         ></el-pagination>
       </div>
@@ -47,6 +47,11 @@ export default {
     this.loadTable("/api/carservices?all=1");
 
     this.$root.$on("refreshTable", this.refreshTable);
+  },
+  computed: {
+    data: function() {
+      return this.cars.splice((this.page - 1) * 10, 10);
+    }
   },
   methods: {
     loadTable(url) {
@@ -68,9 +73,7 @@ export default {
   },
   data() {
     return {
-      cars: {
-        data: []
-      },
+      cars: [],
       page: 1,
       search: ""
     };
