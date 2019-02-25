@@ -3286,12 +3286,6 @@ function mergeFn (a, b) {
 
     this.$root.$on("refreshTable", this.refreshTable);
   },
-  computed: {
-    data: function data() {
-      console.log((this.page - 1) * 10);
-      return this.cars.splice((this.page - 1) * 10, 10);
-    }
-  },
   methods: {
     loadTable: function loadTable(url) {
       var $this = this;
@@ -3315,6 +3309,7 @@ function mergeFn (a, b) {
     return {
       cars: [],
       page: 1,
+      limit: 10,
       search: ""
     };
   }
@@ -80071,14 +80066,16 @@ var render = function() {
               staticClass: "table",
               staticStyle: { width: "100%" },
               attrs: {
-                data: _vm.data.filter(function(data) {
-                  return (
-                    !_vm.search ||
-                    data.car.brand
-                      .toLowerCase()
-                      .includes(_vm.search.toLowerCase())
-                  )
-                }),
+                data: _vm.cars
+                  .filter(function(data) {
+                    return (
+                      !_vm.search ||
+                      data.car.brand
+                        .toLowerCase()
+                        .includes(_vm.search.toLowerCase())
+                    )
+                  })
+                  .splice((_vm.page - 1) * _vm.limit, _vm.limit),
                 stripe: "",
                 border: ""
               }
@@ -80185,7 +80182,7 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _vm.data.length > 10
+          _vm.cars.length > _vm.limit
             ? _c(
                 "div",
                 {
@@ -80196,8 +80193,8 @@ var render = function() {
                   _c("el-pagination", {
                     attrs: {
                       layout: "prev, pager, next",
-                      "page-size": 10,
-                      total: _vm.data.length
+                      "page-size": _vm.limit,
+                      total: _vm.cars.length
                     },
                     on: { "current-change": _vm.handleCurrentChange }
                   })
