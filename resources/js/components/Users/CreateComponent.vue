@@ -30,6 +30,16 @@
             <el-form-item label="Contraseña" prop="password">
               <el-input v-model="user.password"></el-input>
             </el-form-item>
+            <el-form-item label="Rol" prop="role">
+              <el-select v-model="user.role" placeholder="Selecciona rol">
+                <el-option
+                  v-for="role in roles"
+                  :key="role.id"
+                  :label="role.name"
+                  :value="role.id"
+                >{{role.name}}</el-option>
+              </el-select>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -42,6 +52,7 @@
 </template>
 <script>
 export default {
+  props: ["roles"],
   data() {
     return {
       dialogVisible: false,
@@ -49,7 +60,8 @@ export default {
       user: {
         name: "",
         email: "",
-        password: ""
+        password: "",
+        role: ""
       },
       rules: {
         name: [
@@ -75,6 +87,13 @@ export default {
           {
             required: true,
             message: "Campo Contraseña es obligatorio",
+            trigger: "change"
+          }
+        ],
+        role: [
+          {
+            required: true,
+            message: "Campo Rol es obligatorio",
             trigger: "change"
           }
         ]

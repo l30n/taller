@@ -24,6 +24,7 @@ class RolesTableSeeder extends Seeder
             'servicios' => ['listar', 'agregar', 'editar', 'borrar'],
             'carros' => ['listar', 'agregar', 'editar', 'borrar'],
             'articulos' => ['listar', 'agregar', 'editar', 'borrar'],
+            'clientes' => ['listar', 'agregar', 'editar', 'borrar'],
             'usuarios' => ['listar', 'agregar', 'editar', 'borrar'],
             'roles' => ['listar', 'agregar', 'editar', 'borrar'],
         ];

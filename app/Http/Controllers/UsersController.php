@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SaveUserRequest;
 use App\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
 {
     //
     public function index()
     {
-        return view('users.index');
+        $roles = Role::get();
+
+        return view('users.index', [
+            'roles' => $roles,
+        ]);
     }
 
     //
@@ -30,6 +35,14 @@ class UsersController extends Controller
 
         $user['password'] = bcrypt($user['password']);
 
-        return User::firstOrCreate($user);
+        $role = Role::find($user['role']);
+
+        unset($user['role']);
+
+        $user = User::firstOrCreate($user);
+
+        $user->syncRoles($role);
+
+        return $user;
     }
 }

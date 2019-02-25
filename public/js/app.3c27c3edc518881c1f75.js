@@ -5060,8 +5060,19 @@ function mergeFn (a, b) {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
+  props: ["roles"],
   data: function data() {
     return {
       dialogVisible: false,
@@ -5069,7 +5080,8 @@ function mergeFn (a, b) {
       user: {
         name: "",
         email: "",
-        password: ""
+        password: "",
+        role: ""
       },
       rules: {
         name: [{
@@ -5089,6 +5101,11 @@ function mergeFn (a, b) {
         password: [{
           required: true,
           message: "Campo Contraseña es obligatorio",
+          trigger: "change"
+        }],
+        role: [{
+          required: true,
+          message: "Campo Rol es obligatorio",
           trigger: "change"
         }]
       }
@@ -81934,6 +81951,38 @@ var render = function() {
                               expression: "user.password"
                             }
                           })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-form-item",
+                        { attrs: { label: "Rol", prop: "role" } },
+                        [
+                          _c(
+                            "el-select",
+                            {
+                              attrs: { placeholder: "Selecciona rol" },
+                              model: {
+                                value: _vm.user.role,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.user, "role", $$v)
+                                },
+                                expression: "user.role"
+                              }
+                            },
+                            _vm._l(_vm.roles, function(role) {
+                              return _c(
+                                "el-option",
+                                {
+                                  key: role.id,
+                                  attrs: { label: role.name, value: role.id }
+                                },
+                                [_vm._v(_vm._s(role.name))]
+                              )
+                            }),
+                            1
+                          )
                         ],
                         1
                       )

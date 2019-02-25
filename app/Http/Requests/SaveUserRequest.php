@@ -27,6 +27,7 @@ class SaveUserRequest extends FormRequest
             "name" => "required",
             "email" => "required|unique:users,email",
             "password" => "required",
+            "role" => "required",
         ];
     }
 }
