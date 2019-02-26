@@ -8,7 +8,7 @@
         <el-table-column label="Carro">
           <template
             slot-scope="scope"
-          >{{ scope.row.car[0].brand }} {{ scope.row.sale_service.year ? scope.row.sale_service.year : scope.row.car[0].start_year +"-"+ scope.row.car[0].end_year }}</template>
+          >{{ scope.row.car[0].brand }} {{ scope.row.sale_services[0].year ? scope.row.sale_services[0].year : scope.row.car[0].start_year +"-"+ scope.row.car[0].end_year }}</template>
         </el-table-column>
         <el-table-column label="Servicios">
           <template slot-scope="scope">

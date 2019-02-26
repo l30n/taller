@@ -12,9 +12,9 @@ class Sale extends Model
     const TERMINADO = 2;
     const CANCELADO = 3;
 
-    public function saleService()
+    public function saleServices()
     {
-        return $this->hasOne('App\Models\SaleService');
+        return $this->hasMany('App\Models\SaleService');
     }
 
     public function client()

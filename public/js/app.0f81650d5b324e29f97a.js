@@ -82229,8 +82229,8 @@ var render = function() {
                           _vm._s(scope.row.car[0].brand) +
                             " " +
                             _vm._s(
-                              scope.row.sale_service.year
-                                ? scope.row.sale_service.year
+                              scope.row.sale_services[0].year
+                                ? scope.row.sale_services[0].year
                                 : scope.row.car[0].start_year +
                                     "-" +
                                     scope.row.car[0].end_year

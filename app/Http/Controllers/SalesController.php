@@ -36,10 +36,10 @@ class SalesController extends Controller
 
     public function get()
     {
-        return Sale::with('saleService')->with('client')->with(['car' => function ($query) {
-            $query->groupBy('id');
+        return Sale::with('saleServices')->with('client')->with(['car' => function ($query) {
+            $query->distinct('id');
         }])->with(['services' => function ($query) {
-            $query->groupBy('id');
+            $query->distinct('id');
         }])->paginate(10);
     }
 
