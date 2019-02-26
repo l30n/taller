@@ -14,7 +14,7 @@
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', 'SalesController@index');
+    Route::get('/', 'DashboardController@index')->name('dashboard');
 
     Route::prefix('cars')->group(function () {
         Route::get('/', 'CarsController@index')->name('cars.list');

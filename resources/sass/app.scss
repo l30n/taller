@@ -144,5 +144,25 @@ header::after {
     height: 100%;
 }
 
+.bigNumber {
+    font-size: 45px;
+}
+
+p.cotizacion {
+    color: #909399;
+}
+
+p.enproceso {
+    color: #e6a23c;
+}
+
+p.terminado {
+    color: #67c23a;
+}
+
+p.cancelado {
+    color: #f56c6c;
+}
+
 // Loader
 @import "shared/loader";

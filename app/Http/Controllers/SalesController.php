@@ -43,6 +43,19 @@ class SalesController extends Controller
         }])->paginate(10);
     }
 
+    public function changeStatus(Request $request)
+    {
+        $sale = Sale::find($request->get('id'));
+
+        $sale->status = $request->get('status');
+
+        $sale->save();
+
+        return response()->json([
+            "success" => true,
+        ]);
+    }
+
     public function save(Request $request)
     {
         $year = $request->get('year');

@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Sale extends Model
 {
     //
+    const COTIZACION = 0;
+    const PROCESO = 1;
+    const TERMINADO = 2;
+    const CANCELADO = 3;
 
     public function saleService()
     {

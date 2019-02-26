@@ -32,6 +32,9 @@
             <el-container class="wrapper">
                 <el-aside class="menu" width="200px">
                     <el-menu default-active="{{ Route::current()->getName() }}">
+                        <el-menu-item index="dashboard" v-on:click="goto('{{ route('dashboard') }}')" v-if="">
+                            Tablero
+                        </el-menu-item>
                         @can('listar ordenes')
                         <el-menu-item index="sales.list" v-on:click="goto('{{ route('sales.list') }}')" v-if="">
                             Ordenes de Servicio

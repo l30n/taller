@@ -25,6 +25,7 @@ Route::post('/clients', 'ClientsController@save');
 
 Route::get('/sales', 'SalesController@get');
 Route::post('/sales', 'SalesController@save');
+Route::post('/sales/status', 'SalesController@changeStatus');
 
 Route::get('/items', 'ItemsController@get');
 Route::post('/items', 'ItemsController@save');
