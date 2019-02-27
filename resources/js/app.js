@@ -85,6 +85,11 @@ Vue.component('list-users', require('./components/Users/ListComponent').default)
 Vue.component('create-roles', require('./components/Roles/CreateComponent').default);
 Vue.component('list-roles', require('./components/Roles/ListComponent').default);
 
+Vue.component('datepicker', require('./components/Dashboard/DatepickerComponent').default);
+Vue.component('top-numbers', require('./components/Dashboard/TopNumbersComponent').default);
+Vue.component('dashboard-chart', require('./components/Dashboard/ChartComponent').default);
+Vue.component('dashboard-table', require('./components/Dashboard/TableComponent').default);
+
 new Vue({
   el: '#app',
   store,
