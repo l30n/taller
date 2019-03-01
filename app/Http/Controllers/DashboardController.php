@@ -15,11 +15,11 @@ class DashboardController extends Controller
             ->where('done_on', '>=', $start)
             ->get()
             ->sum('total');
-        $services = Sale::where('done_on', '>=', $start)
+        $services = Sale::where('created_at', '>=', $start)
             ->get()
             ->groupBy('status');
         $salesByStatus = Sale::select('status', DB::raw('SUM(total) AS total'))
-            ->where('done_on', '>=', $start)
+            ->where('created_at', '>=', $start)
             ->get();
         $sales = Sale::select(DB::raw('DATE(created_at) AS date'), 'method', DB::raw('SUM(total) AS total'), DB::raw('COUNT(*) AS orders'))
             ->where('status', Sale::TERMINADO)
@@ -54,14 +54,15 @@ class DashboardController extends Controller
             ->get()
             ->sum('total');
 
-        $services = Sale::where('done_on', '>=', $start)
-            ->where('done_on', '<=', $end)
-            ->get()->groupBy('status');
+        $services = Sale::where('created_at', '>=', $start)
+            ->where('created_at', '<=', $end)
+            ->get()
+            ->groupBy('status');
         $salesByStatus = Sale::select('status', DB::raw('SUM(total) AS total'))
-            ->where('done_on', '>=', $start)
-            ->where('done_on', '<=', $end)
+            ->where('created_at', '>=', $start)
+            ->where('created_at', '<=', $end)
             ->get();
-        $sales = Sale::select(DB::raw('DATE(created_at) AS date'), 'method', DB::raw('SUM(total) AS total'), DB::raw('COUNT(*) AS orders'))
+        $sales = Sale::select(DB::raw('DATE(done_on) AS date'), 'method', DB::raw('SUM(total) AS total'), DB::raw('COUNT(*) AS orders'))
             ->where('status', Sale::TERMINADO)
             ->where('done_on', '>=', $start)
             ->where('done_on', '<=', $end)
