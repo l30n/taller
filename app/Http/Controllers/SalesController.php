@@ -49,6 +49,11 @@ class SalesController extends Controller
 
         $sale->status = $request->get('status');
 
+        if ($sale->status == Sale::TERMINADO) {
+            $sale->done_on = date('Y-m-d H:i:s');
+            $sale->method = $request->get('method');;
+        }
+
         $sale->save();
 
         return response()->json([

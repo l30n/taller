@@ -30,13 +30,14 @@
               v-model="scope.row.status"
               :class="status[scope.row.status].toLowerCase().replace(/\s+/g, '')"
               @change="handleChangeStatus(scope.$index)"
+              :disabled="scope.row.status == 2"
             >
               <el-option
                 v-for="(status, index) in status"
                 :key="index"
                 :label="status"
                 :value="index"
-                :disabled="index < scope.row.status || scope.row.status == 2"
+                :disabled="index < scope.row.status"
                 :class="status.toLowerCase().replace(/\s+/g, '')"
               >
                 <span>{{ status }}</span>
@@ -83,21 +84,71 @@ export default {
     },
     handleChangeStatus(index) {
       var $this = this;
-      $this
-        .$confirm(
-          "¿Quieres cambiar el estados de la Orden de Servicio?",
-          "Warning",
+      var message = $this.$createElement(
+        "p",
+        null,
+        "¿Quieres cambiar el estado la Orden de Servicio?"
+      );
+      if ($this.sales.data[index].status == 2) {
+        var checkGroup = $this.$createElement(
+          "el-radio-group",
           {
-            confirmButtonText: "Si",
-            cancelButtonText: "No",
-            type: "warning"
-          }
-        )
+            model: {
+              value: $this.method,
+              callback: function(value) {
+                checkGroup.componentInstance.value = value;
+                $this.method = value;
+              }
+            },
+            ref: "paymentMethod"
+          },
+          [
+            $this.$createElement(
+              "el-radio",
+              {
+                attrs: {
+                  label: "1"
+                }
+              },
+              "Efectivo"
+            ),
+            $this.$createElement(
+              "el-radio",
+              {
+                attrs: {
+                  label: "2"
+                }
+              },
+              "Electronico"
+            )
+          ]
+        );
+        message = $this.$createElement("p", null, [
+          $this.$createElement(
+            "p",
+            null,
+            "¿Quieres cambiar el estado la Orden de Servicio?"
+          ),
+          $this.$createElement("p", null, [
+            $this.$createElement("p", null, "Metodo de pago:"),
+            checkGroup
+          ])
+        ]);
+      }
+      $this
+        .$msgbox({
+          title: "Cambiar orden de estado",
+          message: message,
+          showCancelButton: true,
+          confirmButtonText: "Si",
+          cancelButtonText: "No"
+        })
         .then(() => {
           axios
             .post("api/sales/status", {
               id: $this.sales.data[index].id,
-              status: $this.sales.data[index].status
+              status: $this.sales.data[index].status,
+              method: $this.method
             })
             .then(function(response) {
               $this.oldSales = JSON.parse(JSON.stringify($this.sales));
@@ -116,34 +167,35 @@ export default {
     return {
       sales: [],
       oldSales: [],
-      status: ["Cotizacion", "En Proceso", "Terminado", "Cancelado"]
+      status: ["Cotizacion", "En Proceso", "Terminado", "Cancelado"],
+      method: "2"
     };
   }
 };
 </script>
 <style lang="scss">
 .cotizacion {
-  background-color: #909399;
+  color: #909399;
   input {
-    background-color: #909399;
+    color: #909399;
   }
 }
 .enproceso {
-  background-color: #e6a23c;
+  color: #e6a23c;
   input {
-    background-color: #e6a23c;
+    color: #e6a23c;
   }
 }
 .terminado {
-  background-color: #67c23a;
+  color: #67c23a;
   input {
-    background-color: #67c23a;
+    color: #67c23a;
   }
 }
 .cancelado {
-  background-color: #f56c6c;
+  color: #f56c6c;
   input {
-    background-color: #f56c6c;
+    color: #f56c6c;
   }
 }
 </style>

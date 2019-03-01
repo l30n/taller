@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Taller Gallegos</title>
     <meta charset="utf-8">
@@ -8,6 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
+
 <body>
     <div id="app" v-cloak>
         <div class="loader-container">
@@ -33,44 +35,37 @@
                 <el-aside class="menu" width="200px">
                     <el-menu default-active="{{ Route::current()->getName() }}">
                         <el-menu-item index="dashboard" v-on:click="goto('{{ route('dashboard') }}')" v-if="">
-                            Tablero
+                            Reporte de Ventas
                         </el-menu-item>
                         @can('listar ordenes')
                         <el-menu-item index="sales.list" v-on:click="goto('{{ route('sales.list') }}')" v-if="">
                             Ordenes de Servicio
                         </el-menu-item>
-                        @endcan
-                        @can('listar carros_servicios')
+                        @endcan @can('listar carros_servicios')
                         <el-menu-item index="carservices.list" v-on:click="goto('{{ route('carservices.list') }}')">
                             Carros y Servicios
                         </el-menu-item>
-                        @endcan
-                        @can('listar servicios')
+                        @endcan @can('listar servicios')
                         <el-menu-item index="services.list" v-on:click="goto('{{ route('services.list') }}')">
                             Servicios
                         </el-menu-item>
-                        @endcan
-                        @can('listar carros')
+                        @endcan @can('listar carros')
                         <el-menu-item index="cars.list" v-on:click="goto('{{ route('cars.list') }}')">
                             Carros
                         </el-menu-item>
-                        @endcan
-                        @can('listar articulos')
+                        @endcan @can('listar articulos')
                         <el-menu-item index="items.list" v-on:click="goto('{{ route('items.list') }}')">
                             Articulos
                         </el-menu-item>
-                        @endcan
-                        @can('listar clientes')
+                        @endcan @can('listar clientes')
                         <el-menu-item index="clients.list" v-on:click="goto('{{ route('clients.list') }}')">
                             Clientes
                         </el-menu-item>
-                        @endcan
-                        @can('listar usuarios')
+                        @endcan @can('listar usuarios')
                         <el-menu-item index="users.list" v-on:click="goto('{{ route('users.list') }}')">
                             Usuarios
                         </el-menu-item>
-                        @endcan
-                        @can('listar roles')
+                        @endcan @can('listar roles')
                         <el-menu-item index="roles.list" v-on:click="goto('{{ route('roles.list') }}')">
                             Roles
                         </el-menu-item>
@@ -85,4 +80,5 @@
     <script src="{{ mix('js/vendor.js') }}"></script>
     <script src="{{ mix('js/app.js') }}"></script>
 </body>
+
 </html>

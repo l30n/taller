@@ -8,6 +8,7 @@
       start-placeholder="Fecha de inicio"
       end-placeholder="Fecha final"
       :picker-options="pickerOptions"
+      @change="changeDate"
     ></el-date-picker>
   </div>
 </template>
@@ -19,6 +20,27 @@ export default {
     const start = new Date();
     start.setDate(end.getDate() - ((end.getDay() + 6) % 7));
     this.dateRange = [start, end];
+  },
+  methods: {
+    changeDate: function(values) {
+      var $this = this;
+      axios
+        .get(
+          "api/dashboard?start=" +
+            values[0].toISOString().substring(0, 10) +
+            "&end=" +
+            values[1].toISOString().substring(0, 10)
+        )
+        .then(function(response) {
+          console.log($this.$root.$refs);
+          $this.$root.$refs.dashboardNumbers.refresh(
+            response.data.total,
+            response.data.services
+          );
+          $this.$root.$refs.dashboardChart.refresh(response.data.salesByStatus);
+          $this.$root.$refs.dashboardTable.refresh(response.data.sales);
+        });
+    }
   },
   data() {
     return {

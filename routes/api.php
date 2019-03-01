@@ -44,3 +44,5 @@ Route::post('/users', 'UsersController@save');
 
 Route::get('/roles', 'RolesController@get');
 Route::post('/roles', 'RolesController@save');
+
+Route::get('/dashboard', 'DashboardController@get');

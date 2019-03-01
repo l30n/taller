@@ -12,7 +12,7 @@
           v-for="(status, index) in statuses"
           v-bind:key="index"
         >
-          <span class="bigNumber">{{ sales[index] ? sales[index].length : 0 }}</span>
+          <span class="bigNumber">{{ services[index] ? services[index].length : 0 }}</span>
           <p :class="status.toLowerCase().replace(/\s+/g, '')">{{ status }}</p>
         </el-col>
       </el-row>
@@ -22,16 +22,23 @@
 
 <script>
 export default {
-  props: ["total", "sales"],
+  props: ["total", "services"],
   data() {
     return {
       statuses: ["Cotizacion", "En Proceso", "Terminado", "Cancelado"]
     };
   },
+  mounted() {
+    this.$on("refresh", this.refresh);
+  },
   methods: {
     formatPrice(value) {
       let val = (value / 1).toFixed(2);
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    refresh(total, services) {
+      this.total = total;
+      this.services = services;
     }
   }
 };

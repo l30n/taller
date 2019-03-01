@@ -2,13 +2,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
+use DB;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $total = Sale::where('status', Sale::TERMINADO)->get()->sum('total');
-        $sales = Sale::get()->groupBy('status');
+        $start = date('Y-m-d 00:00:00', strtotime('last monday'));
+
+        $total = Sale::where('status', Sale::TERMINADO)
+            ->where('done_on', '>=', $start)
+            ->get()
+            ->sum('total');
+        $services = Sale::where('done_on', '>=', $start)
+            ->get()
+            ->groupBy('status');
+        $salesByStatus = Sale::select('status', DB::raw('SUM(total) AS total'))
+            ->where('done_on', '>=', $start)
+            ->get();
+        $sales = Sale::select(DB::raw('DATE(created_at) AS date'), 'method', DB::raw('SUM(total) AS total'), DB::raw('COUNT(*) AS orders'))
+            ->where('status', Sale::TERMINADO)
+            ->where('done_on', '>=', $start)
+            ->groupBy(['date', 'method'])
+            ->get();
 
         $statuses = [
             'Cotizacion',
@@ -19,8 +36,43 @@ class DashboardController extends Controller
 
         return view('dashboard.index', [
             'total' => $total,
+            'services' => $services,
+            'salesByStatus' => $salesByStatus,
             'sales' => $sales,
             'statuses' => $statuses,
+        ]);
+    }
+
+    public function get(Request $request)
+    {
+        $start = date('Y-m-d 00:00:00', strtotime($request->get('start')));
+        $end = date('Y-m-d 23:59:59', strtotime($request->get('end')));
+
+        $total = Sale::where('status', Sale::TERMINADO)
+            ->where('done_on', '>=', $start)
+            ->where('done_on', '<=', $end)
+            ->get()
+            ->sum('total');
+
+        $services = Sale::where('done_on', '>=', $start)
+            ->where('done_on', '<=', $end)
+            ->get()->groupBy('status');
+        $salesByStatus = Sale::select('status', DB::raw('SUM(total) AS total'))
+            ->where('done_on', '>=', $start)
+            ->where('done_on', '<=', $end)
+            ->get();
+        $sales = Sale::select(DB::raw('DATE(created_at) AS date'), 'method', DB::raw('SUM(total) AS total'), DB::raw('COUNT(*) AS orders'))
+            ->where('status', Sale::TERMINADO)
+            ->where('done_on', '>=', $start)
+            ->where('done_on', '<=', $end)
+            ->groupBy(['date', 'method'])
+            ->get();
+
+        return response()->json([
+            'total' => $total,
+            'services' => $services,
+            'salesByStatus' => $salesByStatus,
+            'sales' => $sales,
         ]);
     }
 }
