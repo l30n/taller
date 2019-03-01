@@ -1,9 +1,5 @@
 <template>
   <el-row type="flex">
-    <el-col :span="4" style="text-align:center;">
-      <span class="bigNumber">${{ formatPrice(total) }}</span>
-      <p>Total</p>
-    </el-col>
     <el-col :span="20">
       <el-row type="flex">
         <el-col
@@ -16,6 +12,10 @@
           <p :class="status.toLowerCase().replace(/\s+/g, '')">{{ status }}</p>
         </el-col>
       </el-row>
+    </el-col>
+    <el-col :span="4" style="text-align:center;">
+      <span class="bigNumber">${{ formatPrice(total) }}</span>
+      <p>Total</p>
     </el-col>
   </el-row>
 </template>
