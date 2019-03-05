@@ -71,13 +71,34 @@
         </el-col>
       </el-row>
       <el-row>
+        <el-col :span="17" :offset="7" style="padding-left: 20px;">
+          <el-row style="padding: 10px 20px;">
+            <el-col :span="4">
+              <b>Total</b>
+            </el-col>
+            <el-col :span="3" style="text-align:right;">
+              <b>${{ formatPrice(sumItemPrice("price")) }}</b>
+            </el-col>
+            <el-col :span="3" :offset="2" style="text-align:right;">
+              <b>${{ formatPrice(sumItemPrice("low_price")) }}</b>
+            </el-col>
+            <el-col :span="3" :offset="2" style="text-align:right;">
+              <b>${{ formatPrice(sumItemPrice("mid_price")) }}</b>
+            </el-col>
+            <el-col :span="3" :offset="2" style="text-align:right;">
+              <b>${{ formatPrice(sumItemPrice("high_price")) }}</b>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="4" :offset="20" style="text-align:right;">
           <br>
           <el-button
             type="primary"
             :disabled="car == '' || service == '' || items.length == 0 || save"
             @click="next()"
-          >Continuar</el-button>
+          >Guardar</el-button>
         </el-col>
       </el-row>
     </el-main>
@@ -157,6 +178,21 @@ export default {
       this.items.push(item);
       this.$refs.selectItem.$forceUpdate();
     },
+    formatPrice(value) {
+      let val = (value / 1).toFixed(2);
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    sumItemPrice(value) {
+      var total = 0;
+      if (this.items) {
+        for (var item in this.items) {
+          if (this.items[item][value]) {
+            total += parseFloat(this.items[item][value]);
+          }
+        }
+      }
+      return total;
+    },
     next() {
       var $this = this;
       axios
@@ -192,7 +228,8 @@ export default {
 
 <style lang="scss">
 .box-card {
-  height: 430px;
+  min-height: 190px;
+  max-height: 430px;
   overflow-y: auto;
   .el-tree {
     height: 350px;
@@ -202,9 +239,11 @@ export default {
 }
 .el-input.percentage {
   width: 50px;
+  margin: 0 auto;
+  display: block;
 }
 .el-input.price {
-  width: 80%;
+  width: 100%;
   input {
     text-align: right;
   }

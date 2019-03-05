@@ -16,7 +16,7 @@
         ></el-input>
       </el-col>
       <el-col :span="3">
-        <el-input class="price" v-model="item.low_price"></el-input>
+        <el-input class="price" v-model="item.low_price" @change="onChangePrice()"></el-input>
       </el-col>
       <el-col :span="2">
         <el-input
@@ -27,7 +27,7 @@
         ></el-input>
       </el-col>
       <el-col :span="3">
-        <el-input class="price" v-model="item.mid_price"></el-input>
+        <el-input class="price" v-model="item.mid_price" @change="onChangePrice()"></el-input>
       </el-col>
       <el-col :span="2">
         <el-input
@@ -38,9 +38,9 @@
         ></el-input>
       </el-col>
       <el-col :span="3">
-        <el-input class="price" v-model="item.high_price"></el-input>
+        <el-input class="price" v-model="item.high_price" @change="onChangePrice()"></el-input>
       </el-col>
-      <el-col :span="2">
+      <el-col :span="2" style="text-align: center;">
         <el-button type="danger" icon="el-icon-delete" @click="deleteItem(index)"></el-button>
       </el-col>
     </el-row>
@@ -58,18 +58,22 @@ export default {
     },
     deleteItem(value) {
       this.items.splice(value, 1);
-      this.$forceUpdate();
+      this.onChangePrice();
     },
     changeBase(item, index) {
       this.items[index].low_price = item.price;
       this.items[index].mid_price = item.price;
       this.items[index].high_price = item.price;
-      this.$forceUpdate();
+      this.onChangePrice();
     },
     changePercentage(price, item, index) {
       this.items[index][price + "_price"] =
         parseInt(item.price) + (item.price * item[price]) / 100;
+      this.onChangePrice();
+    },
+    onChangePrice() {
       this.$forceUpdate();
+      this.$root.$refs.create.$forceUpdate();
     },
     itemName(item) {
       if (item.name) {

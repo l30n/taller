@@ -32,11 +32,24 @@ class ServicesController extends Controller
             return Service::all();
         }
 
+        if ($request->filled('search')) {
+            return Service::where('name', 'LIKE', '%' . $request->get('search') . '%')
+                ->paginate(10)
+                ->setPath('')
+                ->appends(array(
+                    'search' => $request->get('search'),
+                ));
+        }
+
         return Service::paginate(10);
     }
 
     public function save(SaveServiceRequest $request)
     {
+        if ($request->has('id')) {
+            return Service::updateOrCreate($request->only('id'), $request->except('id'));
+        }
+
         return Service::firstOrCreate($request->all());
     }
 

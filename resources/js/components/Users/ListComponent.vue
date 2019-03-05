@@ -8,6 +8,14 @@
         <el-table-column prop="name" label="Nombre"></el-table-column>
         <el-table-column prop="email" label="Correo Electronico"></el-table-column>
         <el-table-column prop="created_at" label="Fecha"></el-table-column>
+        <el-table-column>
+          <template slot="header" slot-scope>
+            <el-input v-model="search" size="mini" placeholder="Escribe para buscar"/>
+          </template>
+          <template slot-scope="scope">
+            <el-button icon="el-icon-edit" @click="goto('/carservices/edit/' + scope.row.id)">Editar</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="block" style="text-align: center;" v-if="users.total > 10">
         <el-pagination
@@ -46,6 +54,7 @@ export default {
   data() {
     return {
       users: [],
+      search: "",
       page: 1
     };
   }

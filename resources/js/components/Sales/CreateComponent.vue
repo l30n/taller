@@ -79,16 +79,24 @@
                 <el-radio label="high" v-model="selectedPrice"></el-radio>
               </el-col>
             </el-row>
-            <div style="height: 340px;overflow: auto;">
+            <div style="height: 340px;overflow: auto;" v-if="selectedServices.length > 0">
               <div v-for="(service, index) in selectedServices" v-bind:key="index">
                 <select-service :service="service" :price="selectedPrice"></select-service>
               </div>
             </div>
             <el-row v-if="selectedServices.length > 0">
-              <el-col :span="9">Total</el-col>
-              <el-col :span="5" style="text-align: right;padding-right: 10px;">{{ total('low') }}</el-col>
-              <el-col :span="5" style="text-align: right;padding-right: 10px;">{{ total('mid') }}</el-col>
-              <el-col :span="5" style="text-align: right;padding-right: 10px;">{{ total('high') }}</el-col>
+              <el-col :span="9">
+                <b>Total</b>
+              </el-col>
+              <el-col :span="5" style="text-align: right;padding-right: 10px;">
+                <b>${{ total('low') }}</b>
+              </el-col>
+              <el-col :span="5" style="text-align: right;padding-right: 10px;">
+                <b>${{ total('mid') }}</b>
+              </el-col>
+              <el-col :span="5" style="text-align: right;padding-right: 10px;">
+                <b>${{ total('high') }}</b>
+              </el-col>
             </el-row>
             <el-row v-if="selectedServices.length == 0">
               <el-col :span="24" style="text-align: center;">Servicio no seleccionado</el-col>
@@ -262,5 +270,9 @@ export default {
 }
 .year {
   width: 80px;
+}
+.el-form-item__label {
+  text-align: left;
+  line-height: 18px;
 }
 </style>

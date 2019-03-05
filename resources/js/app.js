@@ -67,6 +67,7 @@ Vue.component('create-items', require('./components/Items/CreateComponent').defa
 Vue.component('list-items', require('./components/Items/ListComponent').default);
 
 Vue.component('create-services', require('./components/Services/CreateComponent').default);
+Vue.component('edit-services', require('./components/Services/EditComponent').default);
 Vue.component('list-services', require('./components/Services/ListComponent').default);
 
 Vue.component('create-cars', require('./components/Cars/CreateComponent').default);

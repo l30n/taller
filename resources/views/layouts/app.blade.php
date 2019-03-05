@@ -33,40 +33,40 @@
             </el-header>
             <el-container class="wrapper">
                 <el-aside class="menu" width="200px">
-                    <el-menu default-active="{{ Route::current()->getName() }}">
+                    <el-menu default-active="{{ explode(".", Route::current()->getName())[0] }}">
                         <el-menu-item index="dashboard" v-on:click="goto('{{ route('dashboard') }}')" v-if="">
                             Reporte de Ventas
                         </el-menu-item>
                         @can('listar ordenes')
-                        <el-menu-item index="sales.list" v-on:click="goto('{{ route('sales.list') }}')" v-if="">
+                        <el-menu-item index="sales" v-on:click="goto('{{ route('sales.list') }}')" v-if="">
                             Ordenes de Servicio
                         </el-menu-item>
                         @endcan @can('listar carros_servicios')
-                        <el-menu-item index="carservices.list" v-on:click="goto('{{ route('carservices.list') }}')">
+                        <el-menu-item index="carservices" v-on:click="goto('{{ route('carservices.list') }}')">
                             Carros y Servicios
                         </el-menu-item>
                         @endcan @can('listar servicios')
-                        <el-menu-item index="services.list" v-on:click="goto('{{ route('services.list') }}')">
+                        <el-menu-item index="services" v-on:click="goto('{{ route('services.list') }}')">
                             Servicios
                         </el-menu-item>
                         @endcan @can('listar carros')
-                        <el-menu-item index="cars.list" v-on:click="goto('{{ route('cars.list') }}')">
+                        <el-menu-item index="cars" v-on:click="goto('{{ route('cars.list') }}')">
                             Carros
                         </el-menu-item>
                         @endcan @can('listar articulos')
-                        <el-menu-item index="items.list" v-on:click="goto('{{ route('items.list') }}')">
+                        <el-menu-item index="items" v-on:click="goto('{{ route('items.list') }}')">
                             Articulos
                         </el-menu-item>
                         @endcan @can('listar clientes')
-                        <el-menu-item index="clients.list" v-on:click="goto('{{ route('clients.list') }}')">
+                        <el-menu-item index="clients" v-on:click="goto('{{ route('clients.list') }}')">
                             Clientes
                         </el-menu-item>
                         @endcan @can('listar usuarios')
-                        <el-menu-item index="users.list" v-on:click="goto('{{ route('users.list') }}')">
+                        <el-menu-item index="users" v-on:click="goto('{{ route('users.list') }}')">
                             Usuarios
                         </el-menu-item>
                         @endcan @can('listar roles')
-                        <el-menu-item index="roles.list" v-on:click="goto('{{ route('roles.list') }}')">
+                        <el-menu-item index="roles" v-on:click="goto('{{ route('roles.list') }}')">
                             Roles
                         </el-menu-item>
                         @endcan

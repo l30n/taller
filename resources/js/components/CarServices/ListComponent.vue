@@ -22,7 +22,12 @@
         </el-table-column>
         <el-table-column>
           <template slot="header" slot-scope="scope">
-            <el-input v-model="search" size="mini" placeholder="Escribe para buscar"/>
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="Escribe para buscar"
+              :scope="scope"
+            />
           </template>
           <template slot-scope="scope">
             <el-button icon="el-icon-edit" @click="goto('/carservices/edit/' + scope.row.id)">Editar</el-button>
