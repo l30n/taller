@@ -63,7 +63,7 @@ export default {
       var $this = this;
       if ($this.car.brand) {
         $this
-          .$confirm("¿Estas seguro de no guardar el Articulo?")
+          .$confirm("¿Estas seguro de no guardar el Carro?")
           .then(_ => {
             $this.cancel();
             done();

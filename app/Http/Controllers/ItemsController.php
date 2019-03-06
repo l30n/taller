@@ -29,14 +29,24 @@ class ItemsController extends Controller
         if ($request->has('all')) {
             return Item::all();
         }
+        if ($request->filled('search')) {
+            return Item::where('name', 'LIKE', '%' . $request->get('search') . '%')
+                ->paginate(10)
+                ->setPath('')
+                ->appends(array(
+                    'search' => $request->get('search'),
+                ));
+        }
 
         return Item::paginate(10);
     }
 
     public function save(SaveItemRequest $request)
     {
-        $item = $request->all();
+        if ($request->has('id')) {
+            return Item::updateOrCreate($request->only('id'), $request->except(['id', 'year']));
+        }
 
-        return Item::firstOrCreate($item);
+        return Item::firstOrCreate($request->all());
     }
 }

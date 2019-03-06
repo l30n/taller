@@ -68,7 +68,7 @@ export default {
             .then(function(response) {
               $this.$notify({
                 title: "¡Exito!",
-                message: "El Servicio fue agregado correctamente",
+                message: "El Servicio fue editado correctamente",
                 type: "success"
               });
               $this.$root.$emit("refreshTable");

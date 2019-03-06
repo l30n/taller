@@ -19,7 +19,7 @@
             />
           </template>
           <template slot-scope="scope">
-            <el-button icon="el-icon-edit" @click="goto('/carservices/edit/' + scope.row.id)">Editar</el-button>
+            <edit-cars :car="scope.row"></edit-cars>
           </template>
         </el-table-column>
       </el-table>
@@ -50,17 +50,31 @@ export default {
       });
     },
     refreshTable() {
-      this.loadTable("/api/cars?page=" + this.page);
+      this.loadTable("/api/cars?page=" + this.page + "&search=" + this.search);
     },
     handleCurrentChange(val) {
       this.page = val;
       this.refreshTable();
     }
   },
+  watch: {
+    search: function() {
+      var $this = this;
+      if ($this.timeout) {
+        clearTimeout($this.timeout);
+      }
+      $this.timeout = setTimeout(function() {
+        $this.loadTable(
+          "/api/cars?page=" + $this.page + "&search=" + $this.search
+        );
+      }, 1000);
+    }
+  },
   data() {
     return {
       cars: [],
       search: "",
+      timeout: 0,
       page: 1
     };
   }

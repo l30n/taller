@@ -64,6 +64,7 @@ Vue.component('select-service', require('./components/Sales/SelectServiceCompone
 Vue.component('receipt-sales', require('./components/Sales/ReceiptComponent').default);
 
 Vue.component('create-items', require('./components/Items/CreateComponent').default);
+Vue.component('edit-items', require('./components/Items/EditComponent').default);
 Vue.component('list-items', require('./components/Items/ListComponent').default);
 
 Vue.component('create-services', require('./components/Services/CreateComponent').default);
@@ -71,6 +72,7 @@ Vue.component('edit-services', require('./components/Services/EditComponent').de
 Vue.component('list-services', require('./components/Services/ListComponent').default);
 
 Vue.component('create-cars', require('./components/Cars/CreateComponent').default);
+Vue.component('edit-cars', require('./components/Cars/EditComponent').default);
 Vue.component('list-cars', require('./components/Cars/ListComponent').default);
 
 Vue.component('create-clients', require('./components/Clients/CreateComponent').default);

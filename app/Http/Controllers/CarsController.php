@@ -30,6 +30,17 @@ class CarsController extends Controller
             return Car::all();
         }
 
+        if ($request->filled('search')) {
+            return Car::where('brand', 'LIKE', '%' . $request->get('search') . '%')
+                ->orWhere('start_year', 'LIKE', '%' . $request->get('search') . '%')
+                ->orWhere('end_year', 'LIKE', '%' . $request->get('search') . '%')
+                ->paginate(10)
+                ->setPath('')
+                ->appends(array(
+                    'search' => $request->get('search'),
+                ));
+        }
+
         return Car::paginate(10);
     }
 
@@ -44,6 +55,10 @@ class CarsController extends Controller
             return response()->json([
                 'error' => 'El Carro ya existe',
             ]);
+        }
+
+        if ($request->has('id')) {
+            return Car::updateOrCreate($request->only('id'), $request->except(['id', 'year']));
         }
 
         return Car::firstOrCreate([
