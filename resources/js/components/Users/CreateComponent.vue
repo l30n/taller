@@ -105,7 +105,7 @@ export default {
       var $this = this;
       if ($this.user.name || $this.user.email || $this.user.password) {
         $this
-          .$confirm("¿Estas seguro de no guardar el Articulo?")
+          .$confirm("¿Estas seguro de no guardar el Usuario?")
           .then(_ => {
             $this.cancel();
             done();

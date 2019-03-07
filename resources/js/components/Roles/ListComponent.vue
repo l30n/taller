@@ -7,7 +7,20 @@
         </el-table-column>
         <el-table-column prop="name" label="Nombre" width="150px"></el-table-column>
         <el-table-column label="Permisos">
-          <template slot-scope="scope">{{ permissions(scope.row.permissions) }}</template>
+          <template slot-scope="scope">{{ getPermissions(scope.row.permissions) }}</template>
+        </el-table-column>
+        <el-table-column>
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="Escribe para buscar"
+              :scope="scope"
+            />
+          </template>
+          <template slot-scope="scope">
+            <edit-roles :role="scope.row" :permissions="permissions"></edit-roles>
+          </template>
         </el-table-column>
       </el-table>
       <div class="block" style="text-align: center;" v-if="roles.total > 10">
@@ -24,6 +37,7 @@
 
 <script>
 export default {
+  props: ["permissions"],
   mounted: function() {
     this.loadTable("/api/roles");
 
@@ -37,13 +51,13 @@ export default {
       });
     },
     refreshTable() {
-      this.loadTable("/api/roles?page=" + this.page);
+      this.loadTable("/api/roles?page=" + this.page + "&search=" + this.search);
     },
     handleCurrentChange(val) {
       this.page = val;
       this.refreshTable();
     },
-    permissions(permissions) {
+    getPermissions(permissions) {
       return permissions
         .map(function(el) {
           return el["name"];
@@ -51,9 +65,24 @@ export default {
         .join(", ");
     }
   },
+  watch: {
+    search: function() {
+      var $this = this;
+      if ($this.timeout) {
+        clearTimeout($this.timeout);
+      }
+      $this.timeout = setTimeout(function() {
+        $this.loadTable(
+          "/api/roles?page=" + $this.page + "&search=" + $this.search
+        );
+      }, 1000);
+    }
+  },
   data() {
     return {
       roles: [],
+      search: "",
+      timeout: 0,
       page: 1
     };
   }

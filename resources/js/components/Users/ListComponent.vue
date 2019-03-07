@@ -9,11 +9,16 @@
         <el-table-column prop="email" label="Correo Electronico"></el-table-column>
         <el-table-column prop="created_at" label="Fecha"></el-table-column>
         <el-table-column>
-          <template slot="header" slot-scope>
-            <el-input v-model="search" size="mini" placeholder="Escribe para buscar"/>
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="Escribe para buscar"
+              :scope="scope"
+            />
           </template>
           <template slot-scope="scope">
-            <el-button icon="el-icon-edit" @click="goto('/carservices/edit/' + scope.row.id)">Editar</el-button>
+            <edit-users :user="scope.row" :roles="roles"></edit-users>
           </template>
         </el-table-column>
       </el-table>
@@ -31,6 +36,7 @@
 
 <script>
 export default {
+  props: ["roles"],
   mounted: function() {
     this.loadTable("/api/users");
 
@@ -44,17 +50,31 @@ export default {
       });
     },
     refreshTable() {
-      this.loadTable("/api/users?page=" + this.page);
+      this.loadTable("/api/users?page=" + this.page + "&search=" + this.search);
     },
     handleCurrentChange(val) {
       this.page = val;
       this.refreshTable();
     }
   },
+  watch: {
+    search: function() {
+      var $this = this;
+      if ($this.timeout) {
+        clearTimeout($this.timeout);
+      }
+      $this.timeout = setTimeout(function() {
+        $this.loadTable(
+          "/api/users?page=" + $this.page + "&search=" + $this.search
+        );
+      }, 1000);
+    }
+  },
   data() {
     return {
       users: [],
       search: "",
+      timeout: 0,
       page: 1
     };
   }

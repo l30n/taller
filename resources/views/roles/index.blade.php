@@ -9,7 +9,7 @@
     </el-row>
     <el-row type="flex">
         <el-col :span="24">
-            <list-roles></list-roles>
+            <list-roles :permissions="{{ $permissions->toJson()}}"></list-roles>
         </el-col>
     </el-row>
 </el-main>

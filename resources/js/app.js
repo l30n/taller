@@ -76,6 +76,7 @@ Vue.component('edit-cars', require('./components/Cars/EditComponent').default);
 Vue.component('list-cars', require('./components/Cars/ListComponent').default);
 
 Vue.component('create-clients', require('./components/Clients/CreateComponent').default);
+Vue.component('edit-clients', require('./components/Clients/EditComponent').default);
 Vue.component('list-clients', require('./components/Clients/ListComponent').default);
 
 Vue.component('create-carservices', require('./components/CarServices/CreateComponent').default);
@@ -83,9 +84,11 @@ Vue.component('list-carservices', require('./components/CarServices/ListComponen
 Vue.component('select-item', require('./components/CarServices/SelectItemComponent').default);
 
 Vue.component('create-users', require('./components/Users/CreateComponent').default);
+Vue.component('edit-users', require('./components/Users/EditComponent').default);
 Vue.component('list-users', require('./components/Users/ListComponent').default);
 
 Vue.component('create-roles', require('./components/Roles/CreateComponent').default);
+Vue.component('edit-roles', require('./components/Roles/EditComponent').default);
 Vue.component('list-roles', require('./components/Roles/ListComponent').default);
 
 Vue.component('datepicker', require('./components/Dashboard/DatepickerComponent').default);

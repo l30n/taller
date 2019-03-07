@@ -25,8 +25,7 @@ class SaveUserRequest extends FormRequest
     {
         return [
             "name" => "required",
-            "email" => "required|unique:users,email",
-            "password" => "required",
+            "email" => "required",
             "role" => "required",
         ];
     }

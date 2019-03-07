@@ -44,7 +44,7 @@ class ItemsController extends Controller
     public function save(SaveItemRequest $request)
     {
         if ($request->has('id')) {
-            return Item::updateOrCreate($request->only('id'), $request->except(['id', 'year']));
+            return Item::updateOrCreate($request->only('id'), $request->except('id'));
         }
 
         return Item::firstOrCreate($request->all());

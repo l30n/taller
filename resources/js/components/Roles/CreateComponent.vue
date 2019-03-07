@@ -79,7 +79,7 @@ export default {
       var $this = this;
       if ($this.role.name) {
         $this
-          .$confirm("¿Estas seguro de no guardar el Articulo?")
+          .$confirm("¿Estas seguro de no guardar el Rol?")
           .then(_ => {
             $this.cancel();
             done();

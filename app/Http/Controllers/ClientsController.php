@@ -27,6 +27,17 @@ class ClientsController extends Controller
             return Client::all();
         }
 
+        if ($request->filled('search')) {
+            return Client::where('name', 'LIKE', '%' . $request->get('search') . '%')
+                ->orWhere('phonenumber', 'LIKE', '%' . $request->get('search') . '%')
+                ->orWhere('address', 'LIKE', '%' . $request->get('search') . '%')
+                ->paginate(10)
+                ->setPath('')
+                ->appends(array(
+                    'search' => $request->get('search'),
+                ));
+        }
+
         return Client::paginate(10);
     }
 
@@ -37,8 +48,10 @@ class ClientsController extends Controller
 
     public function save(SaveClientRequest $request)
     {
-        $client = $request->all();
+        if ($request->has('id')) {
+            return Client::updateOrCreate($request->only('id'), $request->except('id'));
+        }
 
-        return Client::firstOrCreate($client);
+        return Client::firstOrCreate($request->all());
     }
 }

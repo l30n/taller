@@ -23,23 +23,42 @@ class UsersController extends Controller
     public function get(Request $request)
     {
         if ($request->has('all')) {
-            return User::all();
+            return User::with('roles')->all();
         }
 
-        return User::paginate(10);
+        if ($request->filled('search')) {
+            return User::where('name', 'LIKE', '%' . $request->get('search') . '%')
+                ->orWhere('email', 'LIKE', '%' . $request->get('search') . '%')
+                ->paginate(10)
+                ->setPath('')
+                ->appends(array(
+                    'search' => $request->get('search'),
+                ));
+        }
+
+        return User::with('roles')->paginate(10);
     }
 
     public function save(SaveUserRequest $request)
     {
         $user = $request->all();
 
-        $user['password'] = bcrypt($user['password']);
+        unset($user['id']);
+        if ($request->filled('password')) {
+            $user['password'] = bcrypt($user['password']);
+        } else {
+            unset($user['password']);
+        }
 
         $role = Role::find($user['role']);
 
         unset($user['role']);
 
-        $user = User::firstOrCreate($user);
+        if ($request->has('id')) {
+            $user = User::updateOrCreate($request->only('id'), $user);
+        } else {
+            $user = User::firstOrCreate($user);
+        }
 
         $user->syncRoles($role);
 
