@@ -2,6 +2,7 @@
   <el-row>
     <el-col :span="24">
       <el-table
+        v-loading="loading"
         :data="cars.filter(data => !search || (data.car.brand + ' ' + data.car.start_year + '-' + data.car.end_year + ' ' + data.service.name).toLowerCase().includes(search.toLowerCase())).splice((page - 1) * limit, limit)"
         class="table"
         stripe
@@ -20,7 +21,7 @@
         <el-table-column label="Servicio">
           <template slot-scope="scope">{{ scope.row.service.name }}</template>
         </el-table-column>
-        <el-table-column>
+        <el-table-column width="280px">
           <template slot="header" slot-scope="scope">
             <el-input
               v-model="search"
@@ -30,7 +31,12 @@
             />
           </template>
           <template slot-scope="scope">
-            <el-button icon="el-icon-edit" @click="goto('/carservices/edit/' + scope.row.id)">Editar</el-button>
+            <span>
+              <el-tooltip class="item" effect="dark" content="Editar" placement="top">
+                <el-button icon="el-icon-edit" @click="goto('/carservices/edit/' + scope.row.id)"></el-button>
+              </el-tooltip>
+            </span>
+            <delete-carservices :carservice="scope.row"></delete-carservices>
           </template>
         </el-table-column>
       </el-table>
@@ -56,8 +62,10 @@ export default {
   methods: {
     loadTable(url) {
       var $this = this;
+      $this.loading = true;
       axios.get(url).then(function(response) {
         $this.cars = response.data;
+        $this.loading = false;
       });
     },
     refreshTable() {
@@ -76,7 +84,8 @@ export default {
       cars: [],
       page: 1,
       limit: 10,
-      search: ""
+      search: "",
+      loading: true
     };
   }
 };

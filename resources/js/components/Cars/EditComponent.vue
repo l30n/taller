@@ -1,6 +1,8 @@
 <template>
-  <el-col :span="5">
-    <el-button icon="el-icon-edit" @click="dialogVisible = true">Editar</el-button>
+  <span>
+    <el-tooltip class="item" effect="dark" content="Editar" placement="top">
+      <el-button icon="el-icon-edit" @click="dialogVisible = true"></el-button>
+    </el-tooltip>
     <el-dialog
       title="Editar un Carro"
       :visible.sync="dialogVisible"
@@ -37,7 +39,7 @@
         <el-button type="primary" @click="saveCar()">Guardar</el-button>
       </span>
     </el-dialog>
-  </el-col>
+  </span>
 </template>
 <script>
 export default {

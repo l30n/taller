@@ -64,4 +64,11 @@ class UsersController extends Controller
 
         return $user;
     }
+
+    public function delete($id)
+    {
+        return response()->json([
+            'success' => User::findOrFail($id)->delete(),
+        ]);
+    }
 }

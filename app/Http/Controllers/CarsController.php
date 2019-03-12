@@ -72,4 +72,11 @@ class CarsController extends Controller
     {
         return Car::select('brand')->groupBy('brand')->orderBy('brand')->get();
     }
+
+    public function delete($id)
+    {
+        return response()->json([
+            'success' => Car::findOrFail($id)->delete(),
+        ]);
+    }
 }

@@ -1,12 +1,19 @@
 <template>
   <el-row>
     <el-col :span="24">
-      <el-table :data="services.data" class="table" stripe border style="width: 100%">
+      <el-table
+        v-loading="loading"
+        :data="services.data"
+        class="table"
+        stripe
+        border
+        style="width: 100%"
+      >
         <el-table-column prop="id" label="#" width="50px">
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
         <el-table-column prop="name" label="Servicio"></el-table-column>
-        <el-table-column>
+        <el-table-column width="280px">
           <template slot="header" slot-scope="scope">
             <el-input
               v-model="search"
@@ -17,6 +24,7 @@
           </template>
           <template slot-scope="scope">
             <edit-services :service="scope.row"></edit-services>
+            <delete-services :service="scope.row"></delete-services>
           </template>
         </el-table-column>
       </el-table>
@@ -42,8 +50,10 @@ export default {
   methods: {
     loadTable(url) {
       var $this = this;
+      $this.loading = true;
       axios.get(url).then(function(response) {
         $this.services = response.data;
+        $this.loading = false;
       });
     },
     refreshTable() {
@@ -74,7 +84,8 @@ export default {
       services: [],
       search: "",
       timeout: 0,
-      page: 1
+      page: 1,
+      loading: true
     };
   }
 };

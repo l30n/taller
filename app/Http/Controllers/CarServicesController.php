@@ -97,4 +97,22 @@ class CarServicesController extends Controller
             'success' => true,
         ]);
     }
+
+    public function delete($id)
+    {
+        $carService = CarService::find($id);
+
+        if (!$carService) {
+            return response()->json(['errors' => ['missing' => ['Servicio no existe']]], 422);
+        }
+
+        CarServiceItem::where([
+            'car_id' => $carService->car_id,
+            'service_id' => $carService->service_id,
+        ])->delete();
+
+        return response()->json([
+            'success' => $carService->delete(),
+        ]);
+    }
 }

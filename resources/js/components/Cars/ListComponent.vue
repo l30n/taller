@@ -1,7 +1,14 @@
 <template>
   <el-row>
     <el-col :span="24">
-      <el-table :data="cars.data" class="table" stripe border style="width: 100%">
+      <el-table
+        v-loading="loading"
+        :data="cars.data"
+        class="table"
+        stripe
+        border
+        style="width: 100%"
+      >
         <el-table-column prop="id" label="#" width="50px">
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
@@ -9,7 +16,7 @@
         <el-table-column label="Año">
           <template slot-scope="scope">{{ scope.row.start_year }}-{{ scope.row.end_year }}</template>
         </el-table-column>
-        <el-table-column>
+        <el-table-column width="280px">
           <template slot="header" slot-scope="scope">
             <el-input
               v-model="search"
@@ -20,6 +27,7 @@
           </template>
           <template slot-scope="scope">
             <edit-cars :car="scope.row"></edit-cars>
+            <delete-cars :car="scope.row"></delete-cars>
           </template>
         </el-table-column>
       </el-table>
@@ -45,8 +53,10 @@ export default {
   methods: {
     loadTable(url) {
       var $this = this;
+      $this.loading = true;
       axios.get(url).then(function(response) {
         $this.cars = response.data;
+        $this.loading = false;
       });
     },
     refreshTable() {
@@ -75,7 +85,8 @@ export default {
       cars: [],
       search: "",
       timeout: 0,
-      page: 1
+      page: 1,
+      loading: true
     };
   }
 };

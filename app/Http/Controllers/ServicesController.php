@@ -99,4 +99,11 @@ class ServicesController extends Controller
 
         return $services->values()->toArray();
     }
+
+    public function delete($id)
+    {
+        return response()->json([
+            'success' => Service::findOrFail($id)->delete(),
+        ]);
+    }
 }

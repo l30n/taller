@@ -54,4 +54,11 @@ class ClientsController extends Controller
 
         return Client::firstOrCreate($request->all());
     }
+
+    public function delete($id)
+    {
+        return response()->json([
+            'success' => Client::findOrFail($id)->delete(),
+        ]);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveRoleRequest;
+use App\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -52,5 +53,24 @@ class RolesController extends Controller
         $role->syncPermissions($p);
 
         return $role;
+    }
+
+    public function delete($id)
+    {
+        $role = Role::findOrFail($id);
+
+        $users = User::role($role)->get();
+
+        if ($users->count() > 0) {
+            return response()->json([
+                'errors' => [
+                    'used' => ['Rol esta asignado a ' . $users->count() . ' usuarios. Remover rol de usuarios asignados.'],
+                ],
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => $role->delete(),
+        ]);
     }
 }

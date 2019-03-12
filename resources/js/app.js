@@ -65,30 +65,37 @@ Vue.component('receipt-sales', require('./components/Sales/ReceiptComponent').de
 
 Vue.component('create-items', require('./components/Items/CreateComponent').default);
 Vue.component('edit-items', require('./components/Items/EditComponent').default);
+Vue.component('delete-items', require('./components/Items/DeleteComponent').default);
 Vue.component('list-items', require('./components/Items/ListComponent').default);
 
 Vue.component('create-services', require('./components/Services/CreateComponent').default);
 Vue.component('edit-services', require('./components/Services/EditComponent').default);
+Vue.component('delete-services', require('./components/Services/DeleteComponent').default);
 Vue.component('list-services', require('./components/Services/ListComponent').default);
 
 Vue.component('create-cars', require('./components/Cars/CreateComponent').default);
 Vue.component('edit-cars', require('./components/Cars/EditComponent').default);
+Vue.component('delete-cars', require('./components/Cars/DeleteComponent').default);
 Vue.component('list-cars', require('./components/Cars/ListComponent').default);
 
 Vue.component('create-clients', require('./components/Clients/CreateComponent').default);
 Vue.component('edit-clients', require('./components/Clients/EditComponent').default);
+Vue.component('delete-clients', require('./components/Clients/DeleteComponent').default);
 Vue.component('list-clients', require('./components/Clients/ListComponent').default);
 
 Vue.component('create-carservices', require('./components/CarServices/CreateComponent').default);
+Vue.component('delete-carservices', require('./components/CarServices/DeleteComponent').default);
 Vue.component('list-carservices', require('./components/CarServices/ListComponent').default);
 Vue.component('select-item', require('./components/CarServices/SelectItemComponent').default);
 
 Vue.component('create-users', require('./components/Users/CreateComponent').default);
 Vue.component('edit-users', require('./components/Users/EditComponent').default);
+Vue.component('delete-users', require('./components/Users/DeleteComponent').default);
 Vue.component('list-users', require('./components/Users/ListComponent').default);
 
 Vue.component('create-roles', require('./components/Roles/CreateComponent').default);
 Vue.component('edit-roles', require('./components/Roles/EditComponent').default);
+Vue.component('delete-roles', require('./components/Roles/DeleteComponent').default);
 Vue.component('list-roles', require('./components/Roles/ListComponent').default);
 
 Vue.component('datepicker', require('./components/Dashboard/DatepickerComponent').default);

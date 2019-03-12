@@ -1,7 +1,14 @@
 <template>
   <el-row>
     <el-col :span="24">
-      <el-table :data="roles.data" class="table" stripe border style="width: 100%">
+      <el-table
+        v-loading="loading"
+        :data="roles.data"
+        class="table"
+        stripe
+        border
+        style="width: 100%"
+      >
         <el-table-column prop="id" label="#" width="50px">
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
@@ -9,7 +16,7 @@
         <el-table-column label="Permisos">
           <template slot-scope="scope">{{ getPermissions(scope.row.permissions) }}</template>
         </el-table-column>
-        <el-table-column>
+        <el-table-column width="280px">
           <template slot="header" slot-scope="scope">
             <el-input
               v-model="search"
@@ -20,6 +27,7 @@
           </template>
           <template slot-scope="scope">
             <edit-roles :role="scope.row" :permissions="permissions"></edit-roles>
+            <delete-roles :role="scope.row"></delete-roles>
           </template>
         </el-table-column>
       </el-table>
@@ -46,8 +54,10 @@ export default {
   methods: {
     loadTable(url) {
       var $this = this;
+      $this.loading = true;
       axios.get(url).then(function(response) {
         $this.roles = response.data;
+        $this.loading = false;
       });
     },
     refreshTable() {
@@ -83,7 +93,8 @@ export default {
       roles: [],
       search: "",
       timeout: 0,
-      page: 1
+      page: 1,
+      loading: true
     };
   }
 };

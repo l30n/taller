@@ -49,4 +49,11 @@ class ItemsController extends Controller
 
         return Item::firstOrCreate($request->all());
     }
+
+    public function delete($id)
+    {
+        return response()->json([
+            'success' => Item::findOrFail($id)->delete(),
+        ]);
+    }
 }
