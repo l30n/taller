@@ -2,7 +2,7 @@
   <el-row>
     <el-col :span="24">
       <el-table
-        :data="cars.filter(data => !search || data.car.brand.toLowerCase().includes(search.toLowerCase())).splice((page - 1) * limit, limit)"
+        :data="cars.filter(data => !search || (data.car.brand + ' ' + data.car.start_year + '-' + data.car.end_year + ' ' + data.service.name).toLowerCase().includes(search.toLowerCase())).splice((page - 1) * limit, limit)"
         class="table"
         stripe
         border

@@ -23,10 +23,16 @@ class SaveRoleRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required|unique:roles,name',
             'permissions' => 'required',
         ];
+
+        if ($this->filled('id')) {
+            $rules['name'] = 'required';
+        }
+
+        return $rules;
     }
 
     /**

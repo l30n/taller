@@ -37,14 +37,19 @@ class RolesController extends Controller
     {
         $name = $request['name'];
 
-        $role = new Role();
-        $role->name = $name;
-        $role->save();
+        if ($request->has('id')) {
+            $role = Role::updateOrCreate($request->only('id'), $request->except(['id', 'permissions']));
+        } else {
+            $role = Role::firstOrCreate([
+                'name' => $request->get('name'),
+            ]);
+        }
 
         foreach ($request['permissions'] as $permission) {
-            $p = Permission::where('id', '=', $permission)->firstOrFail();
-            $role->givePermissionTo($p);
+            $p[] = Permission::where('id', '=', $permission)->firstOrFail();
         }
+
+        $role->syncPermissions($p);
 
         return $role;
     }

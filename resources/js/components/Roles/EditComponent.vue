@@ -6,6 +6,7 @@
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="handleClose"
+      @open="handleOpen"
     >
       <el-row>
         <el-col :span="24">
@@ -20,7 +21,7 @@
               <el-input v-model="localRole.name"></el-input>
             </el-form-item>
             <el-form-item label="Permisos" prop="permissions">
-              <el-checkbox-group v-model="localRole.permissions" @change="changePermissions">
+              <el-checkbox-group v-model="localRole.permissions">
                 <el-checkbox
                   v-for="(permission) in permissions"
                   v-bind:key="permission.id"
@@ -42,14 +43,6 @@
 <script>
 export default {
   props: ["role", "permissions"],
-  beforeUpdate: function() {
-    this.localRole = JSON.parse(JSON.stringify(this.role));
-    for (var permission in this.localRole.permissions) {
-      this.localRole.permissions[permission] = this.localRole.permissions[
-        permission
-      ].id;
-    }
-  },
   data() {
     return {
       dialogVisible: false,
@@ -78,6 +71,14 @@ export default {
     };
   },
   methods: {
+    handleOpen: function() {
+      this.localRole = JSON.parse(JSON.stringify(this.role));
+      for (var permission in this.localRole.permissions) {
+        this.localRole.permissions[permission] = this.localRole.permissions[
+          permission
+        ].id;
+      }
+    },
     handleClose(done) {
       var $this = this;
       if ($this.localRole.name) {
@@ -92,10 +93,6 @@ export default {
         $this.cancel();
         done();
       }
-    },
-    changePermissions(value) {
-      console.log(value);
-      this.$forceUpdate();
     },
     cancel() {
       this.dialogVisible = false;
