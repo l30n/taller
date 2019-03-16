@@ -19,7 +19,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item style="float: right;" v-if="sales">
+            <el-form-item style="float: right;" v-if="sale">
               <el-button icon="el-icon-printer" @click="buildReceipt()">Imprimir</el-button>
             </el-form-item>
           </el-form>
