@@ -208,23 +208,25 @@ export default {
 
       $this.context.font = "16px Georgia";
 
-      if ($this.sale.client.name.length < 20) {
-        $this.context.fillText($this.sale.client.name, 192, 358);
-      } else {
-        var length = $this.sale.client.name.length;
-        var limit = $this.sale.client.name.substr(0, 20).lastIndexOf(" ");
-        $this.context.fillText(
-          $this.sale.client.name.substr(0, limit),
-          192,
-          352
-        );
-        $this.context.fillText(
-          $this.sale.client.name.substr(limit + 1, length),
-          192,
-          364
-        );
+      if ($this.sale.client) {
+        if ($this.sale.client.name.length < 20) {
+          $this.context.fillText($this.sale.client.name, 192, 358);
+        } else {
+          var length = $this.sale.client.name.length;
+          var limit = $this.sale.client.name.substr(0, 20).lastIndexOf(" ");
+          $this.context.fillText(
+            $this.sale.client.name.substr(0, limit),
+            192,
+            352
+          );
+          $this.context.fillText(
+            $this.sale.client.name.substr(limit + 1, length),
+            192,
+            364
+          );
+        }
+        $this.context.fillText($this.sale.client.phonenumber, 128, 398);
       }
-      $this.context.fillText($this.sale.client.phonenumber, 128, 398);
 
       $this.context.fillText($this.order.brand, 450, 338);
       $this.context.fillText($this.order.year, 450, 415);
