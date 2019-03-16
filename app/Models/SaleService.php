@@ -15,4 +15,14 @@ class SaleService extends Model
     {
         return $this->belongsTo('App\Models\Service');
     }
+
+    public function car()
+    {
+        return $this->belongsTo('App\Models\Car');
+    }
+
+    public function item()
+    {
+        return $this->belongsTo('App\Models\Item');
+    }
 }

@@ -29,8 +29,21 @@ class SalesController extends Controller
         return view('sales.create');
     }
 
-    public function receipt()
+    public function receipt($id = 0)
     {
+        if (!empty($id)) {
+            $sale = Sale::with('saleServices')->with('saleServices.item')->with('client')
+                ->with(['car' => function ($query) {
+                    $query->distinct('id');
+                }])->with(['services' => function ($query) {
+                $query->distinct('id');
+            }])->find($id);
+
+            return view('sales.receipt', [
+                'sale' => $sale,
+            ]);
+        }
+
         return view('sales.receipt');
     }
 
@@ -51,7 +64,7 @@ class SalesController extends Controller
 
         if ($sale->status == Sale::TERMINADO) {
             $sale->done_on = date('Y-m-d H:i:s');
-            $sale->method = $request->get('method');;
+            $sale->method = $request->get('method');
         }
 
         $sale->save();

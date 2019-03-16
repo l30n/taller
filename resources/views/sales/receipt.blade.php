@@ -1,4 +1,4 @@
 @extends('layouts.app') 
 @section('content')
-<receipt-sales></receipt-sales>
+<receipt-sales :sale="{{ !empty($sale) ? $sale->toJson() : " false " }}"></receipt-sales>
 @endsection

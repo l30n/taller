@@ -112,7 +112,7 @@ new Vue({
   ],
   data() {
     return {
-      primaryColor: "#021C73",
+      primaryColor: "#021C73"
     }
   },
   methods: {

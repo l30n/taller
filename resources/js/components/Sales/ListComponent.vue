@@ -49,6 +49,13 @@
           <template slot-scope="scope">${{ formatPrice(scope.row.total) }}</template>
         </el-table-column>
         <el-table-column prop="created_at" label="Fecha"></el-table-column>
+        <el-table-column width="80px">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" content="Recibo" placement="top">
+              <el-button icon="el-icon-tickets" @click="goto('/sales/receipt/' + scope.row.id)"></el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="block" style="text-align: center;" v-if="sales.total > 10">
         <el-pagination
@@ -161,6 +168,9 @@ export default {
         .catch(_ => {
           $this.sales = JSON.parse(JSON.stringify($this.oldSales));
         });
+    },
+    goto: function(link) {
+      window.location.href = link;
     }
   },
   data() {
