@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class CarServiceItem extends Model
 {
     //
+    protected $softDelete = false;
+
     public $fillable = [
         'item_id',
         'car_id',

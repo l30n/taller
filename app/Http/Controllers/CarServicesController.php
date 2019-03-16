@@ -86,6 +86,8 @@ class CarServicesController extends Controller
                 unset($item['item']);
             }
 
+            unset($item['deleted_at']);
+
             if (isset($item['id'])) {
                 CarServiceItem::find($item['id'])->update($item);
             } else {
