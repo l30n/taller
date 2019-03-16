@@ -19,7 +19,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item style="float: right;">
+            <el-form-item style="float: right;" v-if="sales">
               <el-button icon="el-icon-printer" @click="buildReceipt()">Imprimir</el-button>
             </el-form-item>
           </el-form>
@@ -97,7 +97,7 @@ export default {
   props: ["sale"],
   data() {
     return {
-      order: [],
+      order: {},
       client: "",
       clients: [],
       context: ""
@@ -111,36 +111,37 @@ export default {
       } catch (e) {
         localStorage.removeItem("order");
       }
-      if ($this.sale) {
-        var services = [];
-        for (var i in $this.sale.services) {
-          var items = [];
-          for (var x in $this.sale.sale_services) {
-            if ($this.sale.sale_services[x].item) {
-              items.push({
-                id: $this.sale.sale_services[x].item_id,
-                name: $this.sale.sale_services[x].item.name,
-                low_price: $this.sale.sale_services[x].price
-              });
-            }
+    }
+
+    if ($this.sale) {
+      var services = [];
+      for (var i in $this.sale.services) {
+        var items = [];
+        for (var x in $this.sale.sale_services) {
+          if ($this.sale.sale_services[x].item) {
+            items.push({
+              id: $this.sale.sale_services[x].item_id,
+              name: $this.sale.sale_services[x].item.name,
+              low_price: $this.sale.sale_services[x].price
+            });
           }
-          services.push({
-            id: $this.sale.services[i].id,
-            label: $this.sale.services[i].name,
-            items: items
-          });
         }
+        services.push({
+          id: $this.sale.services[i].id,
+          label: $this.sale.services[i].name,
+          items: items
+        });
+      }
 
-        $this.order = {
-          brand: $this.sale.car[0].brand,
-          price: "low",
-          services: services,
-          year: $this.sale.sale_services[0].year
-        };
+      $this.order = {
+        brand: $this.sale.car[0].brand,
+        price: "low",
+        services: services,
+        year: $this.sale.sale_services[0].year
+      };
 
-        if ($this.sale.client) {
-          $this.client = $this.sale.client.id;
-        }
+      if ($this.sale.client) {
+        $this.client = $this.sale.client.id;
       }
 
       axios.get("/api/clients?all=1").then(function(response) {
