@@ -31,4 +31,9 @@ class Sale extends Model
     {
         return $this->hasManyThrough('App\Models\Service', 'App\Models\SaleService', 'sale_id', 'id', 'id', 'service_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

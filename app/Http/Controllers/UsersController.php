@@ -23,6 +23,10 @@ class UsersController extends Controller
     public function get(Request $request)
     {
         if ($request->has('all')) {
+            if ($request->has('role')) {
+                return User::role($request->get('role'))->get();
+            }
+
             return User::with('roles')->all();
         }
 

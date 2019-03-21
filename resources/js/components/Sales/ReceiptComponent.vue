@@ -3,12 +3,30 @@
     <el-main class="content">
       <el-row>
         <el-col :span="24">
-          <el-form inline label-position="right" label-width="80px" class="query-form">
+          <el-form
+            :rules="rules"
+            :model="form"
+            inline
+            label-position="right"
+            label-width="80px"
+            class="query-form"
+            ref="form"
+          >
+            <el-form-item label="Empleado" prop="user">
+              <el-select
+                filterable
+                placeholder="Selecciona un Empleado"
+                v-model="form.user"
+                :disabled="sale != false"
+              >
+                <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="Cliente" prop="client">
               <el-select
                 filterable
                 placeholder="Selecciona un Client"
-                v-model="client"
+                v-model="form.client"
                 :disabled="sale != false"
               >
                 <el-option
@@ -98,8 +116,21 @@ export default {
   data() {
     return {
       order: {},
-      client: "",
+      form: {
+        client: "",
+        user: ""
+      },
       clients: [],
+      users: [],
+      rules: {
+        user: [
+          {
+            required: true,
+            message: "Empleado es obligatorio",
+            trigger: "change"
+          }
+        ]
+      },
       context: ""
     };
   },
@@ -139,15 +170,23 @@ export default {
         services: services,
         year: $this.sale.sale_services[0].year
       };
-
-      if ($this.sale.client) {
-        $this.client = $this.sale.client.id;
-      }
-
-      axios.get("/api/clients?all=1").then(function(response) {
-        $this.clients = response.data;
-      });
     }
+
+    axios.get("/api/clients?all=1").then(function(response) {
+      $this.clients = response.data;
+      if ($this.sale) {
+        if ($this.sale.client) {
+          $this.form.client = $this.sale.client.id;
+        }
+      }
+    });
+
+    axios.get("/api/users?all=1&role=Empleado").then(function(response) {
+      $this.users = response.data;
+      if ($this.sale) {
+        $this.form.user = $this.sale.user.id;
+      }
+    });
   },
   methods: {
     formatPrice(value) {
@@ -229,6 +268,19 @@ export default {
         $this.context.fillText($this.sale.client.phonenumber, 128, 398);
       }
 
+      if ($this.sale.user.name.length < 20) {
+        $this.context.fillText($this.sale.user.name, 195, 438);
+      } else {
+        var length = $this.sale.user.name.length;
+        var limit = $this.sale.user.name.substr(0, 20).lastIndexOf(" ");
+        $this.context.fillText($this.sale.user.name.substr(0, limit), 195, 432);
+        $this.context.fillText(
+          $this.sale.user.name.substr(limit + 1, length),
+          195,
+          444
+        );
+      }
+
       $this.context.fillText($this.order.brand, 450, 338);
       $this.context.fillText($this.order.year, 450, 415);
 
@@ -288,13 +340,19 @@ export default {
       return total;
     },
     save() {
-      localStorage.removeItem("order");
-      if (this.client) {
-        this.order.client = this.client;
-      }
-      this.order.total = this.total;
-      axios.post("/api/sales", this.order).then(function(response) {
-        window.location.href = "/sales";
+      var $this = this;
+      $this.$refs.form.validate(valid => {
+        if (valid) {
+          localStorage.removeItem("order");
+          $this.order.user = $this.form.user;
+          if ($this.form.client) {
+            $this.order.client = $this.form.client;
+          }
+          $this.order.total = $this.total;
+          axios.post("/api/sales", $this.order).then(function(response) {
+            window.location.href = "/sales";
+          });
+        }
       });
     }
   },

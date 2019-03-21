@@ -18,7 +18,7 @@ class AddPricesColumnSaleServicesTable extends Migration
             $table->unsignedInteger('item_id')->after('service_id');
             $table->unsignedDecimal('price')->default(0)->after('year');
 
-            $table->foreign('sale_id')->references('id')->on('sales');
+            $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
             $table->foreign('car_id')->references('id')->on('cars');
             $table->foreign('service_id')->references('id')->on('services');
             $table->foreign('item_id')->references('id')->on('items');

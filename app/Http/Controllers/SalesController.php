@@ -32,7 +32,7 @@ class SalesController extends Controller
     public function receipt($id = 0)
     {
         if (!empty($id)) {
-            $sale = Sale::with('saleServices')->with('saleServices.item')->with('client')
+            $sale = Sale::with('saleServices')->with('saleServices.item')->with('client')->with('user')
                 ->with(['car' => function ($query) {
                     $query->distinct('id');
                 }])->with(['services' => function ($query) {
@@ -88,6 +88,7 @@ class SalesController extends Controller
         $sale = new Sale();
 
         $sale->total = $request->get('total');
+        $sale->user_id = $request->get('user');
         $sale->client_id = 0;
         if ($request->get('client')) {
             $sale->client_id = $request->get('client');

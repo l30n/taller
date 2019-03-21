@@ -42,7 +42,7 @@ mix.copyDirectory('resources/img', 'public/img');
 deleteFiles('public/js');
 deleteFiles('public/css');
 
-mix.js('resources/js/app.js', 'public/js').extract(['vue']).version();
+mix.js('resources/js/app.js', 'public/js').extract(['vue']).sourceMaps().version();
 mix.sass('resources/sass/app.scss', 'public/css').version();
 
 mix.disableNotifications();
