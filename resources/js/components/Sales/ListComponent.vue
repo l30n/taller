@@ -1,7 +1,14 @@
 <template>
   <el-row>
     <el-col :span="24">
-      <el-table :data="sales.data" class="table" stripe border style="width: 100%">
+      <el-table
+        v-loading="loading"
+        :data="sales.data"
+        class="table"
+        stripe
+        border
+        style="width: 100%"
+      >
         <el-table-column prop="id" label="#" width="50px">
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
@@ -77,9 +84,11 @@ export default {
   methods: {
     loadTable(url) {
       var $this = this;
+      $this.loading = true;
       axios.get(url).then(function(response) {
         $this.sales = response.data;
         $this.oldSales = JSON.parse(JSON.stringify(response.data));
+        $this.loading = false;
       });
     },
     formatPrice(value) {
@@ -178,7 +187,8 @@ export default {
       sales: [],
       oldSales: [],
       status: ["Cotizacion", "En Proceso", "Terminado", "Cancelado"],
-      method: "2"
+      method: "2",
+      loading: true
     };
   }
 };
