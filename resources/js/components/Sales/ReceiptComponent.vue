@@ -227,7 +227,6 @@ export default {
         $this.$refs["my-canvas"].height
       );
 
-      $this.sale.id;
       $this.context.font = "24px Georgia";
       $this.context.fillStyle = "red";
       $this.context.fillText($this.pad($this.sale.id, 5), 512, 60);
@@ -284,28 +283,28 @@ export default {
       $this.context.fillText($this.order.brand, 450, 338);
       $this.context.fillText($this.order.year, 450, 415);
 
-      for (var s in $this.order.services) {
-        $this.context.fillText("1", 92, 530 + s * 26);
-        $this.context.fillText(
-          $this.order.services[s].label,
-          155,
-          530 + s * 26
-        );
-        $this.context.fillText(
-          "$" + $this.formatPrice($this.sumServiceTotal(s)),
-          580,
-          530 + s * 26
-        );
-      }
+      $this.sale.total = parseFloat($this.sale.total);
 
-      $this.context.fillText("$" + $this.formatPrice($this.total), 580, 765);
+      $this.context.fillText("1", 92, 530);
+      $this.context.fillText($this.sale.concept, 155, 530);
       $this.context.fillText(
-        "$" + $this.formatPrice($this.total * 0.08),
+        "$" + $this.formatPrice($this.sale.total),
+        580,
+        530
+      );
+
+      $this.context.fillText(
+        "$" + $this.formatPrice($this.sale.total),
+        580,
+        765
+      );
+      $this.context.fillText(
+        "$" + $this.formatPrice($this.sale.total * 0.08),
         580,
         797
       );
       $this.context.fillText(
-        "$" + $this.formatPrice($this.total + $this.total * 0.08),
+        "$" + $this.formatPrice($this.sale.total + $this.sale.total * 0.08),
         580,
         833
       );

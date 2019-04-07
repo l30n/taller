@@ -59,7 +59,11 @@
         <el-table-column width="80px">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="Recibo" placement="top">
-              <el-button icon="el-icon-tickets" @click="goto('/sales/receipt/' + scope.row.id)"></el-button>
+              <el-button
+                icon="el-icon-tickets"
+                @click="goto('/sales/receipt/' + scope.row.id)"
+                :disabled="scope.row.status != 2"
+              ></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -105,7 +109,10 @@ export default {
         null,
         "¿Quieres cambiar el estado la Orden de Servicio?"
       );
+      $this.concept = "";
+      $this.total = "";
       if ($this.sales.data[index].status == 2) {
+        $this.total = $this.sales.data[index].total;
         var checkGroup = $this.$createElement(
           "el-radio-group",
           {
@@ -139,16 +146,86 @@ export default {
             )
           ]
         );
-        message = $this.$createElement("p", null, [
+        message = $this.$createElement("el-row", null, [
           $this.$createElement(
-            "p",
-            null,
+            "div",
+            {
+              class: "el-col el-col-24",
+              style: {
+                marginBottom: "10px"
+              }
+            },
             "¿Quieres cambiar el estado la Orden de Servicio?"
           ),
-          $this.$createElement("p", null, [
-            $this.$createElement("p", null, "Metodo de pago:"),
-            checkGroup
-          ])
+          $this.$createElement(
+            "div",
+            {
+              class: "el-col el-col-8 el-form-item__label"
+            },
+            "Concepto:"
+          ),
+          $this.$createElement(
+            "div",
+            {
+              class: "el-col el-col-16",
+              style: {
+                marginBottom: "4px"
+              }
+            },
+            [
+              $this.$createElement("el-input", {
+                model: {
+                  value: $this.concept,
+                  callback: function(value) {
+                    $this.concept = value;
+                  }
+                }
+              })
+            ]
+          ),
+          $this.$createElement(
+            "div",
+            {
+              class: "el-col el-col-8 el-form-item__label"
+            },
+            "Mounto Total:"
+          ),
+          $this.$createElement(
+            "div",
+            {
+              class: "el-col el-col-16",
+              style: {
+                marginBottom: "4px"
+              }
+            },
+            [
+              $this.$createElement("el-input", {
+                model: {
+                  value: $this.total,
+                  callback: function(value) {
+                    $this.total = value;
+                  }
+                }
+              })
+            ]
+          ),
+          $this.$createElement(
+            "div",
+            {
+              class: "el-col el-col-8 el-form-item__label"
+            },
+            "Metodo de pago:"
+          ),
+          $this.$createElement(
+            "div",
+            {
+              class: "el-col el-col-16",
+              style: {
+                paddingTop: "13px"
+              }
+            },
+            [checkGroup]
+          )
         ]);
       }
       $this
@@ -164,7 +241,9 @@ export default {
             .post("api/sales/status", {
               id: $this.sales.data[index].id,
               status: $this.sales.data[index].status,
-              method: $this.method
+              method: $this.method,
+              concept: $this.concept,
+              total: $this.total
             })
             .then(function(response) {
               $this.oldSales = JSON.parse(JSON.stringify($this.sales));
@@ -187,6 +266,8 @@ export default {
       sales: [],
       oldSales: [],
       status: ["Cotizacion", "En Proceso", "Terminado", "Cancelado"],
+      concept: "",
+      total: "",
       method: "2",
       loading: true
     };
