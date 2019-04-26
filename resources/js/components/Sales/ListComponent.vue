@@ -83,7 +83,12 @@
 <script>
 export default {
   mounted: function() {
-    this.loadTable("/api/sales");
+    var $this = this;
+    $this.loadTable("/api/sales");
+
+    axios.get("/api/users?all=1&role=Empleado").then(function(response) {
+      $this.users = response.data;
+    });
   },
   methods: {
     loadTable(url) {
@@ -111,8 +116,49 @@ export default {
       );
       $this.concept = "";
       $this.total = "";
+      $this.user = "";
+      var userName = "";
       if ($this.sales.data[index].status == 2) {
         $this.total = $this.sales.data[index].total;
+        $this.user = $this.sales.data[index].user_id;
+
+        var options = [];
+        for (var x = 0; x < $this.users.length; x++) {
+          var option = $this.$createElement(
+            "el-option",
+            {
+              props: {
+                key: $this.users[x].id,
+                value: $this.users[x].id
+              }
+            },
+            $this.users[x].name
+          );
+          if ($this.users[x].id == $this.user) {
+            userName = $this.users[x].name;
+          }
+          options.push(option);
+        }
+
+        var select = $this.$createElement(
+          "el-select",
+          {
+            props: {
+              model: $this.user,
+              value: userName
+            },
+            model: {
+              value: $this.user,
+              callback: function(value) {
+                $this.user = value;
+                select.componentInstance.value = value;
+                select.componentInstance.$forceUpdate();
+              }
+            }
+          },
+          options
+        );
+
         var checkGroup = $this.$createElement(
           "el-radio-group",
           {
@@ -156,6 +202,23 @@ export default {
               }
             },
             "¿Quieres cambiar el estado la Orden de Servicio?"
+          ),
+          $this.$createElement(
+            "div",
+            {
+              class: "el-col el-col-8 el-form-item__label"
+            },
+            "Empleado:"
+          ),
+          $this.$createElement(
+            "div",
+            {
+              class: "el-col el-col-16",
+              style: {
+                marginBottom: "4px"
+              }
+            },
+            [select]
           ),
           $this.$createElement(
             "div",
@@ -243,7 +306,8 @@ export default {
               status: $this.sales.data[index].status,
               method: $this.method,
               concept: $this.concept,
-              total: $this.total
+              total: $this.total,
+              user: $this.user
             })
             .then(function(response) {
               $this.oldSales = JSON.parse(JSON.stringify($this.sales));
@@ -265,10 +329,12 @@ export default {
     return {
       sales: [],
       oldSales: [],
+      users: [],
       status: ["Cotizacion", "En Proceso", "Terminado", "Cancelado"],
       concept: "",
       total: "",
       method: "2",
+      user: "",
       loading: true
     };
   }

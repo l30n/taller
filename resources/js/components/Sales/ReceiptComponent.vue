@@ -70,6 +70,10 @@
                       <el-col :span="6" :offset="4">{{ item.name }}</el-col>
                       <el-col :span="4">${{ formatPrice(item[order.price+"_price"]) }}</el-col>
                     </el-row>
+                    <el-row class="row-item" v-if="total != sumServiceTotal()">
+                      <el-col :span="6" :offset="4">Otro</el-col>
+                      <el-col :span="4">${{ formatPrice(total - sumServiceTotal()) }}</el-col>
+                    </el-row>
                     <br>
                   </el-col>
                 </el-row>
@@ -324,15 +328,17 @@ export default {
       }
       return s;
     },
-    sumServiceTotal(i) {
+    sumServiceTotal() {
       var total = 0;
       const order = this.order;
 
-      for (var x in order.services[i].items) {
-        if (order.services[i].items[x][order.price + "_price"]) {
-          total += parseFloat(
-            order.services[i].items[x][order.price + "_price"]
-          );
+      for (var i in order.services) {
+        for (var x in order.services[i].items) {
+          if (order.services[i].items[x][order.price + "_price"]) {
+            total += parseFloat(
+              order.services[i].items[x][order.price + "_price"]
+            );
+          }
         }
       }
 
@@ -359,6 +365,10 @@ export default {
     total() {
       if (this.order.length == 0) {
         return 0;
+      }
+
+      if (this.sale) {
+        return parseFloat(this.sale.total);
       }
 
       var total = 0;

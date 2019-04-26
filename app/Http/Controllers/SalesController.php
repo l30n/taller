@@ -70,6 +70,9 @@ class SalesController extends Controller
             if ($request->get('total')) {
                 $sale->total = $request->get('total');
             }
+            if ($request->get('user')) {
+                $sale->user_id = $request->get('user');
+            }
             $sale->method = $request->get('method');
         }
 
