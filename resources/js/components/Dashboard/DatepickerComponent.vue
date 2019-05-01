@@ -32,7 +32,6 @@ export default {
             values[1].toISOString().substring(0, 10)
         )
         .then(function(response) {
-          console.log($this.$root.$refs);
           $this.$root.$refs.dashboardNumbers.refresh(
             response.data.total,
             response.data.services

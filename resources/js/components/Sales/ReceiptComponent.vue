@@ -302,16 +302,29 @@ export default {
         580,
         765
       );
-      $this.context.fillText(
-        "$" + $this.formatPrice($this.sale.total * 0.08),
-        580,
-        797
-      );
-      $this.context.fillText(
-        "$" + $this.formatPrice($this.sale.total + $this.sale.total * 0.08),
-        580,
-        833
-      );
+      if ($this.sale.tax) {
+        $this.context.fillText(
+          "$" + $this.formatPrice($this.sale.total * 0.08),
+          580,
+          797
+        );
+      } else {
+        $this.context.fillText("$0", 580, 797);
+      }
+
+      if ($this.sale.tax) {
+        $this.context.fillText(
+          "$" + $this.formatPrice($this.sale.total + $this.sale.total * 0.08),
+          580,
+          833
+        );
+      } else {
+        $this.context.fillText(
+          "$" + $this.formatPrice($this.sale.total),
+          580,
+          833
+        );
+      }
 
       var img = document.createElement("img");
       img.src = $this.$refs["my-canvas"].toDataURL("image/jpeg");

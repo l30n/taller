@@ -76,6 +76,7 @@
           @current-change="handleCurrentChange"
         ></el-pagination>
       </div>
+      <confirm-sales></confirm-sales>
     </el-col>
   </el-row>
 </template>
@@ -119,6 +120,8 @@ export default {
       $this.user = "";
       var userName = "";
       if ($this.sales.data[index].status == 2) {
+        $this.$root.$emit("confirmSale", $this.sales.data[index]);
+        return;
         $this.total = $this.sales.data[index].total;
         $this.user = $this.sales.data[index].user_id;
 

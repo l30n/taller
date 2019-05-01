@@ -64,14 +64,23 @@ class SalesController extends Controller
 
         if ($sale->status == Sale::TERMINADO) {
             $sale->done_on = date('Y-m-d H:i:s');
-            if ($request->get('concept')) {
+            if ($request->has('concept')) {
                 $sale->concept = $request->get('concept');
             }
-            if ($request->get('total')) {
+            if ($request->has('total')) {
                 $sale->total = $request->get('total');
             }
-            if ($request->get('user')) {
+            if ($request->has('user')) {
                 $sale->user_id = $request->get('user');
+            }
+            if ($request->has('details')) {
+                $sale->details = $request->get('details');
+            }
+            if ($request->has('guaranty')) {
+                $sale->guaranty = $request->get('guaranty');
+            }
+            if ($request->has('tax')) {
+                $sale->tax = $request->get('tax');
             }
             $sale->method = $request->get('method');
         }

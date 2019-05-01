@@ -15,6 +15,7 @@
         <el-table-column prop="name" label="Nombre de Cliente"></el-table-column>
         <el-table-column prop="phonenumber" label="Telefono"></el-table-column>
         <el-table-column prop="address" label="Direccion"></el-table-column>
+        <el-table-column prop="reference" label="Referencia"></el-table-column>
         <el-table-column width="280px">
           <template slot="header" slot-scope="scope">
             <el-input
