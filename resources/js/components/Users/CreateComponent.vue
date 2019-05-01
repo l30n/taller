@@ -45,7 +45,7 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">Cancelar</el-button>
-        <el-button type="primary" @click="saveUser()">Agregar</el-button>
+        <el-button type="primary" @click="saveUser()" :loading="loading">Agregar</el-button>
       </span>
     </el-dialog>
   </el-col>
@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      loading: false,
       labelPosition: "left",
       user: {
         name: "",
@@ -118,12 +119,14 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
+      this.loading = false;
       this.$refs.userForm.resetFields();
     },
     saveUser() {
       var $this = this;
       $this.$refs.userForm.validate(valid => {
         if (valid) {
+          $this.loading = true;
           axios
             .post("/api/users", $this.user)
             .then(function(response) {
@@ -143,6 +146,7 @@ export default {
                   type: "error"
                 });
               }
+              $this.loading = false;
             });
         } else {
           return false;

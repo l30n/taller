@@ -38,7 +38,7 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">Cancelar</el-button>
-        <el-button type="primary" @click="saveClient()">Agregar</el-button>
+        <el-button type="primary" @click="saveClient()" :loading="loading">Agregar</el-button>
       </span>
     </el-dialog>
   </el-col>
@@ -48,6 +48,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      loading: false,
       labelPosition: "left",
       client: {
         name: "",
@@ -84,12 +85,14 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
+      this.loading = false;
       this.$refs.clientForm.resetFields();
     },
     saveClient() {
       var $this = this;
       $this.$refs.clientForm.validate(valid => {
         if (valid) {
+          $this.loading = true;
           axios
             .post("/api/clients", $this.client)
             .then(function(response) {
@@ -109,6 +112,7 @@ export default {
                   type: "error"
                 });
               }
+              $this.loading = false
             });
         } else {
           return false;

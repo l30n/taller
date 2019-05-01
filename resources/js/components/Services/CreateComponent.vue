@@ -32,7 +32,7 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">Cancelar</el-button>
-        <el-button type="primary" @click="saveService()">Agregar</el-button>
+        <el-button type="primary" @click="saveService()" :loading="loading">Agregar</el-button>
       </span>
     </el-dialog>
   </el-col>
@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      loading: false,
       labelPosition: "left",
       service: {
         name: "",
@@ -76,12 +77,14 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
+      this.loading = false;
       this.$refs.serviceForm.resetFields();
     },
     saveService() {
       var $this = this;
       $this.$refs.serviceForm.validate(valid => {
         if (valid) {
+          $this.loading = true;
           axios
             .post("/api/services", $this.service)
             .then(function(response) {
@@ -101,6 +104,7 @@ export default {
                   type: "error"
                 });
               }
+              $this.loading = false;
             });
         } else {
           return false;

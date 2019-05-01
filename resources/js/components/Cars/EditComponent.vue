@@ -36,7 +36,7 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">Cancelar</el-button>
-        <el-button type="primary" @click="saveCar()">Guardar</el-button>
+        <el-button type="primary" @click="saveCar()" :loading="loading">Guardar</el-button>
       </span>
     </el-dialog>
   </span>
@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      loading: false,
       labelPosition: "left",
       rules: {
         brand: [
@@ -82,12 +83,14 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
+      this.loading = false;
       this.$refs.carForm.resetFields();
     },
     saveCar() {
       var $this = this;
       $this.$refs.carForm.validate(valid => {
         if (valid) {
+          $this.loading = true;
           axios
             .post("/api/cars", $this.car)
             .then(function(response) {
@@ -107,6 +110,7 @@ export default {
                   type: "error"
                 });
               }
+              $this.loading = false;
             });
         } else {
           return false;

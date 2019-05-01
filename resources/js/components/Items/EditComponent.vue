@@ -29,7 +29,7 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">Cancelar</el-button>
-        <el-button type="primary" @click="saveItem()">Guardar</el-button>
+        <el-button type="primary" @click="saveItem()" :loading="loading">Guardar</el-button>
       </span>
     </el-dialog>
   </span>
@@ -40,6 +40,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      loading: false,
       labelPosition: "left",
       rules: {
         name: [
@@ -70,12 +71,14 @@ export default {
     },
     cancel() {
       this.dialogVisible = false;
+      this.loading = false;
       this.$refs.itemForm.resetFields();
     },
     saveItem() {
       var $this = this;
       $this.$refs.itemForm.validate(valid => {
         if (valid) {
+          $this.loading = true;
           axios
             .post("/api/items", $this.item)
             .then(function(response) {
@@ -95,6 +98,7 @@ export default {
                   type: "error"
                 });
               }
+              $this.loading= false;
             });
         } else {
           return false;
