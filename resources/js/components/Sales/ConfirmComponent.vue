@@ -69,11 +69,14 @@ export default {
     this.$root.$on("confirmSale", this.openDialog);
   },
   methods: {
-    revert: function() {},
     openDialog: function(sale) {
       this.dialogVisible = true;
       this.sale = sale;
       this.concept = "";
+      this.details = "";
+      this.guaranty = false;
+      this.tax = true;
+      this.method = 1;
       this.user = sale.user_id;
       this.total = sale.total;
       console.log(sale);
@@ -95,6 +98,7 @@ export default {
         .then(function(response) {
           // $this.oldSales = JSON.parse(JSON.stringify($this.sales));
           $this.dialogVisible = false;
+          $this.$root.$emit("refreshTable");
           $this.$message({
             type: "success",
             message: "Cambio de estatus exitoso"

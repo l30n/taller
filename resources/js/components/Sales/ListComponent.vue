@@ -84,14 +84,14 @@
 <script>
 export default {
   mounted: function() {
-    var $this = this;
-    $this.loadTable("/api/sales");
+    this.loadTable("/api/sales");
 
-    axios.get("/api/users?all=1&role=Empleado").then(function(response) {
-      $this.users = response.data;
-    });
+    this.$root.$on("refreshTable", this.refreshTable);
   },
   methods: {
+    refreshTable() {
+      this.loadTable("/api/sales?page=" + this.page);
+    },
     loadTable(url) {
       var $this = this;
       $this.loading = true;
@@ -106,7 +106,8 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     handleCurrentChange(val) {
-      this.loadTable("/api/sales?page=" + val);
+      this.page = val;
+      this.refreshTable();
     },
     handleChangeStatus(index) {
       var $this = this;
@@ -115,185 +116,13 @@ export default {
         null,
         "¿Quieres cambiar el estado la Orden de Servicio?"
       );
-      $this.concept = "";
-      $this.total = "";
-      $this.user = "";
-      var userName = "";
+
       if ($this.sales.data[index].status == 2) {
         $this.$root.$emit("confirmSale", $this.sales.data[index]);
-        return;
-        $this.total = $this.sales.data[index].total;
-        $this.user = $this.sales.data[index].user_id;
-
-        var options = [];
-        for (var x = 0; x < $this.users.length; x++) {
-          var option = $this.$createElement(
-            "el-option",
-            {
-              props: {
-                key: $this.users[x].id,
-                value: $this.users[x].id
-              }
-            },
-            $this.users[x].name
-          );
-          if ($this.users[x].id == $this.user) {
-            userName = $this.users[x].name;
-          }
-          options.push(option);
-        }
-
-        var select = $this.$createElement(
-          "el-select",
-          {
-            props: {
-              model: $this.user,
-              value: userName
-            },
-            model: {
-              value: $this.user,
-              callback: function(value) {
-                $this.user = value;
-                select.componentInstance.value = value;
-                select.componentInstance.$forceUpdate();
-              }
-            }
-          },
-          options
-        );
-
-        var checkGroup = $this.$createElement(
-          "el-radio-group",
-          {
-            model: {
-              value: $this.method,
-              callback: function(value) {
-                checkGroup.componentInstance.value = value;
-                $this.method = value;
-              }
-            },
-            ref: "paymentMethod"
-          },
-          [
-            $this.$createElement(
-              "el-radio",
-              {
-                attrs: {
-                  label: "1"
-                }
-              },
-              "Efectivo"
-            ),
-            $this.$createElement(
-              "el-radio",
-              {
-                attrs: {
-                  label: "2"
-                }
-              },
-              "Electronico"
-            )
-          ]
-        );
-        message = $this.$createElement("el-row", null, [
-          $this.$createElement(
-            "div",
-            {
-              class: "el-col el-col-24",
-              style: {
-                marginBottom: "10px"
-              }
-            },
-            "¿Quieres cambiar el estado la Orden de Servicio?"
-          ),
-          $this.$createElement(
-            "div",
-            {
-              class: "el-col el-col-8 el-form-item__label"
-            },
-            "Empleado:"
-          ),
-          $this.$createElement(
-            "div",
-            {
-              class: "el-col el-col-16",
-              style: {
-                marginBottom: "4px"
-              }
-            },
-            [select]
-          ),
-          $this.$createElement(
-            "div",
-            {
-              class: "el-col el-col-8 el-form-item__label"
-            },
-            "Concepto:"
-          ),
-          $this.$createElement(
-            "div",
-            {
-              class: "el-col el-col-16",
-              style: {
-                marginBottom: "4px"
-              }
-            },
-            [
-              $this.$createElement("el-input", {
-                model: {
-                  value: $this.concept,
-                  callback: function(value) {
-                    $this.concept = value;
-                  }
-                }
-              })
-            ]
-          ),
-          $this.$createElement(
-            "div",
-            {
-              class: "el-col el-col-8 el-form-item__label"
-            },
-            "Mounto Total:"
-          ),
-          $this.$createElement(
-            "div",
-            {
-              class: "el-col el-col-16",
-              style: {
-                marginBottom: "4px"
-              }
-            },
-            [
-              $this.$createElement("el-input", {
-                model: {
-                  value: $this.total,
-                  callback: function(value) {
-                    $this.total = value;
-                  }
-                }
-              })
-            ]
-          ),
-          $this.$createElement(
-            "div",
-            {
-              class: "el-col el-col-8 el-form-item__label"
-            },
-            "Metodo de pago:"
-          ),
-          $this.$createElement(
-            "div",
-            {
-              class: "el-col el-col-16",
-              style: {
-                paddingTop: "13px"
-              }
-            },
-            [checkGroup]
-          )
-        ]);
+        $this.sales = JSON.parse(JSON.stringify($this.oldSales));
+        return false;
       }
+
       $this
         .$msgbox({
           title: "Cambiar orden de estado",
@@ -306,11 +135,7 @@ export default {
           axios
             .post("api/sales/status", {
               id: $this.sales.data[index].id,
-              status: $this.sales.data[index].status,
-              method: $this.method,
-              concept: $this.concept,
-              total: $this.total,
-              user: $this.user
+              status: $this.sales.data[index].status
             })
             .then(function(response) {
               $this.oldSales = JSON.parse(JSON.stringify($this.sales));
@@ -332,13 +157,9 @@ export default {
     return {
       sales: [],
       oldSales: [],
-      users: [],
       status: ["Cotizacion", "En Proceso", "Terminado", "Cancelado"],
-      concept: "",
-      total: "",
-      method: "2",
-      user: "",
-      loading: true
+      loading: true,
+      page: 1
     };
   }
 };
