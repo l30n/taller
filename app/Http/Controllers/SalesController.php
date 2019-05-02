@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\CarServiceItem;
 use App\Models\Sale;
 use App\Models\SaleService;
 use Illuminate\Http\Request;
@@ -97,15 +98,21 @@ class SalesController extends Controller
         $year = $request->get('year');
         $price = $request->get('price');
 
-        $car = Car::with(['carServices', 'carServices.service'])
-            ->where('brand', '=', $request->get('brand'))
+        $car = Car::where('brand', '=', $request->get('brand'))
             ->where('start_year', '<=', $year)
             ->where('end_year', '>=', $year)
             ->first();
 
+        if (!$car) {
+            return response()->json(['errors' => ['required' => ['El Carro no existe']]], 422);
+        }
+
         $sale = new Sale();
 
         $sale->total = $request->get('total');
+        if ($request->has('service') && $sale->total == 0) {
+            $sale->total = CarServiceItem::where('car_id', $car->id)->where('service_id', $request->get('service'))->sum('price');
+        }
         $sale->user_id = $request->get('user');
         $sale->client_id = 0;
         if ($request->get('client')) {
@@ -114,20 +121,44 @@ class SalesController extends Controller
 
         $sale->save();
 
-        foreach ($request->get('services') as $service) {
-            foreach ($service['items'] as $item) {
+        if ($request->has('service')) {
+            $items = CarServiceItem::where('car_id', $car->id)->where('service_id', $request->get('service'))->get();
+
+            if ($items->isNotEmpty()) {
+                $items->each(function ($item, $key) use ($sale, $year) {
+                    SaleService::create([
+                        'sale_id' => $sale->id,
+                        'car_id' => $item->car_id,
+                        'service_id' => $item->service_id,
+                        'item_id' => $item->item_id,
+                        'year' => $year,
+                        'price' => $item->price,
+                    ]);
+                });
+            } else {
                 SaleService::create([
                     'sale_id' => $sale->id,
                     'car_id' => $car->id,
-                    'service_id' => $service['id'],
-                    'item_id' => $item['id'],
+                    'service_id' => $request->get('service'),
+                    'item_id' => 1,
                     'year' => $year,
-                    'price' => $item[$price . '_price'],
+                    'price' => 0,
                 ]);
             }
+        } else if ($request->has('services')) {
+            foreach ($request->get('services') as $service) {
+                foreach ($service['items'] as $item) {
+                    SaleService::create([
+                        'sale_id' => $sale->id,
+                        'car_id' => $car->id,
+                        'service_id' => $service['id'],
+                        'item_id' => $item['id'],
+                        'year' => $year,
+                        'price' => $item[$price . '_price'],
+                    ]);
+                }
+            }
         }
-
-        $sale->id;
 
         return $sale;
     }

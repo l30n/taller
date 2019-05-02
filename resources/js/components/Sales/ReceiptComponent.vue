@@ -297,6 +297,12 @@ export default {
         530
       );
 
+      $this.context.fillText($this.sale.details, 155, 555);
+
+      if ($this.sale.guaranty) {
+        $this.context.fillText("Si", 160, 770);
+      }
+
       $this.context.fillText(
         "$" + $this.formatPrice($this.sale.total),
         580,

@@ -1,6 +1,6 @@
 <template>
   <el-row type="flex">
-    <el-col :span="20">
+    <el-col :span="18">
       <el-row type="flex">
         <el-col
           :span="6"
@@ -13,7 +13,7 @@
         </el-col>
       </el-row>
     </el-col>
-    <el-col :span="4" style="text-align:center;">
+    <el-col :span="6" style="text-align:center;">
       <span class="bigNumber">${{ formatPrice(total) }}</span>
       <p>Total</p>
     </el-col>

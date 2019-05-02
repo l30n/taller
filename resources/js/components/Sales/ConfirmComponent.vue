@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="Cambiar orden de estado" :visible.sync="dialogVisible" width="420px">
-    <el-row>
+    <el-row class="confirm">
       <el-col
         :span="24"
         style="margin-bottom: 10px;"
@@ -38,7 +38,7 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">No</el-button>
-      <el-button type="primary" @click="save">Si</el-button>
+      <el-button type="primary" @click="save" :loading="loading">Si</el-button>
     </span>
   </el-dialog>
 </template>
@@ -56,7 +56,8 @@ export default {
       user: "",
       tax: true,
       users: [],
-      sale: {}
+      sale: {},
+      loading: false
     };
   },
   mounted: function() {
@@ -79,10 +80,10 @@ export default {
       this.method = 1;
       this.user = sale.user_id;
       this.total = sale.total;
-      console.log(sale);
     },
     save: function() {
       var $this = this;
+      $this.loading = true;
       axios
         .post("api/sales/status", {
           id: $this.sale.id,
@@ -98,6 +99,7 @@ export default {
         .then(function(response) {
           // $this.oldSales = JSON.parse(JSON.stringify($this.sales));
           $this.dialogVisible = false;
+          $this.loading = false;
           $this.$root.$emit("refreshTable");
           $this.$message({
             type: "success",
@@ -109,13 +111,15 @@ export default {
 };
 </script>
 <style lang="scss">
-.el-dialog__header {
-  padding: 15px;
-}
-.el-dialog__body {
-  padding: 10px 15px;
-}
-.el-form-item {
-  margin-bottom: 10px;
+.confirm {
+  .el-dialog__header {
+    padding: 15px;
+  }
+  .el-dialog__body {
+    padding: 10px 15px;
+  }
+  .el-form-item {
+    margin-bottom: 10px;
+  }
 }
 </style>

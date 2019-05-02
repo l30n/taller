@@ -20,5 +20,11 @@
             <dashboard-table ref="dashboardTable" :sales="{{ $sales->toJson() }}"></dashboard-table>
         </el-col>
     </el-row>
+    <br>
+    <el-row type="flex">
+        <el-col :span="24">
+            <dashboard-users ref="dashboardTable" :sales="{{ $sales->toJson() }}"></dashboard-users>
+        </el-col>
+    </el-row>
 </el-main>
 @endsection

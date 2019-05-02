@@ -5,11 +5,12 @@
         <el-col :span="19">
             <h2>Ordenes de Servicio</h2>
         </el-col>
-        <el-col :span="5" style="text-align:right;">
+        <create-pop-sales></create-pop-sales>
+        <!--el-col :span="5" style="text-align:right;">
             <el-button type="primary" icon="el-icon-circle-plus" v-on:click="goto('{{ route('sales.create') }}')">
                 Crear Orden de Servicio
             </el-button>
-        </el-col>
+        </el-col-->
     </el-row>
     <el-row type="flex">
         <el-col :span="24">

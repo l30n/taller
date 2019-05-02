@@ -59,6 +59,7 @@ Vue.use(ElementUI, {
 Vue.component('login-component', require('./components/Login/LoginComponent').default);
 
 Vue.component('list-sales', require('./components/Sales/ListComponent').default);
+Vue.component('create-pop-sales', require('./components/Sales/CreatePopUpComponent').default);
 Vue.component('create-sales', require('./components/Sales/CreateComponent').default);
 Vue.component('select-service', require('./components/Sales/SelectServiceComponent').default);
 Vue.component('receipt-sales', require('./components/Sales/ReceiptComponent').default);
@@ -103,6 +104,7 @@ Vue.component('datepicker', require('./components/Dashboard/DatepickerComponent'
 Vue.component('top-numbers', require('./components/Dashboard/TopNumbersComponent').default);
 Vue.component('dashboard-chart', require('./components/Dashboard/ChartComponent').default);
 Vue.component('dashboard-table', require('./components/Dashboard/TableComponent').default);
+Vue.component('dashboard-users', require('./components/Dashboard/UsersComponent').default);
 
 new Vue({
   el: '#app',

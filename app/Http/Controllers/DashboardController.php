@@ -15,16 +15,27 @@ class DashboardController extends Controller
             ->where('done_on', '>=', $start)
             ->get()
             ->sum('total');
+
         $services = Sale::where('updated_at', '>=', $start)
             ->get()
             ->groupBy('status');
+
         $salesByStatus = Sale::select('status', DB::raw('SUM(total) AS total'))
             ->where('updated_at', '>=', $start)
+            ->groupBy('status')
             ->get();
+
         $sales = Sale::select(DB::raw('DATE(done_on) AS date'), 'method', DB::raw('SUM(total) AS total'), DB::raw('COUNT(*) AS orders'))
             ->where('status', Sale::TERMINADO)
             ->where('done_on', '>=', $start)
             ->groupBy(['date', 'method'])
+            ->get();
+
+        $users = Sale::select('user_id', DB::raw('SUM(total) AS total'), DB::raw('COUNT(*) AS orders'))
+            ->where('status', Sale::TERMINADO)
+            ->where('done_on', '>=', $start)
+            ->with('user')
+            ->groupBy(['user_id'])
             ->get();
 
         $statuses = [
@@ -39,6 +50,7 @@ class DashboardController extends Controller
             'services' => $services,
             'salesByStatus' => $salesByStatus,
             'sales' => $sales,
+            'sales' => $users,
             'statuses' => $statuses,
         ]);
     }
@@ -61,6 +73,7 @@ class DashboardController extends Controller
         $salesByStatus = Sale::select('status', DB::raw('SUM(total) AS total'))
             ->where('updated_at', '>=', $start)
             ->where('updated_at', '<=', $end)
+            ->groupBy('status')
             ->get();
         $sales = Sale::select(DB::raw('DATE(done_on) AS date'), 'method', DB::raw('SUM(total) AS total'), DB::raw('COUNT(*) AS orders'))
             ->where('status', Sale::TERMINADO)
@@ -69,11 +82,19 @@ class DashboardController extends Controller
             ->groupBy(['date', 'method'])
             ->get();
 
+        $users = Sale::select('user_id', DB::raw('SUM(total) AS total'), DB::raw('COUNT(*) AS orders'))
+            ->where('status', Sale::TERMINADO)
+            ->where('done_on', '>=', $start)
+            ->with('user')
+            ->groupBy(['user_id'])
+            ->get();
+
         return response()->json([
             'total' => $total,
             'services' => $services,
             'salesByStatus' => $salesByStatus,
             'sales' => $sales,
+            'users' => $users,
         ]);
     }
 }
