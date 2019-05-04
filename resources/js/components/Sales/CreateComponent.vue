@@ -170,7 +170,7 @@ export default {
   methods: {
     addService: function(service, total) {
       var $this = this;
-      $this.services.push({
+      var service = {
         id: service.id,
         label: service.name,
         items: [
@@ -187,9 +187,10 @@ export default {
             high_price: total
           }
         ]
-      });
+      };
+      $this.services.push(service);
       setTimeout(function() {
-        $this.$refs.services.setCheckedNodes($this.services);
+        $this.$refs.services.setCheckedNodes([service]);
       }, 0);
     },
     filterNode(value, data) {
