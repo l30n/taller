@@ -36,7 +36,7 @@ class SalesController extends Controller
                     $query->distinct('id');
                 }])->with(['services' => function ($query) {
                     $query->distinct('id');
-                }])->where('create_at', '>=', date('Y-m-d 00:00:00', strtotime('-7 days')))->find($id);
+                }])->find($id);
 
             return view('sales.receipt', [
                 'sale' => $sale,
