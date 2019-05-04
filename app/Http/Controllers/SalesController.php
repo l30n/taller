@@ -16,9 +16,7 @@ class SalesController extends Controller
      * @return void
      */
     public function __construct()
-    {
-
-    }
+    { }
 
     public function index()
     {
@@ -37,8 +35,8 @@ class SalesController extends Controller
                 ->with(['car' => function ($query) {
                     $query->distinct('id');
                 }])->with(['services' => function ($query) {
-                $query->distinct('id');
-            }])->find($id);
+                    $query->distinct('id');
+                }])->find($id);
 
             return view('sales.receipt', [
                 'sale' => $sale,
@@ -104,7 +102,28 @@ class SalesController extends Controller
             ->first();
 
         if (!$car) {
-            return response()->json(['errors' => ['required' => ['El Carro no existe']]], 422);
+            $car = Car::where('brand', '=', $request->get('brand'))
+                ->where('start_year', '<=', $year + 1)
+                ->where('end_year', '>=', $year + 1)
+                ->first();
+            if (!$car) {
+                $car = Car::where('brand', '=', $request->get('brand'))
+                    ->where('start_year', '<=', $year - 1)
+                    ->where('end_year', '>=', $year - 1)
+                    ->first();
+                if (!$car) {
+                    $car = Car::create([
+                        'brand' => $request->get('brand'),
+                        'start_year' => $year,
+                        'end_year' => $year
+                    ]);
+                } else {
+                    $car->end_year++;
+                }
+            } else {
+                $car->start_year--;
+            }
+            $car->save();
         }
 
         $sale = new Sale();

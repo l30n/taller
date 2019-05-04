@@ -4,10 +4,9 @@
       type="primary"
       icon="el-icon-circle-plus"
       @click="dialogVisible = true"
-      style="float:right;"
-    >Crear Orden de Servicio</el-button>
+    >Agregar Servicio</el-button>
     <el-dialog
-      title="Crear Orden de Servicio"
+      title="Agregar Servicio"
       :visible.sync="dialogVisible"
       width="30%"
       :before-close="handleClose"
@@ -21,7 +20,7 @@
             label-width="150px"
             ref="saleForm"
           >
-            <el-form-item label="Vehiculo" prop="brand">
+            <!--el-form-item label="Vehiculo" prop="brand">
               <el-select
                 v-model="sale.brand"
                 filterable
@@ -45,18 +44,18 @@
               >
                 <el-option v-for="year in years" :key="year" :label="year" :value="year"></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item-->
             <el-form-item label="Servicio" prop="service">
               <el-select v-model="sale.service" filterable placeholder="Selecciona un Servicio">
                 <el-option
                   v-for="service in services"
                   :key="service.id"
                   :label="service.name"
-                  :value="service.id"
+                  :value="service"
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="Empleado" prop="user">
+            <!--el-form-item label="Empleado" prop="user">
               <el-select v-model="sale.user" filterable placeholder="Selecciona un Empleado">
                 <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
               </el-select>
@@ -70,11 +69,10 @@
                   :value="client.id"
                 ></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item-->
             <el-form-item
               label="Total"
               prop="total"
-              v-if="showTotal"
               :rules="{
                 required: true, message: 'Campo Total es obligatorio', trigger: 'blur'
               }"
@@ -152,20 +150,8 @@ export default {
       $this.years.push(year);
     }
 
-    axios.get("/api/car/brands").then(function(response) {
-      $this.brands = response.data;
-    });
-
     axios.get("/api/services?all=1").then(function(response) {
       $this.services = response.data;
-    });
-
-    axios.get("/api/clients?all=1").then(function(response) {
-      $this.clients = response.data;
-    });
-
-    axios.get("/api/users?all=1&role=Empleado").then(function(response) {
-      $this.users = response.data;
     });
   },
   computed: {
@@ -225,6 +211,9 @@ export default {
     },
     saveCar() {
       var $this = this;
+      $this.$root.$emit("addService", $this.sale.service, $this.sale.total);
+      $this.cancel();
+      return;
       $this.$refs.saleForm.validate(valid => {
         if (valid) {
           $this.loading = true;

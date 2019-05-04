@@ -114,6 +114,7 @@
 
 <script>
 import { Printd } from "printd";
+import { setTimeout } from "timers";
 
 export default {
   props: ["sale"],
@@ -300,7 +301,7 @@ export default {
       $this.context.fillText($this.sale.details, 155, 555);
 
       if ($this.sale.guaranty) {
-        $this.context.fillText("Si", 160, 770);
+        $this.context.fillText($this.sale.guaranty, 160, 770);
       }
 
       $this.context.fillText(
@@ -367,15 +368,34 @@ export default {
       var $this = this;
       $this.$refs.form.validate(valid => {
         if (valid) {
-          localStorage.removeItem("order");
           $this.order.user = $this.form.user;
           if ($this.form.client) {
             $this.order.client = $this.form.client;
           }
           $this.order.total = $this.total;
-          axios.post("/api/sales", $this.order).then(function(response) {
-            window.location.href = "/sales";
-          });
+          axios
+            .post("/api/sales", $this.order)
+            .then(function(response) {
+              $this.$notify({
+                title: "¡Exito!",
+                message: "La Orden de Servicio fue agregada correctamente",
+                type: "success"
+              });
+              setTimeout(function() {
+                localStorage.removeItem("order");
+                window.location.href = "/sales";
+              }, 1500);
+            })
+            .catch(error => {
+              if (error.response.data.errors) {
+                var errors = error.response.data.errors;
+                $this.$alert(errors[Object.keys(errors)[0]][0], "Error", {
+                  confirmButtonText: "OK",
+                  type: "error"
+                });
+              }
+              $this.loading = false;
+            });
         }
       });
     }

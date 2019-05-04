@@ -16,10 +16,10 @@
             <el-input v-model="concept"></el-input>
           </el-form-item>
           <el-form-item label="Detalle:">
-            <el-input v-model="details"></el-input>
+            <el-input type="textarea" :rows="3" v-model="details"></el-input>
           </el-form-item>
           <el-form-item label="Garantia:">
-            <el-checkbox v-model="guaranty"></el-checkbox>
+            <el-input v-model="guaranty"></el-input>
           </el-form-item>
           <el-form-item label="Total:">
             <el-input v-model="total"></el-input>
@@ -50,11 +50,11 @@ export default {
       dialogVisible: false,
       concept: "",
       details: "",
-      guaranty: false,
+      guaranty: "",
       total: "",
       method: 1,
       user: "",
-      tax: true,
+      tax: false,
       users: [],
       sale: {},
       loading: false
@@ -75,8 +75,8 @@ export default {
       this.sale = sale;
       this.concept = "";
       this.details = "";
-      this.guaranty = false;
-      this.tax = true;
+      this.guaranty = "";
+      this.tax = false;
       this.method = 1;
       this.user = sale.user_id;
       this.total = sale.total;

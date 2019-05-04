@@ -36,6 +36,11 @@
           </el-form>
           <br>
         </el-col>
+      </el-row>
+      <el-row>
+        <create-pop-sales></create-pop-sales>
+      </el-row>
+      <el-row>
         <el-col :span="5">
           <h3>Servicios</h3>
           <el-card class="box-card">
@@ -120,6 +125,7 @@
 </template>
 
 <script>
+import { setTimeout } from "timers";
 export default {
   watch: {
     filterText(val) {
@@ -145,6 +151,7 @@ export default {
   mounted: function() {
     const $this = this;
 
+    $this.$root.$on("addService", $this.addService);
     $this.years = [];
     for (var year = 1999; year <= new Date().getFullYear(); year++) {
       $this.years.push(year);
@@ -161,6 +168,30 @@ export default {
     });
   },
   methods: {
+    addService: function(service, total) {
+      var $this = this;
+      $this.services.push({
+        id: service.id,
+        label: service.name,
+        items: [
+          {
+            id: 1,
+            name: "Mano de Obra",
+            description: "",
+            price: total,
+            low: 0,
+            low_price: total,
+            mid: 0,
+            mid_price: total,
+            high: 0,
+            high_price: total
+          }
+        ]
+      });
+      setTimeout(function() {
+        $this.$refs.services.setCheckedNodes($this.services);
+      }, 0);
+    },
     filterNode(value, data) {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
@@ -188,7 +219,14 @@ export default {
           if (localStorage.getItem("order") && $this.getParameter("back")) {
             var order = JSON.parse(localStorage.getItem("order"));
             setTimeout(function() {
-              $this.$refs.services.setCheckedNodes(order.services);
+              if ($this.services.length > 0) {
+                $this.$refs.services.setCheckedNodes(order.services);
+              } else {
+                $this.services = order.services;
+                setTimeout(function() {
+                  $this.$refs.services.setCheckedNodes(order.services);
+                }, 0);
+              }
               $this.selectedPrice = order.price;
             }, 0);
           }
