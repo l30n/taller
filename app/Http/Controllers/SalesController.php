@@ -52,7 +52,7 @@ class SalesController extends Controller
             $query->distinct('id');
         }])->with(['services' => function ($query) {
             $query->distinct('id');
-        }])->paginate(10);
+        }])->where('done_on', NULL)->orWhere('done_on', '>', date('Y-m-d 00:00:00', strtotime('-7 days')))->paginate(10);
     }
 
     public function changeStatus(Request $request)
