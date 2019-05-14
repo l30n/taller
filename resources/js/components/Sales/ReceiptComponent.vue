@@ -1,5 +1,6 @@
 <template>
   <el-container>
+    <confirm-sales></confirm-sales>
     <el-main class="content">
       <el-row>
         <el-col :span="24">
@@ -17,7 +18,7 @@
                 filterable
                 placeholder="Selecciona un Empleado"
                 v-model="form.user"
-                :disabled="sale != false"
+                :disabled="currentSale != false"
               >
                 <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
               </el-select>
@@ -27,7 +28,7 @@
                 filterable
                 placeholder="Selecciona un Client"
                 v-model="form.client"
-                :disabled="sale != false"
+                :disabled="currentSale != false"
               >
                 <el-option
                   v-for="client in clients"
@@ -37,7 +38,8 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item style="float: right;" v-if="sale">
+            <el-form-item style="float: right;" v-if="currentSale">
+              <el-button icon="el-icon-edit" @click="openConfirm()">Editar</el-button>
               <el-button icon="el-icon-printer" @click="buildReceipt()">Imprimir</el-button>
             </el-form-item>
           </el-form>
@@ -93,7 +95,7 @@
           </el-card>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="end" v-if="!sale">
+      <el-row type="flex" justify="end" v-if="!currentSale">
         <el-col :span="5" style="text-align:right;">
           <br>
           <el-button type="secondary" @click="back()">Regresar</el-button>
@@ -121,6 +123,7 @@ export default {
   data() {
     return {
       order: {},
+      currentSale: {},
       form: {
         client: "",
         user: ""
@@ -141,6 +144,7 @@ export default {
   },
   mounted() {
     var $this = this;
+    this.$root.$on("refreshReceipt", this.refreshReceipt);
     if (localStorage.getItem("order")) {
       try {
         $this.order = JSON.parse(localStorage.getItem("order"));
@@ -150,50 +154,57 @@ export default {
     }
 
     if ($this.sale) {
+      $this.currentSale = $this.sale;
       var services = [];
-      for (var i in $this.sale.services) {
+      for (var i in $this.currentSale.services) {
         var items = [];
-        for (var x in $this.sale.sale_services) {
-          if ($this.sale.sale_services[x].item) {
+        for (var x in $this.currentSale.sale_services) {
+          if ($this.currentSale.sale_services[x].item) {
             items.push({
-              id: $this.sale.sale_services[x].item_id,
-              name: $this.sale.sale_services[x].item.name,
-              low_price: $this.sale.sale_services[x].price
+              id: $this.currentSale.sale_services[x].item_id,
+              name: $this.currentSale.sale_services[x].item.name,
+              low_price: $this.currentSale.sale_services[x].price
             });
           }
         }
         services.push({
-          id: $this.sale.services[i].id,
-          label: $this.sale.services[i].name,
+          id: $this.currentSale.services[i].id,
+          label: $this.currentSale.services[i].name,
           items: items
         });
       }
 
       $this.order = {
-        brand: $this.sale.car[0].brand,
+        brand: $this.currentSale.car[0].brand,
         price: "low",
         services: services,
-        year: $this.sale.sale_services[0].year
+        year: $this.currentSale.sale_services[0].year
       };
     }
 
     axios.get("/api/clients?all=1").then(function(response) {
       $this.clients = response.data;
-      if ($this.sale) {
-        if ($this.sale.client) {
-          $this.form.client = $this.sale.client.id;
+      if ($this.currentSale) {
+        if ($this.currentSale.client) {
+          $this.form.client = $this.currentSale.client.id;
         }
       }
     });
 
     axios.get("/api/users?all=1&role=Empleado").then(function(response) {
       $this.users = response.data;
-      if ($this.sale) {
-        $this.form.user = $this.sale.user.id;
+      if ($this.currentSale) {
+        $this.form.user = $this.currentSale.user.id;
       }
     });
   },
   methods: {
+    refreshReceipt(sale) {
+      this.currentSale = sale;
+    },
+    openConfirm() {
+      this.$root.$emit("confirmSale", this.currentSale);
+    },
     formatPrice(value) {
       let val = (value / 1).toFixed(2);
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -234,7 +245,7 @@ export default {
 
       $this.context.font = "24px Georgia";
       $this.context.fillStyle = "red";
-      $this.context.fillText($this.pad($this.sale.id, 5), 512, 60);
+      $this.context.fillText($this.pad($this.currentSale.id, 5), 512, 60);
 
       $this.context.fillStyle = "black";
       $this.context.fillText(
@@ -252,34 +263,40 @@ export default {
 
       $this.context.font = "16px Georgia";
 
-      if ($this.sale.client) {
-        if ($this.sale.client.name.length < 20) {
-          $this.context.fillText($this.sale.client.name, 192, 358);
+      if ($this.currentSale.client) {
+        if ($this.currentSale.client.name.length < 20) {
+          $this.context.fillText($this.currentSale.client.name, 192, 358);
         } else {
-          var length = $this.sale.client.name.length;
-          var limit = $this.sale.client.name.substr(0, 20).lastIndexOf(" ");
+          var length = $this.currentSale.client.name.length;
+          var limit = $this.currentSale.client.name
+            .substr(0, 20)
+            .lastIndexOf(" ");
           $this.context.fillText(
-            $this.sale.client.name.substr(0, limit),
+            $this.currentSale.client.name.substr(0, limit),
             192,
             352
           );
           $this.context.fillText(
-            $this.sale.client.name.substr(limit + 1, length),
+            $this.currentSale.client.name.substr(limit + 1, length),
             192,
             364
           );
         }
-        $this.context.fillText($this.sale.client.phonenumber, 128, 398);
+        $this.context.fillText($this.currentSale.client.phonenumber, 128, 398);
       }
 
-      if ($this.sale.user.name.length < 20) {
-        $this.context.fillText($this.sale.user.name, 195, 438);
+      if ($this.currentSale.user.name.length < 20) {
+        $this.context.fillText($this.currentSale.user.name, 195, 438);
       } else {
-        var length = $this.sale.user.name.length;
-        var limit = $this.sale.user.name.substr(0, 20).lastIndexOf(" ");
-        $this.context.fillText($this.sale.user.name.substr(0, limit), 195, 432);
+        var length = $this.currentSale.user.name.length;
+        var limit = $this.currentSale.user.name.substr(0, 20).lastIndexOf(" ");
         $this.context.fillText(
-          $this.sale.user.name.substr(limit + 1, length),
+          $this.currentSale.user.name.substr(0, limit),
+          195,
+          432
+        );
+        $this.context.fillText(
+          $this.currentSale.user.name.substr(limit + 1, length),
           195,
           444
         );
@@ -288,30 +305,30 @@ export default {
       $this.context.fillText($this.order.brand, 450, 338);
       $this.context.fillText($this.order.year, 450, 415);
 
-      $this.sale.total = parseFloat($this.sale.total);
+      $this.currentSale.total = parseFloat($this.currentSale.total);
 
       $this.context.fillText("1", 92, 530);
-      $this.context.fillText($this.sale.concept, 155, 530);
+      $this.context.fillText($this.currentSale.concept, 155, 530);
       $this.context.fillText(
-        "$" + $this.formatPrice($this.sale.total),
+        "$" + $this.formatPrice($this.currentSale.total),
         580,
         530
       );
 
-      $this.context.fillText($this.sale.details, 155, 555);
+      $this.context.fillText($this.currentSale.details, 155, 555);
 
-      if ($this.sale.guaranty) {
-        $this.context.fillText($this.sale.guaranty, 160, 770);
+      if ($this.currentSale.guaranty) {
+        $this.context.fillText($this.currentSale.guaranty, 160, 770);
       }
 
       $this.context.fillText(
-        "$" + $this.formatPrice($this.sale.total),
+        "$" + $this.formatPrice($this.currentSale.total),
         580,
         765
       );
-      if ($this.sale.tax) {
+      if ($this.currentSale.tax) {
         $this.context.fillText(
-          "$" + $this.formatPrice($this.sale.total * 0.08),
+          "$" + $this.formatPrice($this.currentSale.total * 0.08),
           580,
           797
         );
@@ -319,15 +336,18 @@ export default {
         $this.context.fillText("$0", 580, 797);
       }
 
-      if ($this.sale.tax) {
+      if ($this.currentSale.tax) {
         $this.context.fillText(
-          "$" + $this.formatPrice($this.sale.total + $this.sale.total * 0.08),
+          "$" +
+            $this.formatPrice(
+              $this.currentSale.total + $this.currentSale.total * 0.08
+            ),
           580,
           833
         );
       } else {
         $this.context.fillText(
-          "$" + $this.formatPrice($this.sale.total),
+          "$" + $this.formatPrice($this.currentSale.total),
           580,
           833
         );
@@ -406,8 +426,8 @@ export default {
         return 0;
       }
 
-      if (this.sale) {
-        return parseFloat(this.sale.total);
+      if (this.currentSale) {
+        return parseFloat(this.currentSale.total);
       }
 
       var total = 0;

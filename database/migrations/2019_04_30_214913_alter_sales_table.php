@@ -16,8 +16,8 @@ class AlterSalesTable extends Migration
         //
         Schema::table('sales', function (Blueprint $table) {
             $table->text('details')->after('concept')->default('');
-            $table->boolean('guaranty')->after('details')->default(true);
-            $table->boolean('tax')->after('guaranty')->default(true);
+            $table->boolean('guaranty')->after('details')->default(false);
+            $table->boolean('tax')->after('guaranty')->default(false);
         });
     }
 

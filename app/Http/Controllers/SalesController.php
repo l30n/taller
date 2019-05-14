@@ -86,8 +86,16 @@ class SalesController extends Controller
 
         $sale->save();
 
+        $sale = Sale::with('saleServices')->with('saleServices.item')->with('client')->with('user')
+            ->with(['car' => function ($query) {
+                $query->distinct('id');
+            }])->with(['services' => function ($query) {
+                $query->distinct('id');
+            }])->find($sale->id);
+
         return response()->json([
             "success" => true,
+            "sale" => $sale
         ]);
     }
 

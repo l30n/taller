@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="Cambiar orden de estado" :visible.sync="dialogVisible" width="420px">
+  <el-dialog title="Cambiar orden de estado" :visible.sync="dialogVisible" width="450px">
     <el-row class="confirm">
       <el-col
         :span="24"
@@ -73,11 +73,11 @@ export default {
     openDialog: function(sale) {
       this.dialogVisible = true;
       this.sale = sale;
-      this.concept = "";
-      this.details = "";
-      this.guaranty = "";
-      this.tax = false;
-      this.method = 1;
+      this.concept = sale.concept;
+      this.details = sale.details;
+      this.guaranty = sale.guaranty;
+      this.tax = sale.tax;
+      this.method = sale.method ? sale.method : 1;
       this.user = sale.user_id;
       this.total = sale.total;
     },
@@ -85,7 +85,7 @@ export default {
       var $this = this;
       $this.loading = true;
       axios
-        .post("api/sales/status", {
+        .post("/api/sales/status", {
           id: $this.sale.id,
           status: $this.sale.status,
           method: $this.method,
@@ -97,10 +97,11 @@ export default {
           tax: $this.tax
         })
         .then(function(response) {
-          // $this.oldSales = JSON.parse(JSON.stringify($this.sales));
           $this.dialogVisible = false;
           $this.loading = false;
           $this.$root.$emit("refreshTable");
+          console.log(response);
+          $this.$root.$emit("refreshReceipt", response.data.sale);
           $this.$message({
             type: "success",
             message: "Cambio de estatus exitoso"
