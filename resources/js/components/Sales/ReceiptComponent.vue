@@ -123,7 +123,7 @@ export default {
   data() {
     return {
       order: {},
-      currentSale: {},
+      currentSale: false,
       form: {
         client: "",
         user: ""
