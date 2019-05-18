@@ -35,6 +35,14 @@ class CarServicesController extends Controller
     public function get(Request $request)
     {
         if ($request->has('all')) {
+            if ($request->has('sort')) {
+                if ($request->get('order') == "ascending") {
+                    return CarService::with('car')->with('service')->get()->sortBy($request->get('sort'))->values();
+                }
+                if ($request->get('order') == "descending") {
+                    return CarService::with('car')->with('service')->get()->sortByDesc($request->get('sort'))->values();
+                }
+            }
             return CarService::with('car')->with('service')->get();
         }
 

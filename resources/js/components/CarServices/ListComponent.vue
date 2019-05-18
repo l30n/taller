@@ -9,17 +9,18 @@
         stripe
         border
         style="width: 100%"
+        @sort-change="changeSort"
       >
-        <el-table-column prop="id" label="#" sortable width="70px">
+        <el-table-column prop="id" label="#" sortable="custom" width="70px">
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
-        <el-table-column label="Marca" prop="car" sortable>
+        <el-table-column label="Marca" prop="car.name" sortable="custom">
           <template slot-scope="scope">{{ scope.row.car.brand }}</template>
         </el-table-column>
-        <el-table-column label="Año" prop="year" sortable>
+        <el-table-column label="Año" prop="car.start_year" sortable="custom">
           <template slot-scope="scope">{{ scope.row.car.start_year }}-{{ scope.row.car.end_year }}</template>
         </el-table-column>
-        <el-table-column label="Servicio">
+        <el-table-column label="Servicio" prop="service.name" sortable="custom">
           <template slot-scope="scope">{{ scope.row.service.name }}</template>
         </el-table-column>
         <el-table-column width="280px">
@@ -75,6 +76,16 @@ export default {
     handleCurrentChange(val) {
       this.page = val;
       //this.refreshTable();
+    },
+    changeSort(sort) {
+      this.loadTable(
+        "/api/carservices?all=" +
+          this.page +
+          "&sort=" +
+          sort.prop +
+          "&order=" +
+          sort.order
+      );
     },
     goto: function(link) {
       window.location.href = link;
