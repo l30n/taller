@@ -58,8 +58,19 @@ class UsersController extends Controller
 
         unset($user['role']);
 
+        $id = 0;
+        $userDB = User::where('email', $request->get('email'))->withTrashed()->first();
+        if ($userDB) {
+            $id = ['id' => $userDB->id];
+            $userDB->restore();
+        }
+
         if ($request->has('id')) {
-            $user = User::updateOrCreate($request->only('id'), $user);
+            $id = $request->only('id');
+        }
+
+        if ($id) {
+            $user = User::updateOrCreate($id, $user);
         } else {
             $user = User::firstOrCreate($user);
         }
