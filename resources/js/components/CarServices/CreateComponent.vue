@@ -54,7 +54,13 @@
           </el-form>
         </el-col>
         <el-col :span="17" style="padding-left: 20px;">
-          <h3>Articulos</h3>
+          <h3>
+            Articulos
+            <div v-if="Object.keys(carService).length !== 0" style="float:right;">
+              <el-checkbox v-model="updatePrices">Aplicar el porcentaje a todo la fila</el-checkbox>
+            </div>
+          </h3>
+          <br>
           <el-card class="box-card">
             <el-row style="margin-bottom:5px;">
               <el-col :span="4">Nombre</el-col>
@@ -66,7 +72,7 @@
               <el-col :span="2">%</el-col>
               <el-col :span="3">Alto</el-col>
             </el-row>
-            <select-item ref="selectItem" :items="items"></select-item>
+            <select-item ref="selectItem" :items="items" :updatePrices="updatePrices"></select-item>
           </el-card>
         </el-col>
       </el-row>
@@ -138,6 +144,7 @@ export default {
       item: "",
       listItems: [],
       save: false,
+      updatePrices: true,
       defaultProps: {
         label: "label"
       }

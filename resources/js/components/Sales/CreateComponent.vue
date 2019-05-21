@@ -43,6 +43,7 @@
       <el-row>
         <el-col :span="5">
           <h3>Servicios</h3>
+          <br>
           <el-card class="box-card">
             <el-input
               placeholder="Filtra servicios"
@@ -68,7 +69,13 @@
           </el-card>
         </el-col>
         <el-col :span="18" :offset="1">
-          <h3>Articulos</h3>
+          <h3>
+            Articulos
+            <div style="float:right;">
+              <el-checkbox v-model="updatePrices">Aplicar el porcentaje a todo la fila</el-checkbox>
+            </div>
+          </h3>
+          <br>
           <el-card class="box-card">
             <el-row
               v-if="selectedServices.length > 0"
@@ -86,7 +93,11 @@
             </el-row>
             <div style="height: 340px;overflow: auto;" v-if="selectedServices.length > 0">
               <div v-for="(service, index) in selectedServices" v-bind:key="index">
-                <select-service :service="service" :price="selectedPrice"></select-service>
+                <select-service
+                  :service="service"
+                  :price="selectedPrice"
+                  :updatePrices="updatePrices"
+                ></select-service>
               </div>
             </div>
             <el-row v-if="selectedServices.length > 0">
@@ -143,6 +154,7 @@ export default {
       years: [],
       service: "",
       services: [],
+      updatePrices: true,
       defaultProps: {
         label: "label"
       }

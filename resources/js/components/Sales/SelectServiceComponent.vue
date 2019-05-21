@@ -34,22 +34,37 @@
         <label class="el-form-item__label">${{ formatPrice(item.price) }}</label>
       </el-col>
       <el-col :span="2" style="text-align:center;" v-bind:class="{ priceSelected: price == 'low'}">
-        <el-input class="percentage" maxlength="2" v-model="item.low"></el-input>
+        <el-input
+          class="percentage"
+          maxlength="2"
+          v-model="item.low"
+          @change="changePercentage('low', item, index)"
+        ></el-input>
       </el-col>
       <el-col :span="3" style="text-align:center;" v-bind:class="{ priceSelected: price == 'low'}">
-        <el-input class="price" v-model="item.low_price"></el-input>
+        <el-input class="price" v-model="item.low_price" @change="onChangePrice()"></el-input>
       </el-col>
       <el-col :span="2" style="text-align:center;" v-bind:class="{ priceSelected: price == 'mid'}">
-        <el-input class="percentage" maxlength="2" v-model="item.mid"></el-input>
+        <el-input
+          class="percentage"
+          maxlength="2"
+          v-model="item.mid"
+          @change="changePercentage('mid', item, index)"
+        ></el-input>
       </el-col>
       <el-col :span="3" style="text-align:center;" v-bind:class="{ priceSelected: price == 'mid'}">
-        <el-input class="price" v-model="item.mid_price"></el-input>
+        <el-input class="price" v-model="item.mid_price" @change="onChangePrice()"></el-input>
       </el-col>
       <el-col :span="2" style="text-align:center;" v-bind:class="{ priceSelected: price == 'high'}">
-        <el-input class="percentage" maxlength="2" v-model="item.high"></el-input>
+        <el-input
+          class="percentage"
+          maxlength="2"
+          v-model="item.high"
+          @change="changePercentage('high', item, index)"
+        ></el-input>
       </el-col>
       <el-col :span="3" style="text-align:center;" v-bind:class="{ priceSelected: price == 'high'}">
-        <el-input class="price" v-model="item.high_price"></el-input>
+        <el-input class="price" v-model="item.high_price" @change="onChangePrice()"></el-input>
       </el-col>
     </el-row>
     <el-row></el-row>
@@ -58,7 +73,7 @@
 
 <script>
 export default {
-  props: ["service", "price"],
+  props: ["service", "price", "updatePrices"],
   data() {
     return {
       percentages: []
@@ -68,6 +83,28 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toFixed(2);
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    changePercentage(price, item, index) {
+      if (this.updatePrices) {
+        for (var x in this.service.items) {
+          console.log(this.service.items[x]);
+          if (this.service.items[x][price] != 0) {
+            this.service.items[x][price + "_price"] =
+              parseInt(this.service.items[x].price) +
+              (this.service.items[x].price * item[price]) / 100;
+            this.service.items[x][price] = item[price];
+            console.log(item[price]);
+          }
+        }
+      } else {
+        this.service.items[index][price + "_price"] =
+          parseInt(item.price) + (item.price * item[price]) / 100;
+      }
+      this.onChangePrice();
+    },
+    onChangePrice() {
+      this.$forceUpdate();
+      this.$root.$refs.create.$forceUpdate();
     }
   }
 };

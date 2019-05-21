@@ -49,7 +49,7 @@
 
 <script>
 export default {
-  props: ["items"],
+  props: ["items", "updatePrices"],
   mounted: function() {},
   methods: {
     formatPrice(value) {
@@ -67,8 +67,19 @@ export default {
       this.onChangePrice();
     },
     changePercentage(price, item, index) {
-      this.items[index][price + "_price"] =
-        parseInt(item.price) + (item.price * item[price]) / 100;
+      if (this.updatePrices) {
+        for (var x = 0; x < this.items.length; x++) {
+          if (this.items[x][price] != 0) {
+            this.items[x][price + "_price"] =
+              parseInt(this.items[x].price) +
+              (this.items[x].price * item[price]) / 100;
+            this.items[x][price] = item[price];
+          }
+        }
+      } else {
+        this.items[index][price + "_price"] =
+          parseInt(item.price) + (item.price * item[price]) / 100;
+      }
       this.onChangePrice();
     },
     onChangePrice() {
