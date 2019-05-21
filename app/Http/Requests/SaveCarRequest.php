@@ -25,6 +25,7 @@ class SaveCarRequest extends FormRequest
     {
         return [
             //
+            "brand" => "required|bail"
         ];
     }
 }
