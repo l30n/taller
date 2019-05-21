@@ -87,13 +87,11 @@ export default {
     changePercentage(price, item, index) {
       if (this.updatePrices) {
         for (var x in this.service.items) {
-          console.log(this.service.items[x]);
           if (this.service.items[x][price] != 0) {
             this.service.items[x][price + "_price"] =
               parseInt(this.service.items[x].price) +
               (this.service.items[x].price * item[price]) / 100;
             this.service.items[x][price] = item[price];
-            console.log(item[price]);
           }
         }
       } else {
