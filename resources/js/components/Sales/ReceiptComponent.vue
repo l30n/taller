@@ -102,7 +102,7 @@
           <el-button type="primary" @click="save()">Guardar</el-button>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="end" style="opacity:0">
+      <el-row type="flex" justify="end" style="opacity: 0;overflow: hidden;height: 50px;">
         <el-col :span="12">
           <img ref="receipt" src="/img/receipt.jpg" width="650px">
         </el-col>
