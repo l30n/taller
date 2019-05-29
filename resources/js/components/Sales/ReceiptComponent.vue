@@ -203,7 +203,7 @@ export default {
       this.currentSale = sale;
     },
     openConfirm() {
-      this.$root.$emit("confirmSale", this.currentSale);
+      this.$root.$emit("confirmSale", this.currentSale, true);
     },
     formatPrice(value) {
       let val = (value / 1).toFixed(2);
@@ -302,8 +302,10 @@ export default {
         );
       }
 
-      $this.context.fillText($this.order.brand, 450, 338);
-      $this.context.fillText($this.order.year, 450, 415);
+      $this.context.fillText($this.currentSale.maker, 450, 338);
+      $this.context.fillText($this.currentSale.brand, 450, 378);
+      $this.context.fillText($this.currentSale.year, 450, 415);
+      $this.context.fillText($this.currentSale.color, 570, 338);
 
       $this.currentSale.total = parseFloat($this.currentSale.total);
 

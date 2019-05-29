@@ -72,6 +72,18 @@ class SalesController extends Controller
             if ($request->has('user')) {
                 $sale->user_id = $request->get('user');
             }
+            if ($request->has('maker')) {
+                $sale->maker = $request->get('maker');
+            }
+            if ($request->has('brand')) {
+                $sale->brand = $request->get('brand');
+            }
+            if ($request->has('year')) {
+                $sale->year = $request->get('year');
+            }
+            if ($request->has('color')) {
+                $sale->color = $request->get('color');
+            }
             if ($request->has('details')) {
                 $sale->details = $request->get('details');
             }

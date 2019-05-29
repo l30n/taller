@@ -1,9 +1,14 @@
 <template>
-  <el-dialog title="Cambiar orden de estado" :visible.sync="dialogVisible" width="450px">
+  <el-dialog
+    :title="edit ? 'Editar recibo': 'Cambiar orden de estado'"
+    :visible.sync="dialogVisible"
+    width="450px"
+  >
     <el-row class="confirm">
       <el-col
         :span="24"
         style="margin-bottom: 10px;"
+        v-if="!edit"
       >¿Quieres cambiar el estado la Orden de Servicio?</el-col>
       <el-col :span="24">
         <el-form ref="form" label-width="120px">
@@ -11,6 +16,18 @@
             <el-select v-model="user" placeholder="Empleado">
               <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="Marca:">
+            <el-input v-model="maker"></el-input>
+          </el-form-item>
+          <el-form-item label="Modelo:">
+            <el-input v-model="brand"></el-input>
+          </el-form-item>
+          <el-form-item label="Año:">
+            <el-input v-model="year"></el-input>
+          </el-form-item>
+          <el-form-item label="Color:">
+            <el-input v-model="color"></el-input>
           </el-form-item>
           <el-form-item label="Concepto:">
             <el-input v-model="concept"></el-input>
@@ -48,7 +65,12 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      edit: false,
       concept: "",
+      maker: "",
+      brand: "",
+      year: "",
+      color: "",
       details: "",
       guaranty: "",
       total: "",
@@ -70,10 +92,15 @@ export default {
     this.$root.$on("confirmSale", this.openDialog);
   },
   methods: {
-    openDialog: function(sale) {
+    openDialog: function(sale, edit = false) {
       this.dialogVisible = true;
+      this.edit = edit;
       this.sale = sale;
       this.concept = sale.concept;
+      this.maker = sale.maker;
+      this.brand = sale.brand ? sale.brand : sale.car[0].brand;
+      this.year = sale.year ? sale.year : sale.sale_services[0].year;
+      this.color = sale.color;
       this.details = sale.details;
       this.guaranty = sale.guaranty;
       this.tax = sale.tax;
@@ -90,6 +117,10 @@ export default {
           status: $this.sale.status,
           method: $this.method,
           concept: $this.concept,
+          maker: $this.maker,
+          brand: $this.brand,
+          year: $this.year,
+          color: $this.color,
           total: $this.total,
           user: $this.user,
           details: $this.details,
@@ -100,7 +131,6 @@ export default {
           $this.dialogVisible = false;
           $this.loading = false;
           $this.$root.$emit("refreshTable");
-          console.log(response);
           $this.$root.$emit("refreshReceipt", response.data.sale);
           $this.$message({
             type: "success",
