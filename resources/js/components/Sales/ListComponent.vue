@@ -58,7 +58,22 @@
         <el-table-column prop="created_at" label="Fecha"></el-table-column>
         <el-table-column width="80px">
           <template slot-scope="scope">
-            <el-tooltip class="item" effect="dark" content="Recibo" placement="top">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="Cotizacion"
+              placement="top"
+              v-if="scope.row.status != 2"
+            >
+              <el-button icon="el-icon-tickets" @click="buildReceipt(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="Recibo"
+              placement="top"
+              v-if="scope.row.status == 2"
+            >
               <el-button
                 icon="el-icon-tickets"
                 @click="goto('/sales/receipt/' + scope.row.id)"
@@ -77,11 +92,21 @@
         ></el-pagination>
       </div>
       <confirm-sales></confirm-sales>
+      <el-row type="flex" justify="end" style="opacity: 0;overflow: hidden;height: 50px;">
+        <el-col :span="12">
+          <img ref="receipt" src="/img/receipt.jpg" width="650px">
+        </el-col>
+        <el-col :span="12">
+          <canvas ref="my-canvas"></canvas>
+        </el-col>
+      </el-row>
     </el-col>
   </el-row>
 </template>
 
 <script>
+import { Printd } from "printd";
+
 export default {
   mounted: function() {
     this.loadTable("/api/sales");
@@ -151,6 +176,127 @@ export default {
     },
     goto: function(link) {
       window.location.href = link;
+    },
+    pad(number, size) {
+      var s = String(number);
+      while (s.length < (size || 2)) {
+        s = "0" + s;
+      }
+      return s;
+    },
+    buildReceipt(currentSale) {
+      var $this = this;
+
+      $this.$refs["my-canvas"].width = $this.$refs["receipt"].width * 1.2;
+      $this.$refs["my-canvas"].height = $this.$refs["receipt"].height * 1.2;
+      $this.context = $this.$refs["my-canvas"].getContext("2d");
+
+      $this.context.clearRect(
+        0,
+        0,
+        $this.$refs["my-canvas"].width,
+        $this.$refs["my-canvas"].height
+      );
+
+      $this.context.fillStyle = "#FFFFFF";
+      $this.context.fillRect(
+        0,
+        0,
+        $this.$refs["my-canvas"].width,
+        $this.$refs["my-canvas"].height
+      );
+      $this.context.drawImage(
+        $this.$refs["receipt"],
+        0,
+        0,
+        $this.$refs["receipt"].width * 1.2,
+        $this.$refs["receipt"].height * 1.2
+      );
+
+      $this.context.font = "20px Georgia";
+      $this.context.fillStyle = "red";
+      $this.context.fillText($this.pad(currentSale.id, 5), 630, 85);
+
+      $this.context.fillStyle = "black";
+      $this.context.fillText(
+        new Date()
+          .toLocaleDateString("es-ES", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+          })
+          .replace("/", "-")
+          .replace("/", "-"),
+        605,
+        125
+      );
+
+      $this.context.font = "12px Georgia";
+
+      if (currentSale.client) {
+        $this.context.fillText(currentSale.client.name, 175, 176);
+        $this.context.fillText(currentSale.client.phonenumber, 120, 189);
+      }
+      $this.context.fillText(currentSale.user.name, 175, 203);
+
+      $this.context.fillText(currentSale.maker, 448, 176);
+      $this.context.fillText(currentSale.brand, 455, 189);
+      $this.context.fillText(currentSale.year, 435, 203);
+      $this.context.fillText(currentSale.color, 610, 176);
+
+      currentSale.total = parseFloat(currentSale.total);
+
+      $this.context.fillText("1", 80, 277);
+      $this.context.fillText(currentSale.concept, 150, 277);
+      $this.context.fillText(
+        "$" + $this.formatPrice(currentSale.total),
+        615,
+        277
+      );
+
+      $this.context.fillText(currentSale.details, 150, 297);
+
+      $this.context.fillText(
+        "$" + $this.formatPrice(currentSale.total),
+        615,
+        655
+      );
+      if (currentSale.tax) {
+        $this.context.fillText(
+          "$" + $this.formatPrice(currentSale.total * 0.08),
+          615,
+          675
+        );
+      } else {
+        $this.context.fillText("$0", 615, 675);
+      }
+
+      if (currentSale.tax) {
+        $this.context.fillText(
+          "$" + $this.formatPrice(currentSale.total + currentSale.total * 0.08),
+          615,
+          695
+        );
+      } else {
+        $this.context.fillText(
+          "$" + $this.formatPrice(currentSale.total),
+          615,
+          695
+        );
+      }
+
+      if (currentSale.guaranty) {
+        $this.context.font = "20px Georgia";
+        $this.context.fillText(currentSale.guaranty, 150, 680);
+      }
+
+      var img = document.createElement("img");
+      img.src = $this.$refs["my-canvas"].toDataURL("image/jpeg");
+      img.width = $this.$refs["my-canvas"].width;
+      img.height = $this.$refs["my-canvas"].height;
+
+      const d = new Printd();
+      d.print(img);
     }
   },
   data() {

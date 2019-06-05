@@ -48,7 +48,7 @@ class SalesController extends Controller
 
     public function get()
     {
-        return Sale::with('saleServices')->with('client')->with(['car' => function ($query) {
+        return Sale::with('saleServices')->with('client')->with('user')->with(['car' => function ($query) {
             $query->distinct('id');
         }])->with(['services' => function ($query) {
             $query->distinct('id');
