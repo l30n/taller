@@ -31,7 +31,7 @@
         <label class="el-form-item__label">{{ item.name }}</label>
       </el-col>
       <el-col :span="3">
-        <label class="el-form-item__label">${{ formatPrice(item.price) }}</label>
+        <el-input class="price" v-model="item.price" @change="changeBase(item, index)"></el-input>
       </el-col>
       <el-col :span="2" style="text-align:center;" v-bind:class="{ priceSelected: price == 'low'}">
         <el-input
@@ -97,6 +97,35 @@ export default {
       } else {
         this.service.items[index][price + "_price"] =
           parseInt(item.price) + (item.price * item[price]) / 100;
+      }
+      this.onChangePrice();
+    },
+    changeBase(item, index) {
+      if (this.updatePrices) {
+        if (item.low_price != 0) {
+          if (item.low != 0) {
+            this.service.items[index].low_price =
+              parseInt(item.price) + (item.price * item.low) / 100;
+          } else {
+            this.service.items[index].low_price = item.price;
+          }
+        }
+        if (item.mid_price != 0) {
+          if (item.mid != 0) {
+            this.service.items[index].mid_price =
+              parseInt(item.price) + (item.price * item.mid) / 100;
+          } else {
+            this.service.items[index].mid_price = item.price;
+          }
+        }
+        if (item.high_price != 0) {
+          if (item.high != 0) {
+            this.service.items[index].high_price =
+              parseInt(item.price) + (item.price * item.high) / 100;
+          } else {
+            this.service.items[index].high_price = item.price;
+          }
+        }
       }
       this.onChangePrice();
     },
