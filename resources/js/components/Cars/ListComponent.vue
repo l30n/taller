@@ -12,7 +12,8 @@
         <el-table-column prop="id" label="#" width="50px">
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
-        <el-table-column prop="brand" label="Marca"></el-table-column>
+        <el-table-column prop="maker" label="Marca"></el-table-column>
+        <el-table-column prop="brand" label="Modelo"></el-table-column>
         <el-table-column label="Año">
           <template slot-scope="scope">{{ scope.row.start_year }}-{{ scope.row.end_year }}</template>
         </el-table-column>

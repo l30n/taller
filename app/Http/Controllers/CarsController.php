@@ -14,9 +14,7 @@ class CarsController extends Controller
      * @return void
      */
     public function __construct()
-    {
-
-    }
+    { }
 
     public function index()
     {
@@ -46,6 +44,10 @@ class CarsController extends Controller
 
     public function save(SaveCarRequest $request)
     {
+        if ($request->has('id')) {
+            return Car::updateOrCreate($request->only('id'), $request->except(['id', 'year', 'created_at', 'deleted_at', 'updated_at']));
+        }
+
         $car = Car::where('brand', '=', $request->get('brand'))
             ->where('start_year', '=', $request->get('year')[0])
             ->where('end_year', '=', $request->get('year')[1])
@@ -57,11 +59,8 @@ class CarsController extends Controller
             ]);
         }
 
-        if ($request->has('id')) {
-            return Car::updateOrCreate($request->only('id'), $request->except(['id', 'year']));
-        }
-
         return Car::firstOrCreate([
+            'maker' => $request->get('maker'),
             'brand' => $request->get('brand'),
             'start_year' => $request->get('year')[0],
             'end_year' => $request->get('year')[1],

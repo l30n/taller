@@ -9,7 +9,7 @@ class Car extends Model
 {
     use SoftDeletes;
 
-    public $fillable = ['brand', 'start_year', 'end_year'];
+    public $fillable = ['maker', 'brand', 'start_year', 'end_year'];
 
     public function carServices()
     {

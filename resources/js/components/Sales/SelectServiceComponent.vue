@@ -27,7 +27,14 @@
       >Alto</el-col>
     </el-row>
     <el-row v-for="(item, index) in service.items" v-bind:key="index">
-      <el-col :span="5" :offset="1">
+      <el-col :span="1">
+        <button
+          class="el-icon-close"
+          @click="deleteItem(index)"
+          style="cursor:pointer;border:none;background-color:white;"
+        ></button>
+      </el-col>
+      <el-col :span="5">
         <label class="el-form-item__label">{{ item.name }}</label>
       </el-col>
       <el-col :span="3">
@@ -83,6 +90,10 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toFixed(2);
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    deleteItem(index) {
+      delete this.service.items[index];
+      this.onChangePrice();
     },
     changePercentage(price, item, index) {
       if (this.updatePrices) {

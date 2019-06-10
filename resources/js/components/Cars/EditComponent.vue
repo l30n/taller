@@ -18,7 +18,10 @@
             label-width="150px"
             ref="carForm"
           >
-            <el-form-item label="Marca del Carro" prop="name">
+            <el-form-item label="Marca del Carro" prop="maker">
+              <el-input v-model="car.maker"></el-input>
+            </el-form-item>
+            <el-form-item label="Modelo" prop="brand">
               <el-input v-model="car.brand"></el-input>
             </el-form-item>
             <el-form-item :label="'Año (' + car.start_year + '-' + car.end_year + ')'">
@@ -50,10 +53,17 @@ export default {
       loading: false,
       labelPosition: "left",
       rules: {
-        brand: [
+        maker: [
           {
             required: true,
             message: "Campo Marca es obligatorio",
+            trigger: "change"
+          }
+        ],
+        brand: [
+          {
+            required: true,
+            message: "Campo Modelo es obligatorio",
             trigger: "change"
           }
         ]

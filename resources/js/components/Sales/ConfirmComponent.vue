@@ -97,7 +97,7 @@ export default {
       this.edit = edit;
       this.sale = sale;
       this.concept = sale.concept;
-      this.maker = sale.maker;
+      this.maker = sale.maker ? sale.maker : sale.car[0].maker;
       this.brand = sale.brand ? sale.brand : sale.car[0].brand;
       this.year = sale.year ? sale.year : sale.sale_services[0].year;
       this.color = sale.color;

@@ -14,7 +14,10 @@
         <el-table-column prop="id" label="#" sortable="custom" width="70px">
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
-        <el-table-column label="Marca" prop="car.name" sortable="custom">
+        <el-table-column label="Marca" prop="car.maker" sortable="custom">
+          <template slot-scope="scope">{{ scope.row.car.maker }}</template>
+        </el-table-column>
+        <el-table-column label="Modelo" prop="car.name" sortable="custom">
           <template slot-scope="scope">{{ scope.row.car.brand }}</template>
         </el-table-column>
         <el-table-column label="Año" prop="car.start_year" sortable="custom">
