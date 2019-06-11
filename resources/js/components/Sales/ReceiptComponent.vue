@@ -307,10 +307,12 @@ export default {
 
       $this.context.fillText("1", 80, 257);
       $this.context.fillText("1", 80, 257 + 465);
-      var concept = $this.currentSale.concept.match(/.{1,80}/g);
-      for (var x = 0; x < concept.length; x++) {
-        $this.context.fillText(concept[x], 150, 257 + x * 20);
-        $this.context.fillText(concept[x], 150, 257 + 465 + x * 20);
+      if ($this.currentSale.concept) {
+        var concept = $this.currentSale.concept.match(/.{1,80}/g);
+        for (var x = 0; x < concept.length; x++) {
+          $this.context.fillText(concept[x], 150, 257 + x * 20);
+          $this.context.fillText(concept[x], 150, 257 + 465 + x * 20);
+        }
       }
       $this.context.fillText(
         "$" + $this.formatPrice($this.currentSale.total),
@@ -323,18 +325,20 @@ export default {
         257 + 465
       );
 
-      var details = $this.currentSale.details.match(/.{1,80}/g);
-      for (var x = 0; x < details.length; x++) {
-        $this.context.fillText(
-          details[x],
-          150,
-          257 + 20 * concept.length + x * 20
-        );
-        $this.context.fillText(
-          details[x],
-          150,
-          257 + 465 + 20 * concept.length + x * 20
-        );
+      if ($this.currentSale.details) {
+        var details = $this.currentSale.details.match(/.{1,80}/g);
+        for (var x = 0; x < details.length; x++) {
+          $this.context.fillText(
+            details[x],
+            150,
+            257 + 20 * concept.length + x * 20
+          );
+          $this.context.fillText(
+            details[x],
+            150,
+            257 + 465 + 20 * concept.length + x * 20
+          );
+        }
       }
 
       $this.context.fillText(
