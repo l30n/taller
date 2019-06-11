@@ -29,6 +29,12 @@
           <el-form-item label="Color:">
             <el-input v-model="color"></el-input>
           </el-form-item>
+          <el-form-item label="Ultimo Servicio:">
+            <el-input v-model="last_service"></el-input>
+          </el-form-item>
+          <el-form-item label="KM. de Ingreso:">
+            <el-input v-model="km"></el-input>
+          </el-form-item>
           <el-form-item label="Concepto:">
             <el-input v-model="concept"></el-input>
           </el-form-item>
@@ -71,6 +77,8 @@ export default {
       brand: "",
       year: "",
       color: "",
+      last_service: "",
+      km: "",
       details: "",
       guaranty: "",
       total: "",
@@ -101,6 +109,8 @@ export default {
       this.brand = sale.brand ? sale.brand : sale.car[0].brand;
       this.year = sale.year ? sale.year : sale.sale_services[0].year;
       this.color = sale.color;
+      this.last_service = sale.last_service;
+      this.km = sale.km;
       this.details = sale.details;
       this.guaranty = sale.guaranty;
       this.tax = sale.tax;
@@ -121,6 +131,8 @@ export default {
           brand: $this.brand,
           year: $this.year,
           color: $this.color,
+          last_service: $this.last_service,
+          km: $this.km,
           total: $this.total,
           user: $this.user,
           details: $this.details,

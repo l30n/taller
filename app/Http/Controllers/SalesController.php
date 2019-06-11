@@ -84,6 +84,12 @@ class SalesController extends Controller
             if ($request->has('color')) {
                 $sale->color = $request->get('color');
             }
+            if ($request->has('last_service')) {
+                $sale->last_service = $request->get('last_service');
+            }
+            if ($request->has('km')) {
+                $sale->km = $request->get('km');
+            }
             if ($request->has('details')) {
                 $sale->details = $request->get('details');
             }

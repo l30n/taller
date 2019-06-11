@@ -298,13 +298,20 @@ export default {
       $this.context.fillText($this.currentSale.year, 435, 203 + 465);
       $this.context.fillText($this.currentSale.color, 610, 176);
       $this.context.fillText($this.currentSale.color, 610, 176 + 465);
+      $this.context.fillText($this.currentSale.last_service, 660, 189);
+      $this.context.fillText($this.currentSale.last_service, 660, 189 + 465);
+      $this.context.fillText($this.currentSale.km, 655, 203);
+      $this.context.fillText($this.currentSale.km, 655, 203 + 465);
 
       $this.currentSale.total = parseFloat($this.currentSale.total);
 
       $this.context.fillText("1", 80, 257);
       $this.context.fillText("1", 80, 257 + 465);
-      $this.context.fillText($this.currentSale.concept, 150, 257);
-      $this.context.fillText($this.currentSale.concept, 150, 257 + 465);
+      var concept = $this.currentSale.concept.match(/.{1,80}/g);
+      for (var x = 0; x < concept.length; x++) {
+        $this.context.fillText(concept[x], 150, 257 + x * 20);
+        $this.context.fillText(concept[x], 150, 257 + 465 + x * 20);
+      }
       $this.context.fillText(
         "$" + $this.formatPrice($this.currentSale.total),
         620,
@@ -316,8 +323,19 @@ export default {
         257 + 465
       );
 
-      $this.context.fillText($this.currentSale.details, 150, 277);
-      $this.context.fillText($this.currentSale.details, 150, 277 + 465);
+      var details = $this.currentSale.details.match(/.{1,80}/g);
+      for (var x = 0; x < details.length; x++) {
+        $this.context.fillText(
+          details[x],
+          150,
+          257 + 20 * concept.length + x * 20
+        );
+        $this.context.fillText(
+          details[x],
+          150,
+          257 + 465 + 20 * concept.length + x * 20
+        );
+      }
 
       $this.context.fillText(
         "$" + $this.formatPrice($this.currentSale.total),
