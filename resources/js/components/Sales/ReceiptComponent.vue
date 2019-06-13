@@ -2,14 +2,24 @@
   <el-container>
     <confirm-sales></confirm-sales>
     <el-main class="content">
-      <el-row>
+      <el-row v-if="currentSale">
         <el-col :span="24">
+          <el-form inline label-position="right" label-width="80px" class="query-form" ref="form">
+            <el-form-item style="float: right;">
+              <el-button icon="el-icon-edit" @click="openConfirm()">Editar</el-button>
+              <el-button icon="el-icon-printer" @click="buildReceipt()">Imprimir</el-button>
+            </el-form-item>
+            <br style="clear:both;">
+          </el-form>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="7" v-if="!currentSale">
           <el-form
             :rules="rules"
             :model="form"
-            inline
             label-position="right"
-            label-width="80px"
+            label-width="115px"
             class="query-form"
             ref="form"
           >
@@ -38,16 +48,23 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item style="float: right;" v-if="currentSale">
-              <el-button icon="el-icon-edit" @click="openConfirm()">Editar</el-button>
-              <el-button icon="el-icon-printer" @click="buildReceipt()">Imprimir</el-button>
+            <el-form-item label="Telefono" prop="phoenumber">
+              <el-input style="width: 220px;" v-model="form.phonenumber"></el-input>
             </el-form-item>
+            <el-form-item label="Color" prop="color">
+              <el-input style="width: 220px;" v-model="form.color"></el-input>
+            </el-form-item>
+            <el-form-item label="Ultimo servicio" prop="last_service">
+              <el-input style="width: 220px;" v-model="form.last_service"></el-input>
+            </el-form-item>
+            <el-form-item label="KM. de Ingreso" prop="km">
+              <el-input style="width: 220px;" v-model="form.km"></el-input>
+            </el-form-item>
+            <br>
           </el-form>
-          <br>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="18" :offset="3">
+        <el-col :span="currentSale? 18:16" :offset="currentSale? 3:1">
+          <br>
           <el-card class="box-card">
             <el-row>
               <el-col :span="24">
@@ -126,7 +143,11 @@ export default {
       currentSale: false,
       form: {
         client: "",
-        user: ""
+        user: "",
+        phonenumber: "",
+        color: "",
+        last_service: "",
+        km: ""
       },
       clients: [],
       users: [],
@@ -279,12 +300,23 @@ export default {
       if ($this.currentSale.client) {
         $this.context.fillText($this.currentSale.client.name, 175, 176);
         $this.context.fillText($this.currentSale.client.name, 175, 176 + 465);
-        $this.context.fillText($this.currentSale.client.phonenumber, 120, 189);
         $this.context.fillText(
-          $this.currentSale.client.phonenumber,
-          120,
+          $this.currentSale.phonenumber
+            ? $this.currentSale.phonenumber
+            : $this.currentSale.client.phonenumber,
+          115,
+          189
+        );
+        $this.context.fillText(
+          $this.currentSale.phonenumber
+            ? $this.currentSale.phonenumber
+            : $this.currentSale.client.phonenumber,
+          115,
           189 + 465
         );
+      } else if ($this.currentSale.phonenumber) {
+        $this.context.fillText($this.currentSale.phonenumber, 115, 189);
+        $this.context.fillText($this.currentSale.phonenumber, 115, 189 + 465);
       }
 
       $this.context.fillText($this.currentSale.user.name, 175, 203);
@@ -446,6 +478,10 @@ export default {
           if ($this.form.client) {
             $this.order.client = $this.form.client;
           }
+          $this.order.phonenumber = $this.form.phonenumber;
+          $this.order.color = $this.form.color;
+          $this.order.last_service = $this.form.last_service;
+          $this.order.km = $this.form.km;
           $this.order.total = $this.total;
           axios
             .post("/api/sales", $this.order)

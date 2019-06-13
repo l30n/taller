@@ -72,6 +72,9 @@ class SalesController extends Controller
             if ($request->has('user')) {
                 $sale->user_id = $request->get('user');
             }
+            if ($request->has('phonenumber')) {
+                $sale->phonenumber = $request->get('phonenumber');
+            }
             if ($request->has('maker')) {
                 $sale->maker = $request->get('maker');
             }
@@ -162,6 +165,19 @@ class SalesController extends Controller
         $sale->client_id = 0;
         if ($request->get('client')) {
             $sale->client_id = $request->get('client');
+        }
+
+        if ($request->has('phonenumber')) {
+            $sale->phonenumber = $request->get('phonenumber');
+        }
+        if ($request->has('color')) {
+            $sale->color = $request->get('color');
+        }
+        if ($request->has('last_service')) {
+            $sale->last_service = $request->get('last_service');
+        }
+        if ($request->has('km')) {
+            $sale->km = $request->get('km');
         }
 
         $sale->save();

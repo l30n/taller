@@ -235,14 +235,36 @@ export default {
 
       if (currentSale.client) {
         $this.context.fillText(currentSale.client.name, 175, 176);
-        $this.context.fillText(currentSale.client.phonenumber, 120, 189);
+        $this.context.fillText(
+          currentSale.phonenumber
+            ? currentSale.phonenumber
+            : currentSale.client.phonenumber,
+          115,
+          189
+        );
+      } else if (currentSale.phonenumber) {
+        $this.context.fillText(currentSale.phonenumber, 115, 189);
       }
       $this.context.fillText(currentSale.user.name, 175, 203);
 
-      $this.context.fillText(currentSale.maker, 448, 176);
-      $this.context.fillText(currentSale.brand, 455, 189);
-      $this.context.fillText(currentSale.year, 435, 203);
+      $this.context.fillText(
+        currentSale.maker ? currentSale.maker : currentSale.car[0].maker,
+        448,
+        176
+      );
+      $this.context.fillText(
+        currentSale.brand ? currentSale.brand : currentSale.car[0].brand,
+        455,
+        189
+      );
+      $this.context.fillText(
+        currentSale.year ? currentSale.year : currentSale.sale_services[0].year,
+        435,
+        203
+      );
       $this.context.fillText(currentSale.color, 610, 176);
+      $this.context.fillText(currentSale.last_service, 660, 189);
+      $this.context.fillText(currentSale.km, 655, 203);
 
       currentSale.total = parseFloat(currentSale.total);
 
