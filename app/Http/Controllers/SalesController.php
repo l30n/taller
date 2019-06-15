@@ -170,6 +170,9 @@ class SalesController extends Controller
         if ($request->has('phonenumber')) {
             $sale->phonenumber = $request->get('phonenumber');
         }
+        if ($request->has('concept')) {
+            $sale->concept = $request->get('concept');
+        }
         if ($request->has('color')) {
             $sale->color = $request->get('color');
         }

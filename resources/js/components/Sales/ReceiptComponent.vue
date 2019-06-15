@@ -51,6 +51,9 @@
             <el-form-item label="Telefono" prop="phoenumber">
               <el-input style="width: 220px;" v-model="form.phonenumber"></el-input>
             </el-form-item>
+            <el-form-item label="Concepto" prop="concept">
+              <el-input style="width: 220px;" v-model="form.concept"></el-input>
+            </el-form-item>
             <el-form-item label="Color" prop="color">
               <el-input style="width: 220px;" v-model="form.color"></el-input>
             </el-form-item>
@@ -145,6 +148,7 @@ export default {
         client: "",
         user: "",
         phonenumber: "",
+        concept: "",
         color: "",
         last_service: "",
         km: ""
@@ -479,6 +483,7 @@ export default {
             $this.order.client = $this.form.client;
           }
           $this.order.phonenumber = $this.form.phonenumber;
+          $this.order.concept = $this.form.concept;
           $this.order.color = $this.form.color;
           $this.order.last_service = $this.form.last_service;
           $this.order.km = $this.form.km;
