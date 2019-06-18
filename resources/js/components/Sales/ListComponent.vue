@@ -94,7 +94,7 @@
       <confirm-sales></confirm-sales>
       <el-row type="flex" justify="end" style="opacity: 0;overflow: hidden;height: 50px;">
         <el-col :span="12">
-          <img ref="receipt" src="/img/receipt.jpg" width="650px">
+          <img ref="receipt" src="/img/receipt.jpg" width="1200px">
         </el-col>
         <el-col :span="12">
           <canvas ref="my-canvas"></canvas>
@@ -187,8 +187,8 @@ export default {
     buildReceipt(currentSale) {
       var $this = this;
 
-      $this.$refs["my-canvas"].width = $this.$refs["receipt"].width * 1.2;
-      $this.$refs["my-canvas"].height = $this.$refs["receipt"].height * 1.2;
+      $this.$refs["my-canvas"].width = $this.$refs["receipt"].width;
+      $this.$refs["my-canvas"].height = $this.$refs["receipt"].height - 109;
       $this.context = $this.$refs["my-canvas"].getContext("2d");
 
       $this.context.clearRect(
@@ -207,15 +207,15 @@ export default {
       );
       $this.context.drawImage(
         $this.$refs["receipt"],
-        0,
-        0,
-        $this.$refs["receipt"].width * 1.2,
-        $this.$refs["receipt"].height * 1.2
+        -30,
+        -30,
+        $this.$refs["receipt"].width,
+        $this.$refs["receipt"].height
       );
 
-      $this.context.font = "20px Georgia";
+      $this.context.font = "24px Georgia";
       $this.context.fillStyle = "red";
-      $this.context.fillText($this.pad(currentSale.id, 5), 630, 85);
+      $this.context.fillText($this.pad(currentSale.id, 5), 950, 96);
 
       $this.context.fillStyle = "black";
       $this.context.fillText(
@@ -227,89 +227,103 @@ export default {
           })
           .replace("/", "-")
           .replace("/", "-"),
-        605,
-        125
+        920,
+        160
       );
 
-      $this.context.font = "12px Georgia";
+      $this.context.font = "16px Georgia";
 
       if (currentSale.client) {
-        $this.context.fillText(currentSale.client.name, 175, 176);
+        $this.context.fillText(currentSale.client.name, 233, 239);
         $this.context.fillText(
           currentSale.phonenumber
             ? currentSale.phonenumber
             : currentSale.client.phonenumber,
-          115,
-          189
+          150,
+          261
         );
       } else if (currentSale.phonenumber) {
-        $this.context.fillText(currentSale.phonenumber, 115, 189);
+        $this.context.fillText(currentSale.phonenumber, 150, 261);
       }
-      $this.context.fillText(currentSale.user.name, 175, 203);
+      $this.context.fillText(currentSale.user.name, 237, 281);
 
       $this.context.fillText(
         currentSale.maker ? currentSale.maker : currentSale.car[0].maker,
-        448,
-        176
+        662,
+        240
       );
       $this.context.fillText(
         currentSale.brand ? currentSale.brand : currentSale.car[0].brand,
-        455,
-        189
+        671,
+        262
       );
       $this.context.fillText(
         currentSale.year ? currentSale.year : currentSale.sale_services[0].year,
-        435,
-        203
+        640,
+        283
       );
-      $this.context.fillText(currentSale.color, 610, 176);
-      $this.context.fillText(currentSale.last_service, 660, 189);
-      $this.context.fillText(currentSale.km, 655, 203);
+      $this.context.fillText(currentSale.color, 908, 240);
+      $this.context.fillText(currentSale.last_service, 988, 262);
+      $this.context.fillText(currentSale.km, 978, 283);
 
       currentSale.total = parseFloat(currentSale.total);
 
-      $this.context.fillText("1", 80, 277);
-      $this.context.fillText(currentSale.concept, 150, 277);
+      $this.context.fillText("1", 100, 395);
+      if (currentSale.concept) {
+        var concept = currentSale.concept.match(/.{1,60}/g);
+        for (var x = 0; x < concept.length; x++) {
+          $this.context.fillText(concept[x].toUpperCase(), 200, 395 + x * 32);
+        }
+      }
       $this.context.fillText(
         "$" + $this.formatPrice(currentSale.total),
-        615,
-        277
+        928,
+        395
       );
 
-      $this.context.fillText(currentSale.details, 150, 297);
+      if (currentSale.details) {
+        var details = currentSale.details.match(/.{1,60}/g);
+        for (var x = 0; x < details.length; x++) {
+          $this.context.fillText(
+            details[x].toUpperCase(),
+            200,
+            395 + 32 * concept.length + x * 32
+          );
+        }
+      }
 
       $this.context.fillText(
         "$" + $this.formatPrice(currentSale.total),
-        615,
-        655
+        928,
+        980
       );
       if (currentSale.tax) {
         $this.context.fillText(
           "$" + $this.formatPrice(currentSale.total * 0.08),
-          615,
-          675
+          928,
+          1011
         );
       } else {
-        $this.context.fillText("$0", 615, 675);
+        $this.context.fillText("$0", 928, 1011);
       }
 
       if (currentSale.tax) {
         $this.context.fillText(
           "$" + $this.formatPrice(currentSale.total + currentSale.total * 0.08),
-          615,
-          695
+          928,
+          1042
         );
       } else {
         $this.context.fillText(
           "$" + $this.formatPrice(currentSale.total),
-          615,
-          695
+          928,
+          1042
         );
       }
 
       if (currentSale.guaranty) {
-        $this.context.font = "20px Georgia";
-        $this.context.fillText(currentSale.guaranty, 150, 680);
+        $this.context.font = "24px Georgia";
+        $this.context.fillText(currentSale.guaranty, 180, 1011);
       }
 
       var img = document.createElement("img");
