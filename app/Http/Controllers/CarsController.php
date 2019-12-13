@@ -29,7 +29,7 @@ class CarsController extends Controller
         }
 
         if ($request->filled('search')) {
-            return Car::where('brand', 'LIKE', '%' . $request->get('search') . '%')
+            return Car::where('maker', 'LIKE', '%' . $request->get('search') . '%')
                 ->orWhere('start_year', 'LIKE', '%' . $request->get('search') . '%')
                 ->orWhere('end_year', 'LIKE', '%' . $request->get('search') . '%')
                 ->paginate(10)

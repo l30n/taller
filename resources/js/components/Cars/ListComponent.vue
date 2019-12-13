@@ -22,7 +22,7 @@
             <el-input
               v-model="search"
               size="mini"
-              placeholder="Escribe para buscar"
+              placeholder="Busca por marca de carro"
               :scope="scope"
             />
           </template>

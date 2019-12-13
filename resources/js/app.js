@@ -105,6 +105,7 @@ Vue.component('top-numbers', require('./components/Dashboard/TopNumbersComponent
 Vue.component('dashboard-chart', require('./components/Dashboard/ChartComponent').default);
 Vue.component('dashboard-table', require('./components/Dashboard/TableComponent').default);
 Vue.component('dashboard-users', require('./components/Dashboard/UsersComponent').default);
+Vue.component('quick-receipt', require('./components/Dashboard/QuickReceipt').default);
 
 new Vue({
   el: '#app',

@@ -9,7 +9,7 @@
               <el-button icon="el-icon-edit" @click="openConfirm()">Editar</el-button>
               <el-button icon="el-icon-printer" @click="buildReceipt()">Imprimir</el-button>
             </el-form-item>
-            <br style="clear:both;">
+            <br style="clear:both;" />
           </el-form>
         </el-col>
       </el-row>
@@ -63,11 +63,11 @@
             <el-form-item label="KM. de Ingreso" prop="km">
               <el-input style="width: 220px;" v-model="form.km"></el-input>
             </el-form-item>
-            <br>
+            <br />
           </el-form>
         </el-col>
         <el-col :span="currentSale? 18:16" :offset="currentSale? 3:1">
-          <br>
+          <br />
           <el-card class="box-card">
             <el-row>
               <el-col :span="24">
@@ -96,14 +96,14 @@
                       <el-col :span="6" :offset="4">Otro</el-col>
                       <el-col :span="4">${{ formatPrice(total - sumServiceTotal()) }}</el-col>
                     </el-row>
-                    <br>
+                    <br />
                   </el-col>
                 </el-row>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
-                <hr>
+                <hr />
               </el-col>
             </el-row>
             <el-row>
@@ -117,14 +117,14 @@
       </el-row>
       <el-row type="flex" justify="end" v-if="!currentSale">
         <el-col :span="5" style="text-align:right;">
-          <br>
+          <br />
           <el-button type="secondary" @click="back()">Regresar</el-button>
           <el-button type="primary" @click="save()">Guardar</el-button>
         </el-col>
       </el-row>
       <el-row type="flex" justify="end" style="opacity: 0;overflow: hidden;height: 50px;">
         <el-col :span="12">
-          <img ref="receipt" src="/img/receipt2.jpg" width="1200px">
+          <img ref="receipt" src="/img/receipt2.jpg" width="1200px" />
         </el-col>
         <el-col :span="12">
           <canvas ref="my-canvas"></canvas>
@@ -268,7 +268,7 @@ export default {
         $this.$refs["receipt"].height
       );
 
-      $this.context.font = "24px Georgia";
+      $this.context.font = "24px Calibri";
       $this.context.fillStyle = "red";
       $this.context.fillText($this.pad($this.currentSale.id, 5), 950, 96);
       $this.context.fillText($this.pad($this.currentSale.id, 5), 950, 95 + 718);
@@ -299,7 +299,7 @@ export default {
         160 + 718
       );
 
-      $this.context.font = "16px Georgia";
+      $this.context.font = "16px Calibri";
 
       if ($this.currentSale.client) {
         $this.context.fillText($this.currentSale.client.name, 233, 239);
@@ -438,7 +438,7 @@ export default {
       }
 
       if ($this.currentSale.guaranty) {
-        $this.context.font = "24px Georgia";
+        $this.context.font = "24px Calibri";
         $this.context.fillText($this.currentSale.guaranty, 180, 618);
         $this.context.fillText($this.currentSale.guaranty, 180, 618 + 718);
       }

@@ -213,7 +213,7 @@ export default {
         $this.$refs["receipt"].height
       );
 
-      $this.context.font = "24px Georgia";
+      $this.context.font = "24px Calibri";
       $this.context.fillStyle = "red";
       $this.context.fillText($this.pad(currentSale.id, 5), 950, 96);
 
@@ -231,7 +231,7 @@ export default {
         160
       );
 
-      $this.context.font = "16px Georgia";
+      $this.context.font = "16px Calibri";
 
       if (currentSale.client) {
         $this.context.fillText(currentSale.client.name, 233, 239);
@@ -322,7 +322,7 @@ export default {
       }
 
       if (currentSale.guaranty) {
-        $this.context.font = "24px Georgia";
+        $this.context.font = "24px Calibri";
         $this.context.fillText(currentSale.guaranty, 180, 1011);
       }
 

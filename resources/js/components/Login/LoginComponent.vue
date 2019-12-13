@@ -25,6 +25,7 @@
           :autofocus="true"
           placeholder="Correo Electronico"
           name="email"
+          v-model="email"
         >
         </el-input>
       </el-form-item>
@@ -33,6 +34,7 @@
           placeholder="Contraseña"
           type="password"
           name="password"
+          v-model="password"
         >
         </el-input>
       </el-form-item>
@@ -53,7 +55,7 @@ export default {
   props: ["error"],
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
       isBtnLoading: false
     };
