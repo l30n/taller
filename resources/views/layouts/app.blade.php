@@ -34,7 +34,7 @@
             <el-container class="wrapper">
                 <el-aside class="menu" width="200px">
                     <el-menu default-active="{{ explode(".", Route::current()->getName())[0] }}">
-                        <el-menu-item>
+                        <el-menu-item style="padding-top: 10px;">
                             <quick-receipt></quick-receipt>
                         </el-menu-item>
                         <el-menu-item index="dashboard" v-on:click="goto('{{ route('dashboard') }}')" v-if="">
