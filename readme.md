@@ -44,6 +44,12 @@ Run command
 docker-compose up -d
 ```
 
+After starting docker the database is already create run the migrations using the container of docker
+
+```
+docker exec talle_php php artisan migrate --seed
+```
+
 Visit `http://localhost`, It works!
 
 ## Front end build
